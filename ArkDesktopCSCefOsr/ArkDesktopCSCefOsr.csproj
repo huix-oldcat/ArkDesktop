@@ -74,21 +74,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArkDesktopControl\lifeSpanHandler.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ArkDesktopControl\main.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ArkDesktopControl\loadHandler.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ArkDesktopControl\renderHandler - 复制.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ArkDesktopControl\renderHandler.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="ArkDesktopBrowserControl\lifeSpanHandler.cs" />
+    <Compile Include="ArkDesktopBrowserControl\loadHandler.cs" />
+    <Compile Include="ArkDesktopBrowserControl\main.cs" />
+    <Compile Include="ArkDesktopBrowserControl\renderHandler.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
