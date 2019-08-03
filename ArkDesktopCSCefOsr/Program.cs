@@ -3,6 +3,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 using System;
 using System.Drawing;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Chromium;
 
@@ -46,8 +48,9 @@ namespace ArkDesktopCSCefOsr
                 if (!CfxRuntime.Initialize(settings, app))
                     Environment.Exit(-1);
             }
+            
 
-            Form1 form = new Form1
+            Manager.mainForm = new Form1
             {
                 //FormBorderStyle = System.Windows.Forms.FormBorderStyle.None,
                 BackColor = Color.White,
@@ -60,12 +63,14 @@ namespace ArkDesktopCSCefOsr
             ArkDesktopBrowserControl control = new ArkDesktopBrowserControl
             {
                 Dock = DockStyle.Fill,
-                Parent = form
+                Parent = Manager.mainForm
             };
-            form.Controls.Add(control);
+            Manager.mainForm.Controls.Add(control);
+
+            Manager.Init();
 
             Application.Idle += Application_Idle;
-            Application.Run(form);
+            Application.Run(Manager.mainForm);
 
             CfxRuntime.Shutdown();
         }
