@@ -22,7 +22,7 @@ namespace ArkDesktopCSCefOsr
 
         private void Manager_Load(object sender, EventArgs e)
         {
-
+            checkBox_ShowBorder.Checked = Manager.mainForm.FormBorderStyle != FormBorderStyle.None;
         }
 
         private void NotifyIcon_DoubleClick(object sender, EventArgs e)
@@ -55,6 +55,60 @@ namespace ArkDesktopCSCefOsr
             Hide();
             ShowInTaskbar = false;
             notifyIcon.Dispose();
+        }
+
+        private void CheckBox_ShowBorder_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox_ShowBorder.Checked)
+            {
+                Invoke((MethodInvoker)(() => Manager.mainForm.FormBorderStyle = FormBorderStyle.Sizable));
+            }
+            else
+            {
+                Invoke((MethodInvoker)(() => Manager.mainForm.FormBorderStyle = FormBorderStyle.None));
+            }
+        }
+
+        private void Button_XY_Click(object sender, EventArgs e)
+        {
+            Point point = Manager.mainForm.Location;
+            if (((Button)sender).Text == "X-1")
+            {
+                Invoke((MethodInvoker)(() =>
+                {
+                    point.X -= 1;
+                    Manager.mainForm.Location = point;
+                }));
+            }
+            else if (((Button)sender).Text == "X+1")
+            {
+                Invoke((MethodInvoker)(() =>
+                {
+                    point.X += 1;
+                    Manager.mainForm.Location = point;
+                }));
+            }
+            else if (((Button)sender).Text == "Y-1")
+            {
+                Invoke((MethodInvoker)(() =>
+                {
+                    point.Y -= 1;
+                    Manager.mainForm.Location = point;
+                }));
+            }
+            else
+            {
+                Invoke((MethodInvoker)(() =>
+                {
+                    point.Y += 1;
+                    Manager.mainForm.Location = point;
+                }));
+            }
+        }
+
+        private void Button_LoadUrl_Click(object sender, EventArgs e)
+        {
+            Manager.LoadUrl(textBox_Location.Text);
         }
     }
 }

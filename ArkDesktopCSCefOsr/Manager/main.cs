@@ -10,12 +10,29 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Threading;
+using Chromium;
 
 namespace ArkDesktopCSCefOsr
 {
     static public partial class Manager
     {
         private static Thread thread;
+        private static object t_lock;
+        private static CfxBrowser browser;
+        public static CfxBrowser Browser
+        {
+            private get
+            {
+                return browser;
+            }
+            set
+            {
+                lock (t_lock)
+                {
+                    browser = value;
+                }
+            }
+        }
         public static bool formShutdownFalg;
         public static Form mainForm, managerForm;
 
@@ -29,8 +46,18 @@ namespace ArkDesktopCSCefOsr
         }
         public static void Init()
         {
+            t_lock = new object();
             thread = new Thread(new ThreadStart(RealInit));
+            thread.IsBackground = true;
             thread.Start();
+        }
+
+        public static void LoadUrl(string url)
+        {
+            lock (t_lock)
+            {
+                Browser.MainFrame.LoadUrl(url);
+            }
         }
     }
 }

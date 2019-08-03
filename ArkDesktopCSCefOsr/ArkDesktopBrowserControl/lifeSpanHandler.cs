@@ -20,6 +20,7 @@ namespace ArkDesktopCSCefOsr
                 Invoke((MethodInvoker)(() => LifeSpanHandler_OnAfterCreated(sender, e)));
                 return;
             }
+            Manager.Browser = e.Browser;
             browser = e.Browser;
             browser.MainFrame.LoadUrl("http://akd.huix.cc/test1.html");
             if (Focused)
