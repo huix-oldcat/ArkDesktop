@@ -122,8 +122,8 @@ namespace ArkDesktopCSCefOsr
                 var origin = PointToScreen(new Point(0, 0));
                 e.Rect.X = origin.X;
                 e.Rect.Y = origin.Y;
-                e.Rect.Width = Width;
-                e.Rect.Height = Height;
+                e.Rect.Width = Width == 0 ? 1 : Width;
+                e.Rect.Height = Height == 0 ? 1 : Height;
             }
         }
 

@@ -32,6 +32,7 @@ namespace ArkDesktopCSCefOsr
 
             using (var settings = new CfxSettings())
             {
+                settings.MultiThreadedMessageLoop = true;
                 settings.WindowlessRenderingEnabled = true;
                 settings.NoSandbox = true;
                 settings.ResourcesDirPath = System.IO.Path.Combine(nowDir, "cef", "Resources");
@@ -69,16 +70,16 @@ namespace ArkDesktopCSCefOsr
 
             Manager.Init();
 
-            Application.Idle += Application_Idle;
             Application.Run(Manager.mainForm);
 
+            // CfxRuntime.QuitMessageLoop();
             CfxRuntime.Shutdown();
         }
 
 
-        static void Application_Idle(object sender, EventArgs e)
-        {
-            CfxRuntime.DoMessageLoopWork();
-        }
+        //static void Application_Idle(object sender, EventArgs e)
+        //{
+        //    CfxRuntime.DoMessageLoopWork();
+        //}
     }
 }

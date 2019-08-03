@@ -80,6 +80,10 @@ namespace ArkDesktopCSCefOsr
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            if (Width == 0 || Height == 0)
+            {
+                return;
+            }
             lock (pbLock)
             {
                 if (pixelBuffer != null)

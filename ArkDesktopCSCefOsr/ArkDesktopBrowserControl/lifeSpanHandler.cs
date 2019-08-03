@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Chromium.Event;
 
 namespace ArkDesktopCSCefOsr
@@ -14,6 +15,11 @@ namespace ArkDesktopCSCefOsr
     {
         void LifeSpanHandler_OnAfterCreated(object sender, CfxOnAfterCreatedEventArgs e)
         {
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)(() => LifeSpanHandler_OnAfterCreated(sender, e)));
+                return;
+            }
             browser = e.Browser;
             browser.MainFrame.LoadUrl("http://akd.huix.cc/test1.html");
             if (Focused)
