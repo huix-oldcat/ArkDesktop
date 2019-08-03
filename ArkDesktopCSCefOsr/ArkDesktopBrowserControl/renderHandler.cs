@@ -98,6 +98,7 @@ namespace ArkDesktopCSCefOsr
                 using (Bitmap bm = new Bitmap(e.Width, e.Height, e.Width * 4, PixelFormat.Format32bppArgb, e.Buffer))
                 using (Graphics g = Graphics.FromImage(pixelBuffer))
                 {
+                    g.Clear(Color.Transparent);
                     g.DrawImageUnscaled(bm, 0, 0);
                 }
             }
