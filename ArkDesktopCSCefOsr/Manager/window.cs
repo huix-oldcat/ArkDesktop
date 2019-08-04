@@ -110,5 +110,42 @@ namespace ArkDesktopCSCefOsr
         {
             Manager.LoadUrl(textBox_Location.Text);
         }
+
+        private void Button_WH_Click(object sender, EventArgs e)
+        {
+            Size size = Manager.mainForm.Size;
+            if (((Button)sender).Text == "W-1")
+            {
+                Invoke((MethodInvoker)(() =>
+                {
+                    size.Width -= 1;
+                    Manager.mainForm.Size = size;
+                }));
+            }
+            else if (((Button)sender).Text == "W+1")
+            {
+                Invoke((MethodInvoker)(() =>
+                {
+                    size.Width += 1;
+                    Manager.mainForm.Size = size;
+                }));
+            }
+            else if (((Button)sender).Text == "H-1")
+            {
+                Invoke((MethodInvoker)(() =>
+                {
+                    size.Height -= 1;
+                    Manager.mainForm.Size = size;
+                }));
+            }
+            else
+            {
+                Invoke((MethodInvoker)(() =>
+                {
+                    size.Height += 1;
+                    Manager.mainForm.Size = size;
+                }));
+            }
+        }
     }
 }

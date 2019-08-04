@@ -38,13 +38,20 @@
             this.button_NegY = new System.Windows.Forms.Button();
             this.button_PosX = new System.Windows.Forms.Button();
             this.button_NegX = new System.Windows.Forms.Button();
+            this.button_NegW = new System.Windows.Forms.Button();
             this.checkBox_ShowBorder = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.button_LoadScript = new System.Windows.Forms.Button();
             this.button_LoadUrl = new System.Windows.Forms.Button();
+            this.button_PosH = new System.Windows.Forms.Button();
+            this.button_NegH = new System.Windows.Forms.Button();
+            this.button_PosW = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.button_SaveConf = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // notifyIcon
@@ -68,7 +75,7 @@
             this.groupBox1.Controls.Add(this.checkBox_ShowBorder);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(108, 107);
+            this.groupBox1.Size = new System.Drawing.Size(108, 165);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "窗口管理";
@@ -78,16 +85,23 @@
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Controls.Add(this.button_NegH, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.button_PosH, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.button_PosY, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.button_NegY, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.button_PosX, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.button_NegX, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.button_NegW, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.button_PosW, 1, 2);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(6, 42);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(96, 59);
+            this.tableLayoutPanel1.RowCount = 4;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(96, 117);
             this.tableLayoutPanel1.TabIndex = 4;
             // 
             // button_PosY
@@ -125,6 +139,16 @@
             this.button_NegX.TabIndex = 1;
             this.button_NegX.Text = "X-1";
             this.button_NegX.UseVisualStyleBackColor = true;
+            // 
+            // button_NegW
+            // 
+            this.button_NegW.Location = new System.Drawing.Point(3, 61);
+            this.button_NegW.Name = "button_NegW";
+            this.button_NegW.Size = new System.Drawing.Size(42, 23);
+            this.button_NegW.TabIndex = 5;
+            this.button_NegW.Text = "W-1";
+            this.button_NegW.UseVisualStyleBackColor = true;
+            this.button_NegW.Click += new System.EventHandler(this.Button_WH_Click);
             // 
             // checkBox_ShowBorder
             // 
@@ -168,11 +192,62 @@
             this.button_LoadUrl.UseVisualStyleBackColor = true;
             this.button_LoadUrl.Click += new System.EventHandler(this.Button_LoadUrl_Click);
             // 
+            // button_PosH
+            // 
+            this.button_PosH.Location = new System.Drawing.Point(51, 90);
+            this.button_PosH.Name = "button_PosH";
+            this.button_PosH.Size = new System.Drawing.Size(42, 23);
+            this.button_PosH.TabIndex = 6;
+            this.button_PosH.Text = "H+1";
+            this.button_PosH.UseVisualStyleBackColor = true;
+            this.button_PosH.Click += new System.EventHandler(this.Button_WH_Click);
+            // 
+            // button_NegH
+            // 
+            this.button_NegH.Location = new System.Drawing.Point(3, 90);
+            this.button_NegH.Name = "button_NegH";
+            this.button_NegH.Size = new System.Drawing.Size(42, 23);
+            this.button_NegH.TabIndex = 7;
+            this.button_NegH.Text = "H-1";
+            this.button_NegH.UseVisualStyleBackColor = true;
+            this.button_NegH.Click += new System.EventHandler(this.Button_WH_Click);
+            // 
+            // button_PosW
+            // 
+            this.button_PosW.Location = new System.Drawing.Point(51, 61);
+            this.button_PosW.Name = "button_PosW";
+            this.button_PosW.Size = new System.Drawing.Size(42, 23);
+            this.button_PosW.TabIndex = 6;
+            this.button_PosW.Text = "W+1";
+            this.button_PosW.UseVisualStyleBackColor = true;
+            this.button_PosW.Click += new System.EventHandler(this.Button_WH_Click);
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.button_SaveConf);
+            this.groupBox3.Location = new System.Drawing.Point(127, 126);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(333, 51);
+            this.groupBox3.TabIndex = 6;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "配置文件";
+            // 
+            // button_SaveConf
+            // 
+            this.button_SaveConf.Location = new System.Drawing.Point(7, 18);
+            this.button_SaveConf.Name = "button_SaveConf";
+            this.button_SaveConf.Size = new System.Drawing.Size(320, 23);
+            this.button_SaveConf.TabIndex = 0;
+            this.button_SaveConf.Text = "保存当前窗口为默认配置";
+            this.button_SaveConf.UseVisualStyleBackColor = true;
+            this.button_SaveConf.Click += new System.EventHandler(this.Button_SaveConf_Click);
+            // 
             // ManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(472, 129);
+            this.ClientSize = new System.Drawing.Size(472, 183);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Name = "ManagerForm";
@@ -185,6 +260,7 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -203,5 +279,11 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button button_LoadScript;
         private System.Windows.Forms.Button button_LoadUrl;
+        private System.Windows.Forms.Button button_NegW;
+        private System.Windows.Forms.Button button_NegH;
+        private System.Windows.Forms.Button button_PosH;
+        private System.Windows.Forms.Button button_PosW;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button button_SaveConf;
     }
 }
