@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -145,6 +146,44 @@ namespace ArkDesktopCSCefOsr
                     size.Height += 1;
                     Manager.mainForm.Size = size;
                 }));
+            }
+        }
+
+        private void Button_SaveConf_Click(object sender, EventArgs e)
+        {
+            IniFile ini = new IniFile(Environment.CurrentDirectory + "/config.ini");
+            ini.WriteInt("border", "show", checkBox_ShowBorder.Checked ? 1 : 0);
+            ini.WriteInt("location", "x", Manager.mainForm.Location.X);
+            ini.WriteInt("location", "y", Manager.mainForm.Location.Y);
+            ini.WriteInt("size", "width", Manager.mainForm.Size.Width);
+            ini.WriteInt("size", "height", Manager.mainForm.Size.Height);
+            ini.WriteString("target", "url", textBox_Location.Text);
+        }
+
+        private void Button_LoadConf_Click(object sender, EventArgs e)
+        {
+            IniFile ini = new IniFile(Environment.CurrentDirectory + "/config.ini");
+            bool showBorder = ini.ReadInt("border", "show", 1) == 1;
+            Point point = new Point
+            {
+                X = ini.ReadInt("location", "x", 300),
+                Y = ini.ReadInt("location", "y", 300)
+            };
+            Size size = new Size
+            {
+                Width = ini.ReadInt("size", "width", 300),
+                Height = ini.ReadInt("size", "height", 300)
+            };
+            Invoke((MethodInvoker)(() =>
+            {
+                Manager.mainForm.FormBorderStyle = showBorder ? FormBorderStyle.Sizable : FormBorderStyle.None;
+                Manager.mainForm.Location = point;
+                Manager.mainForm.Size = size;
+            }));
+            textBox_Location.Text = ini.ReadString("target", "url", textBox_Location.Text);
+            if(textBox_Location.Text != "")
+            {
+                Button_LoadUrl_Click(button_LoadUrl, new EventArgs());
             }
         }
     }

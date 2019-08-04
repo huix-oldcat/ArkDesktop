@@ -92,6 +92,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Ini.cs" />
     <Compile Include="Manager\window.cs">
       <SubType>Form</SubType>
     </Compile>

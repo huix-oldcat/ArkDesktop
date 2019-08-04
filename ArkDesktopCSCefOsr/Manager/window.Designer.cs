@@ -34,24 +34,27 @@
             this.textBox_Location = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.button_NegH = new System.Windows.Forms.Button();
+            this.button_PosH = new System.Windows.Forms.Button();
             this.button_PosY = new System.Windows.Forms.Button();
             this.button_NegY = new System.Windows.Forms.Button();
             this.button_PosX = new System.Windows.Forms.Button();
             this.button_NegX = new System.Windows.Forms.Button();
             this.button_NegW = new System.Windows.Forms.Button();
+            this.button_PosW = new System.Windows.Forms.Button();
             this.checkBox_ShowBorder = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.button_LoadScript = new System.Windows.Forms.Button();
             this.button_LoadUrl = new System.Windows.Forms.Button();
-            this.button_PosH = new System.Windows.Forms.Button();
-            this.button_NegH = new System.Windows.Forms.Button();
-            this.button_PosW = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.button_LoadConf = new System.Windows.Forms.Button();
             this.button_SaveConf = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // notifyIcon
@@ -104,6 +107,26 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(96, 117);
             this.tableLayoutPanel1.TabIndex = 4;
             // 
+            // button_NegH
+            // 
+            this.button_NegH.Location = new System.Drawing.Point(3, 90);
+            this.button_NegH.Name = "button_NegH";
+            this.button_NegH.Size = new System.Drawing.Size(42, 23);
+            this.button_NegH.TabIndex = 7;
+            this.button_NegH.Text = "H-1";
+            this.button_NegH.UseVisualStyleBackColor = true;
+            this.button_NegH.Click += new System.EventHandler(this.Button_WH_Click);
+            // 
+            // button_PosH
+            // 
+            this.button_PosH.Location = new System.Drawing.Point(51, 90);
+            this.button_PosH.Name = "button_PosH";
+            this.button_PosH.Size = new System.Drawing.Size(42, 23);
+            this.button_PosH.TabIndex = 6;
+            this.button_PosH.Text = "H+1";
+            this.button_PosH.UseVisualStyleBackColor = true;
+            this.button_PosH.Click += new System.EventHandler(this.Button_WH_Click);
+            // 
             // button_PosY
             // 
             this.button_PosY.Location = new System.Drawing.Point(51, 32);
@@ -150,6 +173,16 @@
             this.button_NegW.UseVisualStyleBackColor = true;
             this.button_NegW.Click += new System.EventHandler(this.Button_WH_Click);
             // 
+            // button_PosW
+            // 
+            this.button_PosW.Location = new System.Drawing.Point(51, 61);
+            this.button_PosW.Name = "button_PosW";
+            this.button_PosW.Size = new System.Drawing.Size(42, 23);
+            this.button_PosW.TabIndex = 6;
+            this.button_PosW.Text = "W+1";
+            this.button_PosW.UseVisualStyleBackColor = true;
+            this.button_PosW.Click += new System.EventHandler(this.Button_WH_Click);
+            // 
             // checkBox_ShowBorder
             // 
             this.checkBox_ShowBorder.AutoSize = true;
@@ -159,7 +192,7 @@
             this.checkBox_ShowBorder.TabIndex = 3;
             this.checkBox_ShowBorder.Text = "显示窗口边框";
             this.checkBox_ShowBorder.UseVisualStyleBackColor = true;
-            this.checkBox_ShowBorder.CheckedChanged += CheckBox_ShowBorder_CheckedChanged;
+            this.checkBox_ShowBorder.CheckedChanged += new System.EventHandler(this.CheckBox_ShowBorder_CheckedChanged);
             // 
             // groupBox2
             // 
@@ -193,39 +226,9 @@
             this.button_LoadUrl.UseVisualStyleBackColor = true;
             this.button_LoadUrl.Click += new System.EventHandler(this.Button_LoadUrl_Click);
             // 
-            // button_PosH
-            // 
-            this.button_PosH.Location = new System.Drawing.Point(51, 90);
-            this.button_PosH.Name = "button_PosH";
-            this.button_PosH.Size = new System.Drawing.Size(42, 23);
-            this.button_PosH.TabIndex = 6;
-            this.button_PosH.Text = "H+1";
-            this.button_PosH.UseVisualStyleBackColor = true;
-            this.button_PosH.Click += new System.EventHandler(this.Button_WH_Click);
-            // 
-            // button_NegH
-            // 
-            this.button_NegH.Location = new System.Drawing.Point(3, 90);
-            this.button_NegH.Name = "button_NegH";
-            this.button_NegH.Size = new System.Drawing.Size(42, 23);
-            this.button_NegH.TabIndex = 7;
-            this.button_NegH.Text = "H-1";
-            this.button_NegH.UseVisualStyleBackColor = true;
-            this.button_NegH.Click += new System.EventHandler(this.Button_WH_Click);
-            // 
-            // button_PosW
-            // 
-            this.button_PosW.Location = new System.Drawing.Point(51, 61);
-            this.button_PosW.Name = "button_PosW";
-            this.button_PosW.Size = new System.Drawing.Size(42, 23);
-            this.button_PosW.TabIndex = 6;
-            this.button_PosW.Text = "W+1";
-            this.button_PosW.UseVisualStyleBackColor = true;
-            this.button_PosW.Click += new System.EventHandler(this.Button_WH_Click);
-            // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.button_SaveConf);
+            this.groupBox3.Controls.Add(this.tableLayoutPanel2);
             this.groupBox3.Location = new System.Drawing.Point(127, 126);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(333, 51);
@@ -233,12 +236,36 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "配置文件";
             // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Controls.Add(this.button_LoadConf, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.button_SaveConf, 0, 0);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(7, 18);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 1;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(320, 27);
+            this.tableLayoutPanel2.TabIndex = 0;
+            // 
+            // button_LoadConf
+            // 
+            this.button_LoadConf.Location = new System.Drawing.Point(163, 3);
+            this.button_LoadConf.Name = "button_LoadConf";
+            this.button_LoadConf.Size = new System.Drawing.Size(154, 21);
+            this.button_LoadConf.TabIndex = 2;
+            this.button_LoadConf.Text = "加载配置";
+            this.button_LoadConf.UseVisualStyleBackColor = true;
+            this.button_LoadConf.Click += new System.EventHandler(this.Button_LoadConf_Click);
+            // 
             // button_SaveConf
             // 
-            this.button_SaveConf.Location = new System.Drawing.Point(7, 18);
+            this.button_SaveConf.Location = new System.Drawing.Point(3, 3);
             this.button_SaveConf.Name = "button_SaveConf";
-            this.button_SaveConf.Size = new System.Drawing.Size(320, 23);
-            this.button_SaveConf.TabIndex = 0;
+            this.button_SaveConf.Size = new System.Drawing.Size(154, 21);
+            this.button_SaveConf.TabIndex = 1;
             this.button_SaveConf.Text = "保存当前窗口为默认配置";
             this.button_SaveConf.UseVisualStyleBackColor = true;
             this.button_SaveConf.Click += new System.EventHandler(this.Button_SaveConf_Click);
@@ -262,6 +289,7 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
+            this.tableLayoutPanel2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -285,6 +313,8 @@
         private System.Windows.Forms.Button button_PosH;
         private System.Windows.Forms.Button button_PosW;
         private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.Button button_LoadConf;
         private System.Windows.Forms.Button button_SaveConf;
     }
 }
