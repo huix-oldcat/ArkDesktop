@@ -159,6 +159,7 @@
             this.checkBox_ShowBorder.TabIndex = 3;
             this.checkBox_ShowBorder.Text = "显示窗口边框";
             this.checkBox_ShowBorder.UseVisualStyleBackColor = true;
+            this.checkBox_ShowBorder.CheckedChanged += CheckBox_ShowBorder_CheckedChanged;
             // 
             // groupBox2
             // 
