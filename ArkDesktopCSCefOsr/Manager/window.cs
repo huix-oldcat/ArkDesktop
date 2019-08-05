@@ -186,5 +186,19 @@ namespace ArkDesktopCSCefOsr
                 Button_LoadUrl_Click(button_LoadUrl, new EventArgs());
             }
         }
+
+        private void Button_TryFindProgman_Click(object sender, EventArgs e)
+        {
+            textBox_AttachHwnd.Text = Manager.GetHandleString(Manager.FindProgman());
+        }
+
+        private void Button_ApplyAttach_Click(object sender, EventArgs e)
+        {
+            if(textBox_AttachHwnd.Text == "")
+            {
+                return;
+            }
+            Manager.SetMainFormParent(Manager.GetHandleFromString(textBox_AttachHwnd.Text));
+        }
     }
 }

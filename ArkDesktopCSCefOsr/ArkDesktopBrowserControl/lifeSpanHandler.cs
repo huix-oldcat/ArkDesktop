@@ -22,7 +22,7 @@ namespace ArkDesktopCSCefOsr
             }
             Manager.Browser = e.Browser;
             browser = e.Browser;
-            browser.MainFrame.LoadUrl("http://akd.huix.cc/test1.html");
+            browser.MainFrame.LoadUrl("about:version");
             if (Focused)
             {
                 browser.Host.SendFocusEvent(true);

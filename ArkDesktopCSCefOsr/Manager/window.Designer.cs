@@ -50,11 +50,18 @@
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.button_LoadConf = new System.Windows.Forms.Button();
             this.button_SaveConf = new System.Windows.Forms.Button();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.textBox_AttachHwnd = new System.Windows.Forms.TextBox();
+            this.button_TryFindProgman = new System.Windows.Forms.Button();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.button_ApplyAttach = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // notifyIcon
@@ -135,6 +142,7 @@
             this.button_PosY.TabIndex = 4;
             this.button_PosY.Text = "Y+1";
             this.button_PosY.UseVisualStyleBackColor = true;
+            this.button_PosY.Click += new System.EventHandler(this.Button_XY_Click);
             // 
             // button_NegY
             // 
@@ -144,6 +152,7 @@
             this.button_NegY.TabIndex = 3;
             this.button_NegY.Text = "Y-1";
             this.button_NegY.UseVisualStyleBackColor = true;
+            this.button_NegY.Click += new System.EventHandler(this.Button_XY_Click);
             // 
             // button_PosX
             // 
@@ -153,6 +162,7 @@
             this.button_PosX.TabIndex = 2;
             this.button_PosX.Text = "X+1";
             this.button_PosX.UseVisualStyleBackColor = true;
+            this.button_PosX.Click += new System.EventHandler(this.Button_XY_Click);
             // 
             // button_NegX
             // 
@@ -162,6 +172,7 @@
             this.button_NegX.TabIndex = 1;
             this.button_NegX.Text = "X-1";
             this.button_NegX.UseVisualStyleBackColor = true;
+            this.button_NegX.Click += new System.EventHandler(this.Button_XY_Click);
             // 
             // button_NegW
             // 
@@ -231,7 +242,7 @@
             this.groupBox3.Controls.Add(this.tableLayoutPanel2);
             this.groupBox3.Location = new System.Drawing.Point(127, 126);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(333, 51);
+            this.groupBox3.Size = new System.Drawing.Size(611, 51);
             this.groupBox3.TabIndex = 6;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "配置文件";
@@ -243,18 +254,20 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.Controls.Add(this.button_LoadConf, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.button_SaveConf, 0, 0);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(7, 18);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 17);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(320, 27);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(605, 31);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // button_LoadConf
             // 
-            this.button_LoadConf.Location = new System.Drawing.Point(163, 3);
+            this.button_LoadConf.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button_LoadConf.Location = new System.Drawing.Point(305, 3);
             this.button_LoadConf.Name = "button_LoadConf";
-            this.button_LoadConf.Size = new System.Drawing.Size(154, 21);
+            this.button_LoadConf.Size = new System.Drawing.Size(297, 25);
             this.button_LoadConf.TabIndex = 2;
             this.button_LoadConf.Text = "加载配置";
             this.button_LoadConf.UseVisualStyleBackColor = true;
@@ -262,19 +275,81 @@
             // 
             // button_SaveConf
             // 
+            this.button_SaveConf.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button_SaveConf.Location = new System.Drawing.Point(3, 3);
             this.button_SaveConf.Name = "button_SaveConf";
-            this.button_SaveConf.Size = new System.Drawing.Size(154, 21);
+            this.button_SaveConf.Size = new System.Drawing.Size(296, 25);
             this.button_SaveConf.TabIndex = 1;
             this.button_SaveConf.Text = "保存当前窗口为默认配置";
             this.button_SaveConf.UseVisualStyleBackColor = true;
             this.button_SaveConf.Click += new System.EventHandler(this.Button_SaveConf_Click);
             // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.label1);
+            this.groupBox4.Controls.Add(this.button_ApplyAttach);
+            this.groupBox4.Controls.Add(this.linkLabel1);
+            this.groupBox4.Controls.Add(this.button_TryFindProgman);
+            this.groupBox4.Controls.Add(this.textBox_AttachHwnd);
+            this.groupBox4.Location = new System.Drawing.Point(467, 13);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(271, 106);
+            this.groupBox4.TabIndex = 7;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "附加层";
+            // 
+            // textBox_AttachHwnd
+            // 
+            this.textBox_AttachHwnd.Location = new System.Drawing.Point(47, 17);
+            this.textBox_AttachHwnd.Name = "textBox_AttachHwnd";
+            this.textBox_AttachHwnd.Size = new System.Drawing.Size(201, 21);
+            this.textBox_AttachHwnd.TabIndex = 0;
+            // 
+            // button_TryFindProgman
+            // 
+            this.button_TryFindProgman.Location = new System.Drawing.Point(7, 43);
+            this.button_TryFindProgman.Name = "button_TryFindProgman";
+            this.button_TryFindProgman.Size = new System.Drawing.Size(258, 23);
+            this.button_TryFindProgman.TabIndex = 1;
+            this.button_TryFindProgman.Text = "尝试寻找可用句柄(桌面底层)";
+            this.button_TryFindProgman.UseVisualStyleBackColor = true;
+            this.button_TryFindProgman.Click += new System.EventHandler(this.Button_TryFindProgman_Click);
+            // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(254, 20);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(11, 12);
+            this.linkLabel1.TabIndex = 2;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "?";
+            // 
+            // button_ApplyAttach
+            // 
+            this.button_ApplyAttach.Location = new System.Drawing.Point(7, 72);
+            this.button_ApplyAttach.Name = "button_ApplyAttach";
+            this.button_ApplyAttach.Size = new System.Drawing.Size(258, 23);
+            this.button_ApplyAttach.TabIndex = 3;
+            this.button_ApplyAttach.Text = "修改主窗口的Parent";
+            this.button_ApplyAttach.UseVisualStyleBackColor = true;
+            this.button_ApplyAttach.Click += new System.EventHandler(this.Button_ApplyAttach_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 20);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 12);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "句柄:";
+            // 
             // ManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(472, 183);
+            this.ClientSize = new System.Drawing.Size(750, 183);
+            this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -290,6 +365,8 @@
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -316,5 +393,11 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Button button_LoadConf;
         private System.Windows.Forms.Button button_SaveConf;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button button_ApplyAttach;
+        private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.Button button_TryFindProgman;
+        private System.Windows.Forms.TextBox textBox_AttachHwnd;
     }
 }
