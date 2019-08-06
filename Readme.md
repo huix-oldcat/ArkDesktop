@@ -2,6 +2,7 @@
 
 # ArkDesktop
 
+Current status: [![Build status](https://ci.appveyor.com/api/projects/status/f4oklwdady0figt2?svg=true)](https://ci.appveyor.com/project/huix-oldcat/arkdesktop)
 A simple way to make a control with transparent background.
 
 ## How To Use

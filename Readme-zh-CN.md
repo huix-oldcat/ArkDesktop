@@ -1,5 +1,6 @@
 # ArkDesktop
 
+当前状态: [![Build status](https://ci.appveyor.com/api/projects/status/f4oklwdady0figt2?svg=true)](https://ci.appveyor.com/project/huix-oldcat/arkdesktop)
 简单地制作一款透明背景的控件
 
 ## 快速入门
