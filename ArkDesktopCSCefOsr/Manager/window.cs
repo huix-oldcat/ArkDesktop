@@ -4,6 +4,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Microsoft.VisualBasic;
 
 namespace ArkDesktopCSCefOsr
 {
@@ -16,6 +17,11 @@ namespace ArkDesktopCSCefOsr
 
         private void Manager_Load(object sender, EventArgs e)
         {
+            IniFile ini = new IniFile(Environment.CurrentDirectory + "/config.ini");
+            if(ini.ReadInt("auto", "load",0) == 1)
+            {
+                Button_LoadConf_Click(button_LoadConf, new EventArgs());
+            }
         }
 
         private void NotifyIcon_DoubleClick(object sender, EventArgs e)
@@ -145,12 +151,13 @@ namespace ArkDesktopCSCefOsr
             ini.WriteInt("size", "width", Manager.layeredWindow.Size.Width);
             ini.WriteInt("size", "height", Manager.layeredWindow.Size.Height);
             ini.WriteString("target", "url", textBox_Location.Text);
+            ini.WriteString("zoom", "zoomlevel", Manager.control.Zoom.ToString());
+            ini.WriteInt("auto", "load", checkBox_AutoLoad.Checked ? 1 : 0);
         }
 
         private void Button_LoadConf_Click(object sender, EventArgs e)
         {
             IniFile ini = new IniFile(Environment.CurrentDirectory + "/config.ini");
-            bool showBorder = ini.ReadInt("border", "show", 1) == 1;
             Point point = new Point
             {
                 X = ini.ReadInt("location", "x", 300),
@@ -171,6 +178,9 @@ namespace ArkDesktopCSCefOsr
             {
                 Button_LoadUrl_Click(button_LoadUrl, new EventArgs());
             }
+            linkLabel_Zoom.Text = "缩放:" + ini.ReadString("zoom", "zoomlevel", "1");
+            Manager.control.Zoom = Convert.ToDouble(ini.ReadString("zoom", "zoomlevel", "1"));
+            checkBox_AutoLoad.Checked = ini.ReadInt("auto", "load", 0) == 1;
         }
 
         private void Button_TryFindProgman_Click(object sender, EventArgs e)
@@ -262,6 +272,19 @@ namespace ArkDesktopCSCefOsr
                                                       Manager.layeredWindow.Size.Height + deltaY);
                 Manager.control.OnResize();
             }));
+        }
+
+        private void linkLabel_Zoom_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                Manager.control.Zoom = Convert.ToDouble(Interaction.InputBox("输入新的缩放级别(小数)", "输入", Manager.control.Zoom.ToString()));
+                linkLabel_Zoom.Text = "缩放:" + Manager.control.Zoom.ToString();
+            }
+            catch (FormatException)
+            {
+                Manager.control.Zoom = 1d;
+            }
         }
     }
 }

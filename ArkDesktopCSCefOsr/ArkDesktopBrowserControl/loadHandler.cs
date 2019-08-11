@@ -22,5 +22,10 @@ namespace ArkDesktopCSCefOsr
                 });
             }
         }
+        private void LoadHandler_OnLoadEnd(object sender, Chromium.Event.CfxOnLoadEndEventArgs e)
+        {
+            Manager.control.Zoom = Manager.control.Zoom;
+        }
+
     }
 }

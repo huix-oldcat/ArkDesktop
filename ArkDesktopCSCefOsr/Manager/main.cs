@@ -28,7 +28,7 @@ namespace ArkDesktopCSCefOsr
         }
         public static bool formShutdownFalg;
         public static LayeredWindow layeredWindow;
-        public static Form managerForm;
+        public static ManagerForm managerForm;
         public static ArkDesktopBrowserControl control;
         public static Thread cfxThread;
 

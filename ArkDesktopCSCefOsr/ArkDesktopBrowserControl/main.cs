@@ -35,6 +35,7 @@ namespace ArkDesktopCSCefOsr
 
             loadHandler = new CfxLoadHandler();
             loadHandler.OnLoadError += LoadHandler_OnLoadError;
+            loadHandler.OnLoadEnd += LoadHandler_OnLoadEnd;
             #endregion
 
             client = new CfxClient();
@@ -49,6 +50,21 @@ namespace ArkDesktopCSCefOsr
             windowInfo.SetAsWindowless(IntPtr.Zero);
 
             CfxBrowserHost.CreateBrowser(windowInfo, client, "about:blank", settings, null);
+        }
+
+        private double zoomPercent = 1;
+
+        public double Zoom
+        {
+            get
+            {
+                return zoomPercent;
+            }
+            set
+            {
+                zoomPercent = value;
+                browser.Host.ZoomLevel = Math.Log(value) / Math.Log(1.2d);
+            }
         }
 
         public void OnResize()
