@@ -1,21 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ArkDesktopCSCefOsr
 {
     static public partial class Manager
     {
-        [DllImport("user32.dll", EntryPoint = "GetWindow")]
-        private static extern IntPtr GetWindow(IntPtr hWnd, int uCmd);
-
-        [DllImport("user32.dll")]
-        public static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
-
         public static string GetHandleString(IntPtr ptr)
         {
             if (Environment.Is64BitProcess)
@@ -42,10 +31,10 @@ namespace ArkDesktopCSCefOsr
 
         public static IntPtr FindProgman()
         {
-            IntPtr ptr = FindWindow("Progman", "Program Manager");
+            IntPtr ptr = Win32.FindWindow("Progman", "Program Manager");
             if(ptr != IntPtr.Zero)
             {
-                IntPtr ptr1 = GetWindow(ptr, 5); // 5:The first child window
+                IntPtr ptr1 = Win32.GetWindow(ptr, 5); // 5:The first child window
                 if(ptr1 != IntPtr.Zero)
                 {
                     return ptr1;
@@ -54,9 +43,6 @@ namespace ArkDesktopCSCefOsr
             return IntPtr.Zero;
         }
 
-        [DllImport("user32.dll")]
-        static extern int SetWindowLong(IntPtr hWnd, int nIndex, uint dwNewLong);
-
         public static void SetMainFormParent(IntPtr ptr)
         {
             if (layeredWindow.InvokeRequired)
@@ -64,7 +50,7 @@ namespace ArkDesktopCSCefOsr
                 layeredWindow.Invoke((MethodInvoker)(() => SetMainFormParent(ptr)));
                 return;
             }
-            SetWindowLong(layeredWindow.Handle, -8, (uint)ptr.ToInt32());
+            Win32.SetWindowLong(layeredWindow.Handle, -8, (uint)ptr.ToInt32());
         }
     }
 }

@@ -3,6 +3,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 using System;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace ArkDesktopCSCefOsr
 {
@@ -91,5 +92,29 @@ namespace ArkDesktopCSCefOsr
 
         public const int SC_MAXIMIZE = 61488;
         public const int SC_MINIMIZE = 61472;
+
+
+        [DllImport("User32.dll", EntryPoint = "FindWindow")]
+        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+
+        [DllImport("kernel32.dll")]
+        public static extern int GetPrivateProfileInt(string lpAppName, string lpKeyName, int nDefault, string lpFileName);
+
+        [DllImport("kernel32.dll")]
+        public static extern int GetPrivateProfileString(string lpAppName, string lpKeyName, string lpDefault, StringBuilder lpReturnedString, int nSize, string lpFileName);
+
+        [DllImport("kernel32.dll")]
+        public static extern int WritePrivateProfileString(string lpAppName, string lpKeyName, string lpString, string lpFileName);
+
+
+        [DllImport("user32.dll", EntryPoint = "GetWindow")]
+        public static extern IntPtr GetWindow(IntPtr hWnd, int uCmd);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
+
+        [DllImport("user32.dll")]
+        public static extern int SetWindowLong(IntPtr hWnd, int nIndex, uint dwNewLong);
     }
 }

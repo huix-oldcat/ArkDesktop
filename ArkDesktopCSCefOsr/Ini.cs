@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace ArkDesktopCSCefOsr
 {
@@ -11,46 +6,16 @@ namespace ArkDesktopCSCefOsr
     {
         public string FileName { get; set; }
 
-        [DllImport("kernel32.dll")]
-        private static extern int GetPrivateProfileInt(
-            string lpAppName,
-            string lpKeyName,
-            int nDefault,
-            string lpFileName
-            );
-
-        [DllImport("kernel32.dll")]
-        private static extern int GetPrivateProfileString(
-            string lpAppName,
-            string lpKeyName,
-            string lpDefault,
-            StringBuilder lpReturnedString,
-            int nSize,
-            string lpFileName
-            );
-
-        [DllImport("kernel32.dll")]
-        private static extern int WritePrivateProfileString(
-            string lpAppName,
-            string lpKeyName,
-            string lpString,
-            string lpFileName
-            );
-
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="aFileName">Ini文件路径</param>
-        public IniFile(string aFileName)
-        {
-            this.FileName = aFileName;
-        }
+        public IniFile(string aFileName) => FileName = aFileName;
 
         /// <summary>
         /// 构造函数
         /// </summary>
-        public IniFile()
-        { }
+        public IniFile() { }
 
         /// <summary>
         /// [扩展]读Int数值
@@ -61,7 +26,7 @@ namespace ArkDesktopCSCefOsr
         /// <returns></returns>
         public int ReadInt(string section, string name, int def)
         {
-            return GetPrivateProfileInt(section, name, def, this.FileName);
+            return Win32.GetPrivateProfileInt(section, name, def, FileName);
         }
 
         /// <summary>
@@ -74,7 +39,7 @@ namespace ArkDesktopCSCefOsr
         public string ReadString(string section, string name, string def)
         {
             StringBuilder vRetSb = new StringBuilder(2048);
-            GetPrivateProfileString(section, name, def, vRetSb, 2048, this.FileName);
+            Win32.GetPrivateProfileString(section, name, def, vRetSb, 2048, FileName);
             return vRetSb.ToString();
         }
 
@@ -86,8 +51,7 @@ namespace ArkDesktopCSCefOsr
         /// <param name="Ival">写入值</param>
         public void WriteInt(string section, string name, int Ival)
         {
-
-            WritePrivateProfileString(section, name, Ival.ToString(), this.FileName);
+            Win32.WritePrivateProfileString(section, name, Ival.ToString(), FileName);
         }
 
         /// <summary>
@@ -98,7 +62,7 @@ namespace ArkDesktopCSCefOsr
         /// <param name="strVal">写入值</param>
         public void WriteString(string section, string name, string strVal)
         {
-            WritePrivateProfileString(section, name, strVal, this.FileName);
+            Win32.WritePrivateProfileString(section, name, strVal, FileName);
         }
 
         /// <summary>
@@ -107,7 +71,7 @@ namespace ArkDesktopCSCefOsr
         /// <param name="section"></param>
         public void DeleteSection(string section)
         {
-            WritePrivateProfileString(section, null, null, this.FileName);
+            Win32.WritePrivateProfileString(section, null, null, FileName);
         }
 
         /// <summary>
@@ -115,7 +79,7 @@ namespace ArkDesktopCSCefOsr
         /// </summary>
         public void DeleteAllSection()
         {
-            WritePrivateProfileString(null, null, null, this.FileName);
+            Win32.WritePrivateProfileString(null, null, null, FileName);
         }
 
         /// <summary>
@@ -127,7 +91,7 @@ namespace ArkDesktopCSCefOsr
         public string IniReadValue(string section, string name)
         {
             StringBuilder strSb = new StringBuilder(256);
-            GetPrivateProfileString(section, name, "", strSb, 256, this.FileName);
+            Win32.GetPrivateProfileString(section, name, "", strSb, 256, FileName);
             return strSb.ToString();
         }
 
@@ -139,7 +103,7 @@ namespace ArkDesktopCSCefOsr
         /// <param name="value"></param>
         public void IniWriteValue(string section, string name, string value)
         {
-            WritePrivateProfileString(section, name, value, this.FileName);
+            Win32.WritePrivateProfileString(section, name, value, FileName);
         }
     }
 }
