@@ -34,7 +34,10 @@ namespace ArkDesktopCSCefOsr
             }
         }
         public static bool formShutdownFalg;
-        public static Form mainForm, managerForm;
+        public static LayeredWindow layeredWindow;
+        public static Form managerForm;
+        public static ArkDesktopBrowserControl control;
+        public static Thread cfxThread;
 
         [DllImport("User32.dll", EntryPoint = "FindWindow")]
         private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
@@ -50,6 +53,9 @@ namespace ArkDesktopCSCefOsr
             thread = new Thread(new ThreadStart(RealInit));
             thread.IsBackground = true;
             thread.Start();
+            cfxThread = new Thread(new ThreadStart(CfxRuntime.RunMessageLoop));
+            cfxThread.IsBackground = true;
+            cfxThread.Start();
         }
 
         public static void LoadUrl(string url)

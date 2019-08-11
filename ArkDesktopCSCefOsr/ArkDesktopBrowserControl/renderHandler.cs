@@ -101,8 +101,8 @@ namespace ArkDesktopCSCefOsr
                     g.Clear(Color.Transparent);
                     g.DrawImageUnscaled(bm, 0, 0);
                 }
+                Manager.layeredWindow.SetBits(pixelBuffer);
             }
-            Invalidate();
             //foreach (CfxRect r in e.DirtyRects)
             //{
             //    Invalidate(new Rectangle(r.X, r.Y, r.Width, r.Height));
@@ -112,34 +112,34 @@ namespace ArkDesktopCSCefOsr
         void RenderHandler_GetViewRect(object sender, CfxGetViewRectEventArgs e)
         {
 
-            if (InvokeRequired)
+            if (Manager.layeredWindow.InvokeRequired)
             {
-                Invoke((MethodInvoker)(() => RenderHandler_GetViewRect(sender, e)));
+                Manager.layeredWindow.Invoke((MethodInvoker)(() => RenderHandler_GetViewRect(sender, e)));
                 return;
             }
 
-            if (!IsDisposed)
+            if (!Manager.layeredWindow.IsDisposed)
             {
-                var origin = PointToScreen(new Point(0, 0));
+                var origin = Manager.layeredWindow.PointToScreen(new Point(0, 0));
                 e.Rect.X = origin.X;
                 e.Rect.Y = origin.Y;
-                e.Rect.Width = Width == 0 ? 1 : Width;
-                e.Rect.Height = Height == 0 ? 1 : Height;
+                e.Rect.Width = Manager.layeredWindow.Width == 0 ? 1 : Manager.layeredWindow.Width;
+                e.Rect.Height = Manager.layeredWindow.Height == 0 ? 1 : Manager.layeredWindow.Height;
             }
         }
 
         void RenderHandler_GetScreenPoint(object sender, CfxGetScreenPointEventArgs e)
         {
 
-            if (InvokeRequired)
+            if (Manager.layeredWindow.InvokeRequired)
             {
-                Invoke((MethodInvoker)(() => RenderHandler_GetScreenPoint(sender, e)));
+                Manager.layeredWindow.Invoke((MethodInvoker)(() => RenderHandler_GetScreenPoint(sender, e)));
                 return;
             }
 
-            if (!IsDisposed)
+            if (!Manager.layeredWindow.IsDisposed)
             {
-                var origin = PointToScreen(new Point(e.ViewX, e.ViewY));
+                var origin = Manager.layeredWindow.PointToScreen(new Point(e.ViewX, e.ViewY));
                 e.ScreenX = origin.X;
                 e.ScreenY = origin.Y;
                 e.SetReturnValue(true);

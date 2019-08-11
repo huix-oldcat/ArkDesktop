@@ -15,18 +15,9 @@ namespace ArkDesktopCSCefOsr
     {
         void LifeSpanHandler_OnAfterCreated(object sender, CfxOnAfterCreatedEventArgs e)
         {
-            if (InvokeRequired)
-            {
-                Invoke((MethodInvoker)(() => LifeSpanHandler_OnAfterCreated(sender, e)));
-                return;
-            }
             Manager.Browser = e.Browser;
             browser = e.Browser;
             browser.MainFrame.LoadUrl("about:version");
-            if (Focused)
-            {
-                browser.Host.SendFocusEvent(true);
-            }
         }
     }
 }

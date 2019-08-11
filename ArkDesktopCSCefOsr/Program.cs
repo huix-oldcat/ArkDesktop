@@ -49,28 +49,12 @@ namespace ArkDesktopCSCefOsr
                 if (!CfxRuntime.Initialize(settings, app))
                     Environment.Exit(-1);
             }
-            
 
-            Manager.mainForm = new Form1
-            {
-                //FormBorderStyle = System.Windows.Forms.FormBorderStyle.None,
-                BackColor = Color.White,
-                Height = 300,
-                Width = 300,
-                TransparencyKey = Color.White,
-                AllowTransparency = true
-            };
-
-            ArkDesktopBrowserControl control = new ArkDesktopBrowserControl
-            {
-                Dock = DockStyle.Fill,
-                Parent = Manager.mainForm
-            };
-            Manager.mainForm.Controls.Add(control);
-
+            Manager.layeredWindow = new LayeredWindow();
+            Manager.control = new ArkDesktopBrowserControl();
             Manager.Init();
 
-            Application.Run(Manager.mainForm);
+            Application.Run(Manager.layeredWindow);
 
             // CfxRuntime.QuitMessageLoop();
             CfxRuntime.Shutdown();

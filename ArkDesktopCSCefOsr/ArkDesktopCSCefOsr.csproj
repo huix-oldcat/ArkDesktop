@@ -72,25 +72,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArkDesktopBrowserControl\lifeSpanHandler.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ArkDesktopBrowserControl\loadHandler.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ArkDesktopBrowserControl\main.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ArkDesktopBrowserControl\renderHandler.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Form1.cs">
+    <Compile Include="ArkDesktopBrowserControl\lifeSpanHandler.cs" />
+    <Compile Include="ArkDesktopBrowserControl\loadHandler.cs" />
+    <Compile Include="ArkDesktopBrowserControl\main.cs" />
+    <Compile Include="ArkDesktopBrowserControl\renderHandler.cs" />
+    <Compile Include="Ini.cs" />
+    <Compile Include="LayeredWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="LayeredWindow.Designer.cs">
+      <DependentUpon>LayeredWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="Ini.cs" />
     <Compile Include="Manager\attach.cs" />
     <Compile Include="Manager\window.cs">
       <SubType>Form</SubType>
@@ -101,9 +93,7 @@
     <Compile Include="Manager\main.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
+    <Compile Include="Win32Api.cs" />
     <EmbeddedResource Include="Manager\window.resx">
       <DependentUpon>window.cs</DependentUpon>
     </EmbeddedResource>

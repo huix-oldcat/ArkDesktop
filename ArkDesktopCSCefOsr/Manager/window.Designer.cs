@@ -42,7 +42,6 @@
             this.button_NegX = new System.Windows.Forms.Button();
             this.button_NegW = new System.Windows.Forms.Button();
             this.button_PosW = new System.Windows.Forms.Button();
-            this.checkBox_ShowBorder = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.button_LoadScript = new System.Windows.Forms.Button();
             this.button_LoadUrl = new System.Windows.Forms.Button();
@@ -51,11 +50,13 @@
             this.button_LoadConf = new System.Windows.Forms.Button();
             this.button_SaveConf = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.textBox_AttachHwnd = new System.Windows.Forms.TextBox();
-            this.button_TryFindProgman = new System.Windows.Forms.Button();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.button_ApplyAttach = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.button_ApplyAttach = new System.Windows.Forms.Button();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.button_TryFindProgman = new System.Windows.Forms.Button();
+            this.textBox_AttachHwnd = new System.Windows.Forms.TextBox();
+            this.button_ChangeSize = new System.Windows.Forms.Button();
+            this.button_ChangePos = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -82,7 +83,6 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.tableLayoutPanel1);
-            this.groupBox1.Controls.Add(this.checkBox_ShowBorder);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(108, 165);
@@ -95,6 +95,7 @@
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Controls.Add(this.button_ChangePos, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.button_NegH, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.button_PosH, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.button_PosY, 1, 1);
@@ -103,22 +104,23 @@
             this.tableLayoutPanel1.Controls.Add(this.button_NegX, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.button_NegW, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.button_PosW, 1, 2);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(6, 42);
+            this.tableLayoutPanel1.Controls.Add(this.button_ChangeSize, 1, 4);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(6, 20);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 4;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(96, 117);
+            this.tableLayoutPanel1.RowCount = 5;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(96, 139);
             this.tableLayoutPanel1.TabIndex = 4;
             // 
             // button_NegH
             // 
-            this.button_NegH.Location = new System.Drawing.Point(3, 90);
+            this.button_NegH.Location = new System.Drawing.Point(51, 84);
             this.button_NegH.Name = "button_NegH";
-            this.button_NegH.Size = new System.Drawing.Size(42, 23);
+            this.button_NegH.Size = new System.Drawing.Size(42, 21);
             this.button_NegH.TabIndex = 7;
             this.button_NegH.Text = "H-1";
             this.button_NegH.UseVisualStyleBackColor = true;
@@ -126,9 +128,9 @@
             // 
             // button_PosH
             // 
-            this.button_PosH.Location = new System.Drawing.Point(51, 90);
+            this.button_PosH.Location = new System.Drawing.Point(3, 84);
             this.button_PosH.Name = "button_PosH";
-            this.button_PosH.Size = new System.Drawing.Size(42, 23);
+            this.button_PosH.Size = new System.Drawing.Size(42, 21);
             this.button_PosH.TabIndex = 6;
             this.button_PosH.Text = "H+1";
             this.button_PosH.UseVisualStyleBackColor = true;
@@ -136,9 +138,9 @@
             // 
             // button_PosY
             // 
-            this.button_PosY.Location = new System.Drawing.Point(51, 32);
+            this.button_PosY.Location = new System.Drawing.Point(51, 30);
             this.button_PosY.Name = "button_PosY";
-            this.button_PosY.Size = new System.Drawing.Size(42, 23);
+            this.button_PosY.Size = new System.Drawing.Size(42, 21);
             this.button_PosY.TabIndex = 4;
             this.button_PosY.Text = "Y+1";
             this.button_PosY.UseVisualStyleBackColor = true;
@@ -146,9 +148,9 @@
             // 
             // button_NegY
             // 
-            this.button_NegY.Location = new System.Drawing.Point(3, 32);
+            this.button_NegY.Location = new System.Drawing.Point(3, 30);
             this.button_NegY.Name = "button_NegY";
-            this.button_NegY.Size = new System.Drawing.Size(42, 23);
+            this.button_NegY.Size = new System.Drawing.Size(42, 21);
             this.button_NegY.TabIndex = 3;
             this.button_NegY.Text = "Y-1";
             this.button_NegY.UseVisualStyleBackColor = true;
@@ -158,7 +160,7 @@
             // 
             this.button_PosX.Location = new System.Drawing.Point(51, 3);
             this.button_PosX.Name = "button_PosX";
-            this.button_PosX.Size = new System.Drawing.Size(42, 23);
+            this.button_PosX.Size = new System.Drawing.Size(42, 21);
             this.button_PosX.TabIndex = 2;
             this.button_PosX.Text = "X+1";
             this.button_PosX.UseVisualStyleBackColor = true;
@@ -168,7 +170,7 @@
             // 
             this.button_NegX.Location = new System.Drawing.Point(3, 3);
             this.button_NegX.Name = "button_NegX";
-            this.button_NegX.Size = new System.Drawing.Size(42, 23);
+            this.button_NegX.Size = new System.Drawing.Size(42, 21);
             this.button_NegX.TabIndex = 1;
             this.button_NegX.Text = "X-1";
             this.button_NegX.UseVisualStyleBackColor = true;
@@ -176,9 +178,9 @@
             // 
             // button_NegW
             // 
-            this.button_NegW.Location = new System.Drawing.Point(3, 61);
+            this.button_NegW.Location = new System.Drawing.Point(3, 57);
             this.button_NegW.Name = "button_NegW";
-            this.button_NegW.Size = new System.Drawing.Size(42, 23);
+            this.button_NegW.Size = new System.Drawing.Size(42, 21);
             this.button_NegW.TabIndex = 5;
             this.button_NegW.Text = "W-1";
             this.button_NegW.UseVisualStyleBackColor = true;
@@ -186,24 +188,13 @@
             // 
             // button_PosW
             // 
-            this.button_PosW.Location = new System.Drawing.Point(51, 61);
+            this.button_PosW.Location = new System.Drawing.Point(51, 57);
             this.button_PosW.Name = "button_PosW";
-            this.button_PosW.Size = new System.Drawing.Size(42, 23);
+            this.button_PosW.Size = new System.Drawing.Size(42, 21);
             this.button_PosW.TabIndex = 6;
             this.button_PosW.Text = "W+1";
             this.button_PosW.UseVisualStyleBackColor = true;
             this.button_PosW.Click += new System.EventHandler(this.Button_WH_Click);
-            // 
-            // checkBox_ShowBorder
-            // 
-            this.checkBox_ShowBorder.AutoSize = true;
-            this.checkBox_ShowBorder.Location = new System.Drawing.Point(6, 20);
-            this.checkBox_ShowBorder.Name = "checkBox_ShowBorder";
-            this.checkBox_ShowBorder.Size = new System.Drawing.Size(96, 16);
-            this.checkBox_ShowBorder.TabIndex = 3;
-            this.checkBox_ShowBorder.Text = "显示窗口边框";
-            this.checkBox_ShowBorder.UseVisualStyleBackColor = true;
-            this.checkBox_ShowBorder.CheckedChanged += new System.EventHandler(this.CheckBox_ShowBorder_CheckedChanged);
             // 
             // groupBox2
             // 
@@ -298,32 +289,14 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "附加层";
             // 
-            // textBox_AttachHwnd
+            // label1
             // 
-            this.textBox_AttachHwnd.Location = new System.Drawing.Point(47, 17);
-            this.textBox_AttachHwnd.Name = "textBox_AttachHwnd";
-            this.textBox_AttachHwnd.Size = new System.Drawing.Size(201, 21);
-            this.textBox_AttachHwnd.TabIndex = 0;
-            // 
-            // button_TryFindProgman
-            // 
-            this.button_TryFindProgman.Location = new System.Drawing.Point(7, 43);
-            this.button_TryFindProgman.Name = "button_TryFindProgman";
-            this.button_TryFindProgman.Size = new System.Drawing.Size(258, 23);
-            this.button_TryFindProgman.TabIndex = 1;
-            this.button_TryFindProgman.Text = "尝试寻找可用句柄(桌面底层)";
-            this.button_TryFindProgman.UseVisualStyleBackColor = true;
-            this.button_TryFindProgman.Click += new System.EventHandler(this.Button_TryFindProgman_Click);
-            // 
-            // linkLabel1
-            // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(254, 20);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(11, 12);
-            this.linkLabel1.TabIndex = 2;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "?";
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 20);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 12);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "句柄:";
             // 
             // button_ApplyAttach
             // 
@@ -335,14 +308,56 @@
             this.button_ApplyAttach.UseVisualStyleBackColor = true;
             this.button_ApplyAttach.Click += new System.EventHandler(this.Button_ApplyAttach_Click);
             // 
-            // label1
+            // linkLabel1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 20);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 12);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "句柄:";
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(254, 20);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(11, 12);
+            this.linkLabel1.TabIndex = 2;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "?";
+            // 
+            // button_TryFindProgman
+            // 
+            this.button_TryFindProgman.Location = new System.Drawing.Point(7, 43);
+            this.button_TryFindProgman.Name = "button_TryFindProgman";
+            this.button_TryFindProgman.Size = new System.Drawing.Size(258, 23);
+            this.button_TryFindProgman.TabIndex = 1;
+            this.button_TryFindProgman.Text = "尝试寻找可用句柄(桌面底层)";
+            this.button_TryFindProgman.UseVisualStyleBackColor = true;
+            this.button_TryFindProgman.Click += new System.EventHandler(this.Button_TryFindProgman_Click);
+            // 
+            // textBox_AttachHwnd
+            // 
+            this.textBox_AttachHwnd.Location = new System.Drawing.Point(47, 17);
+            this.textBox_AttachHwnd.Name = "textBox_AttachHwnd";
+            this.textBox_AttachHwnd.Size = new System.Drawing.Size(201, 21);
+            this.textBox_AttachHwnd.TabIndex = 0;
+            // 
+            // button_ChangeSize
+            // 
+            this.button_ChangeSize.Location = new System.Drawing.Point(51, 111);
+            this.button_ChangeSize.Name = "button_ChangeSize";
+            this.button_ChangeSize.Size = new System.Drawing.Size(42, 23);
+            this.button_ChangeSize.TabIndex = 8;
+            this.button_ChangeSize.Text = "Size";
+            this.button_ChangeSize.UseVisualStyleBackColor = true;
+            this.button_ChangeSize.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Button_ChangeSize_MouseDown);
+            this.button_ChangeSize.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Button_ChangeSize_MouseMove);
+            this.button_ChangeSize.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Button_ChangeSize_MouseUp);
+            // 
+            // button_ChangePos
+            // 
+            this.button_ChangePos.Location = new System.Drawing.Point(3, 111);
+            this.button_ChangePos.Name = "button_ChangePos";
+            this.button_ChangePos.Size = new System.Drawing.Size(42, 23);
+            this.button_ChangePos.TabIndex = 9;
+            this.button_ChangePos.Text = "Pos";
+            this.button_ChangePos.UseVisualStyleBackColor = true;
+            this.button_ChangePos.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Button_ChangePos_MouseDown);
+            this.button_ChangePos.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Button_ChangePos_MouseMove);
+            this.button_ChangePos.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Button_ChangePos_MouseUp);
             // 
             // ManagerForm
             // 
@@ -359,7 +374,6 @@
             this.Load += new System.EventHandler(this.Manager_Load);
             this.Resize += new System.EventHandler(this.ManagerWindow_Resize);
             this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
@@ -381,7 +395,6 @@
         private System.Windows.Forms.Button button_NegY;
         private System.Windows.Forms.Button button_PosX;
         private System.Windows.Forms.Button button_NegX;
-        private System.Windows.Forms.CheckBox checkBox_ShowBorder;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button button_LoadScript;
         private System.Windows.Forms.Button button_LoadUrl;
@@ -399,5 +412,7 @@
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.Button button_TryFindProgman;
         private System.Windows.Forms.TextBox textBox_AttachHwnd;
+        private System.Windows.Forms.Button button_ChangePos;
+        private System.Windows.Forms.Button button_ChangeSize;
     }
 }

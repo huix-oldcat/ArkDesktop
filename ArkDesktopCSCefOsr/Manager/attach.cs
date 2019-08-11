@@ -14,7 +14,7 @@ namespace ArkDesktopCSCefOsr
         private static extern IntPtr GetWindow(IntPtr hWnd, int uCmd);
 
         [DllImport("user32.dll")]
-        private static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
+        public static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
 
         public static string GetHandleString(IntPtr ptr)
         {
@@ -54,14 +54,17 @@ namespace ArkDesktopCSCefOsr
             return IntPtr.Zero;
         }
 
+        [DllImport("user32.dll")]
+        static extern int SetWindowLong(IntPtr hWnd, int nIndex, uint dwNewLong);
+
         public static void SetMainFormParent(IntPtr ptr)
         {
-            if (mainForm.InvokeRequired)
+            if (layeredWindow.InvokeRequired)
             {
-                mainForm.Invoke((MethodInvoker)(() => SetMainFormParent(ptr)));
+                layeredWindow.Invoke((MethodInvoker)(() => SetMainFormParent(ptr)));
                 return;
             }
-            SetParent(mainForm.Handle, ptr);
+            SetWindowLong(layeredWindow.Handle, -8, (uint)ptr.ToInt32());
         }
     }
 }
