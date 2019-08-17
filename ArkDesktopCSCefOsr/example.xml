@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ArkDesktop>
+  <Version>0.1</Version>
+  <Redirect MimeType="text/html" Src="http://127.0.0.1/pixis/aglina.html" Desc="$(ResourceRoot)/source.html"/>
+  <Redirect MimeType="application/javascript" Src="http://127.0.0.1/pixis/js/pixi_spine.js" Desc="$(ResourceRoot)/pixi_spine.js"/>
+  <Redirect MimeType="application/javascript" Src="https://cdn.bootcss.com/pixi.js/4.8.8/pixi.min.js" Desc="$(ResourceRoot)/pixi.min.js"/>
+  <Redirect MimeType="application/json" Src="http://127.0.0.1/pixis/assets/build_char_291_aglina.json" Desc="$(ResourceRoot)/aglina.json"/>
+  <Redirect MimeType="text/plain" Src="http://127.0.0.1/pixis/assets/build_char_291_aglina.atlas" Desc="$(ResourceRoot)/aglina.atlas"/>
+  <Redirect MimeType="image/png" Src="http://127.0.0.1/pixis/assets/build_char_291_aglina.png" Desc="$(ResourceRoot)/aglina.png"/>
+</ArkDesktop>

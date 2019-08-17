@@ -4,6 +4,7 @@
 using System.Windows.Forms;
 using System.Threading;
 using Chromium;
+using System.IO;
 
 namespace ArkDesktopCSCefOsr
 {
@@ -47,6 +48,11 @@ namespace ArkDesktopCSCefOsr
             cfxThread = new Thread(new ThreadStart(CfxRuntime.RunMessageLoop));
             cfxThread.IsBackground = true;
             cfxThread.Start();
+
+            if(File.Exists("config.xml"))
+            {
+                Resources.LoadConfig("config.xml");
+            }
         }
 
         public static void LoadUrl(string url)

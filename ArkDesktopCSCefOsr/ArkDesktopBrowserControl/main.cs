@@ -15,6 +15,7 @@ namespace ArkDesktopCSCefOsr
         private CfxLifeSpanHandler lifeSpanHandler;
         private CfxLoadHandler loadHandler;
         private CfxRenderHandler renderHandler;
+        private CfxRequestHandler requestHandler;
 
         private Bitmap pixelBuffer;
         private object pbLock = new object();
@@ -36,12 +37,16 @@ namespace ArkDesktopCSCefOsr
             loadHandler = new CfxLoadHandler();
             loadHandler.OnLoadError += LoadHandler_OnLoadError;
             loadHandler.OnLoadEnd += LoadHandler_OnLoadEnd;
+
+            requestHandler = new CfxRequestHandler();
+            requestHandler.GetResourceHandler += RequestHandler_GetResourceHandler;
             #endregion
 
             client = new CfxClient();
             client.GetLifeSpanHandler += (sender, e) => e.SetReturnValue(lifeSpanHandler);
             client.GetRenderHandler += (sender, e) => e.SetReturnValue(renderHandler);
             client.GetLoadHandler += (sender, e) => e.SetReturnValue(loadHandler);
+            client.GetRequestHandler += (sender, e) => e.SetReturnValue(requestHandler);
 
             var settings = new CfxBrowserSettings();
             settings.BackgroundColor = new CfxColor(0, 0, 0, 0);

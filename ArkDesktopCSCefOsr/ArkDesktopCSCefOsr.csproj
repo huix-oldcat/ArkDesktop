@@ -77,6 +77,8 @@
     <Compile Include="ArkDesktopBrowserControl\loadHandler.cs" />
     <Compile Include="ArkDesktopBrowserControl\main.cs" />
     <Compile Include="ArkDesktopBrowserControl\renderHandler.cs" />
+    <Compile Include="ArkDesktopBrowserControl\requestHandler.cs" />
+    <Compile Include="ArkDesktopBrowserControl\resourceHandler.cs" />
     <Compile Include="Ini.cs" />
     <Compile Include="LayeredWindow.cs">
       <SubType>Form</SubType>
@@ -85,6 +87,7 @@
       <DependentUpon>LayeredWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Manager\attach.cs" />
+    <Compile Include="Manager\resource.cs" />
     <Compile Include="Manager\window.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -119,6 +122,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="example.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
