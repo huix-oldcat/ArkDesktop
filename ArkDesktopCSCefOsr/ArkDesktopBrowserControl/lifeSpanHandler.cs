@@ -12,6 +12,7 @@ namespace ArkDesktopCSCefOsr
             Manager.Browser = e.Browser;
             browser = e.Browser;
             browser.MainFrame.LoadUrl("about:version");
+            Manager.startupFinished = true;
         }
     }
 }

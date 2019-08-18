@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Threading;
 using Chromium;
 using System.IO;
+using System;
 
 namespace ArkDesktopCSCefOsr
 {
@@ -32,6 +33,7 @@ namespace ArkDesktopCSCefOsr
         public static ManagerForm managerForm;
         public static ArkDesktopBrowserControl control;
         public static Thread cfxThread;
+        public static bool startupFinished = false;
 
         private static void RealInit()
         {
@@ -49,14 +51,15 @@ namespace ArkDesktopCSCefOsr
             cfxThread.IsBackground = true;
             cfxThread.Start();
 
-            if(File.Exists("config.xml"))
+            if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.xml")))
             {
-                Resources.LoadConfig("config.xml");
+                Resources.LoadConfig(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.xml"));
             }
         }
 
         public static void LoadUrl(string url)
         {
+            Thread.Sleep(500);
             lock (t_lock)
             {
                 Browser.MainFrame.LoadUrl(url);

@@ -15,7 +15,7 @@ namespace ArkDesktopCSCefOsr
         [STAThread]
         static void Main()
         {
-            string nowDir = Environment.CurrentDirectory;
+            string nowDir = AppDomain.CurrentDomain.BaseDirectory;
             if(!System.IO.File.Exists(System.IO.Path.Combine(nowDir, "libcfx.dll")))
             {
                 if(MessageBox.Show("并没有在软件目录下找到基本运行库\n您应该在获得这款软件的时候同时获得关于本软件依赖库的信息\n如果没有,您可以到本软件的Github Wiki获得帮助\n是否现在前往?",

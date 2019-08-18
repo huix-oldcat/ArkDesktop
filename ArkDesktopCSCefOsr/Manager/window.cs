@@ -3,8 +3,12 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 using System;
 using System.Drawing;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
+using Microsoft.Win32;
 
 namespace ArkDesktopCSCefOsr
 {
@@ -17,10 +21,11 @@ namespace ArkDesktopCSCefOsr
 
         private void Manager_Load(object sender, EventArgs e)
         {
-            IniFile ini = new IniFile(Environment.CurrentDirectory + "/config.ini");
-            if(ini.ReadInt("auto", "load",0) == 1)
+            IniFile ini = new IniFile(AppDomain.CurrentDomain.BaseDirectory + "/config.ini");
+            if (ini.ReadInt("auto", "load", 0) == 1)
             {
-                Button_LoadConf_Click(button_LoadConf, new EventArgs());
+                while (Manager.startupFinished == false) ;
+                LoadConfig();
             }
         }
 
@@ -49,7 +54,7 @@ namespace ArkDesktopCSCefOsr
 
         private void ManagerWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if(e.CloseReason == CloseReason.UserClosing)
+            if (e.CloseReason == CloseReason.UserClosing)
             {
                 e.Cancel = false;
                 Manager.cfxThread.Abort();
@@ -145,7 +150,7 @@ namespace ArkDesktopCSCefOsr
 
         private void Button_SaveConf_Click(object sender, EventArgs e)
         {
-            IniFile ini = new IniFile(Environment.CurrentDirectory + "/config.ini");
+            IniFile ini = new IniFile(AppDomain.CurrentDomain.BaseDirectory + "/config.ini");
             ini.WriteInt("location", "x", Manager.layeredWindow.Location.X);
             ini.WriteInt("location", "y", Manager.layeredWindow.Location.Y);
             ini.WriteInt("size", "width", Manager.layeredWindow.Size.Width);
@@ -157,7 +162,17 @@ namespace ArkDesktopCSCefOsr
 
         private void Button_LoadConf_Click(object sender, EventArgs e)
         {
-            IniFile ini = new IniFile(Environment.CurrentDirectory + "/config.ini");
+            LoadConfig();
+        }
+
+        public void LoadConfig()
+        {
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)(() => LoadConfig()));
+                return;
+            }
+            IniFile ini = new IniFile(AppDomain.CurrentDomain.BaseDirectory + "/config.ini");
             Point point = new Point
             {
                 X = ini.ReadInt("location", "x", 300),
@@ -168,13 +183,13 @@ namespace ArkDesktopCSCefOsr
                 Width = ini.ReadInt("size", "width", 300),
                 Height = ini.ReadInt("size", "height", 300)
             };
-            Invoke((MethodInvoker)(() =>
+            Manager.layeredWindow.Invoke((MethodInvoker)(() =>
             {
                 Manager.layeredWindow.Location = point;
                 Manager.layeredWindow.Size = size;
             }));
             textBox_Location.Text = ini.ReadString("target", "url", textBox_Location.Text);
-            if(textBox_Location.Text != "")
+            if (textBox_Location.Text != "")
             {
                 Button_LoadUrl_Click(button_LoadUrl, new EventArgs());
             }
@@ -190,7 +205,7 @@ namespace ArkDesktopCSCefOsr
 
         private void Button_ApplyAttach_Click(object sender, EventArgs e)
         {
-            if(textBox_AttachHwnd.Text == "")
+            if (textBox_AttachHwnd.Text == "")
             {
                 return;
             }
@@ -222,7 +237,7 @@ namespace ArkDesktopCSCefOsr
 
         private void Button_ChangePos_MouseMove(object sender, MouseEventArgs e)
         {
-            if(isMouseDown == false)
+            if (isMouseDown == false)
             {
                 return;
             }
@@ -284,6 +299,35 @@ namespace ArkDesktopCSCefOsr
             catch (FormatException)
             {
                 Manager.control.Zoom = 1d;
+            }
+        }
+
+        private void Button_SetAutoRun_Click(object sender, EventArgs e)
+        {
+            RegistryKey autorunKey = Registry.CurrentUser.CreateSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\\", true);
+            autorunKey.SetValue("ArkDesktop", Application.ExecutablePath);
+            autorunKey.Close();
+        }
+
+        private void Button_ResetAutoRun_Click(object sender, EventArgs e)
+        {
+            RegistryKey autorunKey = Registry.CurrentUser.CreateSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\\", true);
+            autorunKey.DeleteValue("ArkDesktop", false);
+            autorunKey.Close();
+        }
+
+        private void Button_CheckAutoRun_Click(object sender, EventArgs e)
+        {
+            RegistryKey autorunKey = Registry.CurrentUser.CreateSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\\", true);
+            if (autorunKey.GetValue("ArkDesktop") == null)
+            {
+                MessageBox.Show("没有的呢", "查询结果", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            if (autorunKey.GetValue("ArkDesktop").ToString() != Application.ExecutablePath)
+            {
+                MessageBox.Show("存在一个名为ArkDesktop的启动项,但没有指向本可执行文件,而是指向了:\n" + autorunKey.GetValue("ArkDesktop").ToString(), "查询结果", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
         }
     }

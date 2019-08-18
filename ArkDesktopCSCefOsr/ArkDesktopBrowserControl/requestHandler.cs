@@ -17,7 +17,7 @@ namespace ArkDesktopCSCefOsr
             if (Manager.Resources.Redirects.ContainsKey(e.Request.Url))
             {
                 Manager.Resources.Resource resource = Manager.Resources.Redirects[e.Request.Url];
-                e.SetReturnValue(new ResourceHandler(resource.mimeType, new FileStream(resource.destPath.Replace("$(ResourceRoot)", Path.Combine(Environment.CurrentDirectory, "Resources")), FileMode.Open)));//TODO
+                e.SetReturnValue(new ResourceHandler(resource.mimeType, new FileStream(resource.destPath.Replace("$(ResourceRoot)", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources")), FileMode.Open)));//TODO
             }
             else
             {
