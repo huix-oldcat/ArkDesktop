@@ -16,6 +16,15 @@ namespace ArkDesktopCSCefOsr
         static void Main()
         {
             string nowDir = Environment.CurrentDirectory;
+            if(!System.IO.File.Exists(System.IO.Path.Combine(nowDir, "libcfx.dll")))
+            {
+                if(MessageBox.Show("并没有在软件目录下找到基本运行库\n您应该在获得这款软件的时候同时获得关于本软件依赖库的信息\n如果没有,您可以到本软件的Github Wiki获得帮助\n是否现在前往?",
+                                "未能找到依赖库", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    System.Diagnostics.Process.Start("https://github.com/huix-oldcat/ArkDesktop/wiki");
+                }
+                return;
+            }
             CfxRuntime.LibCefDirPath = System.IO.Path.Combine(nowDir, "cef");
             CfxRuntime.LibCfxDirPath = nowDir;
             int exitCode = CfxRuntime.ExecuteProcess(null);
