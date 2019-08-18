@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29123.88
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArkDesktopCSCefOsr", "ArkDesktopCSCefOsr\ArkDesktopCSCefOsr.csproj", "{3FC81718-7E88-4E43-8E35-1B5222A85672}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageStitchingTool", "ImageStitchingTool\ImageStitchingTool.csproj", "{CE9B875B-814A-4164-88E7-2BE580F6819C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,18 @@ Global
 		{3FC81718-7E88-4E43-8E35-1B5222A85672}.Release|x64.Build.0 = Release|Any CPU
 		{3FC81718-7E88-4E43-8E35-1B5222A85672}.Release|x86.ActiveCfg = Release|Any CPU
 		{3FC81718-7E88-4E43-8E35-1B5222A85672}.Release|x86.Build.0 = Release|Any CPU
+		{CE9B875B-814A-4164-88E7-2BE580F6819C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE9B875B-814A-4164-88E7-2BE580F6819C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE9B875B-814A-4164-88E7-2BE580F6819C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CE9B875B-814A-4164-88E7-2BE580F6819C}.Debug|x64.Build.0 = Debug|Any CPU
+		{CE9B875B-814A-4164-88E7-2BE580F6819C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CE9B875B-814A-4164-88E7-2BE580F6819C}.Debug|x86.Build.0 = Debug|Any CPU
+		{CE9B875B-814A-4164-88E7-2BE580F6819C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE9B875B-814A-4164-88E7-2BE580F6819C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE9B875B-814A-4164-88E7-2BE580F6819C}.Release|x64.ActiveCfg = Release|Any CPU
+		{CE9B875B-814A-4164-88E7-2BE580F6819C}.Release|x64.Build.0 = Release|Any CPU
+		{CE9B875B-814A-4164-88E7-2BE580F6819C}.Release|x86.ActiveCfg = Release|Any CPU
+		{CE9B875B-814A-4164-88E7-2BE580F6819C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
