@@ -98,6 +98,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Win32Api.cs" />
+    <EmbeddedResource Include="LayeredWindow.resx">
+      <DependentUpon>LayeredWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Manager\window.resx">
       <DependentUpon>window.cs</DependentUpon>
     </EmbeddedResource>

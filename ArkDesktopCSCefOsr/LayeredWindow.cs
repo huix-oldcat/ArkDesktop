@@ -90,5 +90,15 @@ namespace ArkDesktopCSCefOsr
         {
             InitializeComponent();
         }
+
+        private void LayeredWindow_MouseDown(object sender, MouseEventArgs e)
+        {
+            Manager.control.browser.Host.SendMouseClickEvent(new Chromium.CfxMouseEvent { X = e.X, Y = e.Y }, Chromium.CfxMouseButtonType.Left, false, 1);
+        }
+
+        private void LayeredWindow_MouseUp(object sender, MouseEventArgs e)
+        {
+            Manager.control.browser.Host.SendMouseClickEvent(new Chromium.CfxMouseEvent { X = e.X, Y = e.Y }, Chromium.CfxMouseButtonType.Left, true, 1);
+        }
     }
 }
