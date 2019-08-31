@@ -32,14 +32,16 @@ namespace ArkDesktop
         private List<Thread> threads = new List<Thread>();
         private Thread containerThread;
         private PluginGuiContainer container;
+        private Dictionary<string, string> pluginFrom = new Dictionary<string, string>();
+        private Dictionary<string, bool> launchable = new Dictionary<string, bool>();
 
         /// <summary>
         /// ArkDesktop Core构造类
         /// 应由ArkDesktop Service等程序调用
         /// </summary>
         /// <param name="rootPath">寻找配置、插件等所基于的根目录</param>
-        /// <param name="loadDefaultConfig">是否加载默认配置</param>
-        public Core(string rootPath, bool loadDefaultConfig = true)
+        /// <param name="loadPlugins">是否加载默认配置</param>
+        public Core(string rootPath, bool loadPlugins = true)
         {
             RootPath = rootPath;
             config = new Config();
@@ -60,6 +62,13 @@ namespace ArkDesktop
             containerThread.SetApartmentState(ApartmentState.STA);
             containerThread.Start();
             ContainerThreadID = containerThread.ManagedThreadId;
+            if (loadPlugins)
+            {
+                foreach (string i in config.PluginList)
+                {
+                    ImportPlugin(i);
+                }
+            }
         }
 
         /// <summary>
@@ -84,8 +93,15 @@ namespace ArkDesktop
             foreach (Type type in found)
             {
                 IArkDesktopPlugin newPlugin = (IArkDesktopPlugin)type.GetConstructor(new Type[0]).Invoke(null);
+                if (plugins.ContainsKey(newPlugin.Name))
+                {
+                    continue;
+                }
                 plugins.Add(newPlugin.Name, newPlugin);
+                pluginFrom.Add(newPlugin.Name, name);
+                launchable.Add(newPlugin.Name, typeof(IArkDesktopLaunchable).IsAssignableFrom(type));
             }
+            config.AddPlugin(name);
         }
 
         /// <summary>
@@ -95,6 +111,16 @@ namespace ArkDesktop
         public List<string> GetLoadedPlugins()
         {
             return plugins.Keys.ToList();
+        }
+
+        public string GetDllNameByPluginName(string pluginName)
+        {
+            return pluginFrom.ContainsKey(pluginName) ? pluginFrom[pluginName] : null;
+        }
+
+        public bool IsLaunchable(string pluginName)
+        {
+            return launchable.ContainsKey(pluginName) ? launchable[pluginName] : false;
         }
 
         public void SaveConfig()
@@ -123,7 +149,11 @@ namespace ArkDesktop
             {
                 throw new Exception("Plugin hasn't been loaded.");
             }
-            Thread thread = new Thread(new ParameterizedThreadStart(plugins[pluginName].MainThread));
+            if (launchable[pluginName] == false)
+            {
+                throw new Exception("Plugin is not launchable.");
+            }
+            Thread thread = new Thread(new ParameterizedThreadStart(((IArkDesktopLaunchable)plugins[pluginName]).MainThread));
             thread.IsBackground = true;
             thread.Start(this);
             threads.Add(thread);

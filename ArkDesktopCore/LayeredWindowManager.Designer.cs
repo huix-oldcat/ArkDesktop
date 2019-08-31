@@ -68,7 +68,6 @@
             this.button_Attach.TabIndex = 2;
             this.button_Attach.Text = "附加到桌面";
             this.button_Attach.UseVisualStyleBackColor = true;
-            this.button_Attach.Click += new System.EventHandler(this.Button_Attach_Click);
             // 
             // LayeredWindowManager
             // 

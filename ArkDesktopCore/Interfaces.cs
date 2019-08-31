@@ -9,6 +9,10 @@ namespace ArkDesktop
     public interface IArkDesktopPlugin
     {
         string Name { get; }
+    }
+
+    public interface IArkDesktopLaunchable : IArkDesktopPlugin
+    {
         void MainThread(object coreInst);
         void RequestDispose();
     }

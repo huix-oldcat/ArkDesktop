@@ -10,6 +10,17 @@ namespace ArkDesktop
 {
     public class Config
     {
+        public class ConfigInfo
+        {
+            public readonly string configName;
+            public readonly bool isDefault;
+
+            public ConfigInfo(string configName, bool isDefault)
+            {
+                this.configName = configName;
+                this.isDefault = isDefault;
+            }
+        }
         public bool Empty
         {
             get
@@ -19,6 +30,25 @@ namespace ArkDesktop
         }
 
         public bool NeedSave { get; private set; } = false;
+        internal ConfigInfo[] ConfigList
+        {
+            get
+            {
+                return (from e in document.Root.Elements()
+                        where e.Name == "Config"
+                        select new ConfigInfo(e.Attribute("name").Value, e.Attribute("default")?.Value == "true")).ToArray();
+            }
+        }
+
+        public string[] PluginList
+        {
+            get
+            {
+                return (from e in document.Root.Element("Plugins").Elements()
+                        where e.Name == "Plugin"
+                        select e.Value).ToArray();
+            }
+        }
 
         private XDocument document = null;
         private XElement config;
@@ -32,10 +62,12 @@ namespace ArkDesktop
                     new XElement("Config",
                         new XAttribute("name", "default"),
                         new XAttribute("default", "true")
-                    )
+                    ),
+                    new XElement("Plugins")
                 )
             );
             document.Changed += Document_Changed;
+            config = document.Root.Element("Config");
         }
 
         public void Load(Stream stream)
@@ -62,7 +94,7 @@ namespace ArkDesktop
                 throw new Exception("The version of this file is not supported.");
             }
             found = from e in document.Root.Elements()
-                    where e.Name == "Config" && e.Attributes("default").First().Value == "true"
+                    where e.Name == "Config" && e.Attribute("default")?.Value == "true"
                     select e;
             if (found.Count() != 0)
             {
@@ -89,7 +121,7 @@ namespace ArkDesktop
 
         public XElement GetElement(XName name)
         {
-            if (name == "_IMPORT")
+            if (name == "_LAUNCH")
             {
                 throw new Exception("Protected space");
             }
@@ -97,9 +129,35 @@ namespace ArkDesktop
             return found.Count() == 0 ? null : found.First();
         }
 
+        public void ChangeDefaultConfig(string name)
+        {
+            var found = from e in document.Root.Elements() where e.Name == "Config" && e.Attribute("name").Value == name select e;
+            if (!found.Any())
+            {
+                throw new Exception("Config not exist.");
+            }
+            foreach (XElement i in from e in document.Root.Elements() where e.Name == "Config" && e.Attribute("default")?.Value == "true" select e)
+            {
+                i.Attribute("default").Remove();
+            }
+            found.First().Add(new XAttribute("default", "true"));
+        }
+
+        public void CopyTo(string destName)
+        {
+            if (GetElement(destName) != null)
+            {
+                throw new Exception("Dest config exists.");
+            }
+            XElement element = new XElement(config);
+            element.Attribute("name").Value = destName;
+            element.Attribute("default")?.Remove();
+            document.Root.Add(element);
+        }
+
         public void AppendElement(XElement element)
         {
-            if (element.Name == "_IMPORT")
+            if (element.Name == "_LAUNCH")
             {
                 throw new Exception("Protected space");
             }
@@ -108,7 +166,7 @@ namespace ArkDesktop
 
         public void RemoveElements(string name)
         {
-            if (name == "_IMPORT")
+            if (name == "_LAUNCH")
             {
                 throw new Exception("Protected space");
             }
@@ -117,9 +175,73 @@ namespace ArkDesktop
              select e).Remove();
         }
 
+        internal string GetLaunchPlugin()
+        {
+            return config.Element("_LAUNCH")?.Value;
+        }
+
+        internal void SetLaunchPlugin(string pluginName)
+        {
+            (from e in config.Elements() where e.Name == "_LAUNCH" select e).Remove();
+            config.Add(new XElement("_LAUNCH", pluginName));
+        }
+
+        internal bool IsDefaultConfig()
+        {
+            return (config.Attribute("default")?.Value == "true") == true;
+        }
+
         public void Save(Stream stream)
         {
             document.Save(stream);
+        }
+
+        internal void AddPlugin(string pluginName)
+        {
+            if ((from e in document.Root.Element("Plugins").Elements() where e.Name == "Plugin" && e.Value == pluginName select e).Any() == false)
+            {
+                document.Root.Element("Plugins").Add(new XElement("Plugin", pluginName));
+            }
+        }
+
+        internal void RemovePlugin(string pluginName)
+        {
+            (from e in document.Root.Element("Plugins").Elements() where e.Name == "Plugin" && e.Value == pluginName select e).Remove();
+        }
+
+        internal void RenameConfig(string newName)
+        {
+            if ((from e in document.Root.Elements() where e.Name == "Config" && e.Attribute("name").Value == newName select e).Any())
+            {
+                throw new Exception("Config exists.");
+            }
+            config.Attribute("name").Value = newName;
+        }
+
+        public void ChangeActiveConfig(string configName)
+        {
+            var found = from e in document.Root.Elements() where e.Name == "Config" && e.Attribute("name").Value == configName select e;
+            if (found.Any() == false)
+            {
+                throw new Exception("No such config");
+            }
+            config = found.First();
+        }
+
+        internal void RemoveConfig()
+        {
+            config.Remove();
+            var found = from e in document.Root.Elements() where e.Name == "Config" select e;
+            var defaultConfig = from e in found where e.Attribute("default")?.Value == "true" select e;
+            if (defaultConfig.Any())
+            {
+                config = defaultConfig.First();
+            }
+            else
+            {
+                config = found.First();
+                config.Add(new XAttribute("default", "true"));
+            }
         }
     }
 }

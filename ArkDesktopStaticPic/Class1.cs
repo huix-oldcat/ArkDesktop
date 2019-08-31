@@ -11,7 +11,7 @@ using System.Xml.Linq;
 
 namespace ArkDesktop
 {
-    public class ArkDesktopStaticPic : IArkDesktopPlugin
+    public class ArkDesktopStaticPic : IArkDesktopLaunchable
     {
         private bool closed = false;
         private LayeredWindow window;
@@ -83,14 +83,11 @@ namespace ArkDesktop
             configControl.manager = manager;
             core.AddControl("图片播放", configControl);
 
-            if (core.config.GetElement(ns + "StaticPic") != null)
-            {
-                LoadConfig();
-            }
-            else
+            if (core.config.GetElement(ns + "StaticPic") == null)
             {
                 CreateConfig();
             }
+            LoadConfig();
 
             while (!manager.Ready) ;
             while (!closed)

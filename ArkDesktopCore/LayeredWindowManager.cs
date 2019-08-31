@@ -108,8 +108,8 @@ namespace ArkDesktop
             config.AppendElement(
                 new XElement(ns + "LayeredWindowManager",
                     new XElement(ns + "Position",
-                        new XElement("X", "1"),
-                        new XElement("Y", "1")
+                        new XElement(ns + "X", "1"),
+                        new XElement(ns + "Y", "1")
                     )
                 )
             );

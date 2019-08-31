@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ArkDesktop;
@@ -21,13 +22,13 @@ namespace ArkDesktopTest
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //core = new Core(AppDomain.CurrentDomain.BaseDirectory);
+            core = new Core(AppDomain.CurrentDomain.BaseDirectory);
             Test2();
+            Test3();
         }
 
         private void Test1()
         {
-            core = new Core(AppDomain.CurrentDomain.BaseDirectory);
             core.SaveConfig();
             core.ImportPlugin("ArkDesktopTestPlugin.dll");
             core.CreateInst(core.GetLoadedPlugins()[0]);
@@ -35,10 +36,17 @@ namespace ArkDesktopTest
 
         private void Test2()
         {
-            core = new Core(AppDomain.CurrentDomain.BaseDirectory);
             core.SaveConfig();
             core.ImportPlugin("ArkDesktopStaticPic.dll");
             core.CreateInst(core.GetLoadedPlugins()[0]);
+        }
+
+        private void Test3()
+        {
+            Thread thread = new Thread(new ThreadStart(() => Application.Run(new ConfigEditor() { core = core }))); ;
+            thread.IsBackground = true;
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
         }
 
         private void Button1_Click(object sender, EventArgs e)
@@ -48,11 +56,11 @@ namespace ArkDesktopTest
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if(!core.config.NeedSave)
+            if (!core.config.NeedSave)
             {
                 return;
             }
-            if(e.CloseReason == CloseReason.UserClosing)
+            if (e.CloseReason == CloseReason.UserClosing)
             {
                 if (MessageBox.Show("是否保存配置？", "QAQ", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     core.SaveConfig();
