@@ -11,6 +11,8 @@ namespace ArkDesktop
     public class LayeredWindow : Form
     {
         public bool Ready { get; private set; } = false;
+        public Timer timer = new Timer();
+
         public LayeredWindow()
         {
             Load += LayeredWindow_Load;

@@ -116,5 +116,40 @@ namespace ArkDesktop
 
         [DllImport("user32.dll")]
         public static extern int SetWindowLong(IntPtr hWnd, int nIndex, uint dwNewLong);
+
+        public delegate bool EnumWindowsProc(IntPtr hWnd, int lParam);
+        [DllImport("user32")]
+        public static extern int EnumWindows(EnumWindowsProc ewp, int lParam);
+
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        public static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
+
+        /*
+         * HWND_TOP = 0; {在前面}
+HWND_BOTTOM = 1; {在后面}
+HWND_TOPMOST = HWND(-1); {在前面, 位于任何顶部窗口的前面}
+HWND_NOTOPMOST = HWND(-2); {在前面, 位于其他顶部窗口的后面}
+//uFlags 参数可选值:
+SWP_NOSIZE = 1; {忽略 cx、cy, 保持大小}
+SWP_NOMOVE = 2; {忽略 X、Y, 不改变位置}
+SWP_NOZORDER = 4; {忽略 hWndInsertAfter, 保持 Z 顺序}
+SWP_NOREDRAW = 8; {不重绘}
+SWP_NOACTIVATE = $10; {不激活}
+SWP_FRAMECHANGED = $20; {强制发送 WM_NCCALCSIZE 消息, 一般只是在改变大小时才发送此消息}
+SWP_SHOWWINDOW = $40; {显示窗口}
+SWP_HIDEWINDOW = $80; {隐藏窗口}
+SWP_NOCOPYBITS = $100; {丢弃客户区}
+SWP_NOOWNERZORDER = $200; {忽略 hWndInsertAfter, 不改变 Z 序列的所有者}
+SWP_NOSENDCHANGING = $400; {不发出 WM_WINDOWPOSCHANGING 消息}
+SWP_DRAWFRAME = SWP_FRAMECHANGED; {画边框}
+SWP_NOREPOSITION = SWP_NOOWNERZORDER;{}
+SWP_DEFERERASE = $2000; {防止产生 WM_SYNCPAINT 消息}
+SWP_ASYNCWINDOWPOS = $4000; {若调用进程不拥有窗口, 系统会向拥有窗口的线程发出需求}
+         */
+        [DllImport("user32.dll")]
+        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndlnsertAfter, int X, int Y, int cx, int cy, uint Flags);
     }
 }
