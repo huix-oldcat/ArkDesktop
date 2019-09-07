@@ -77,6 +77,7 @@ namespace ArkDesktop
             manager.window = window;
             manager.config = core.config;
             manager.HelpPositionChange();
+            manager.helpZoomChange = true;
             configControl = new ConfigControl();
             configControl.Dock = DockStyle.Fill;
             configControl.makerParent = this;
