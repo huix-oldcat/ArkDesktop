@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using ArkDesktop;
 
 namespace ArkDesktopTest
@@ -23,8 +24,9 @@ namespace ArkDesktopTest
         private void Form1_Load(object sender, EventArgs e)
         {
             core = new Core(AppDomain.CurrentDomain.BaseDirectory);
-            Test2();
-            Test3();
+            //Test2();
+            //Test3();
+            Test4();
         }
 
         private void Test1()
@@ -47,6 +49,11 @@ namespace ArkDesktopTest
             thread.IsBackground = true;
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
+        }
+
+        private void Test4()
+        {
+            core.config.GetElement(((XNamespace)"ArkDesktop") + "StaticPic").Name = "_LAUNCH";
         }
 
         private void Button1_Click(object sender, EventArgs e)

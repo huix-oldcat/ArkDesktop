@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -52,6 +53,8 @@ namespace ArkDesktop
 
         private XDocument document = null;
         private XElement config;
+        private Dictionary<XDocument, XElement> sandboxConverter = new Dictionary<XDocument, XElement>();
+        private Dictionary<XName, XDocument> sandbox = new Dictionary<XName, XDocument>();
 
         public void Create()
         {
@@ -67,7 +70,6 @@ namespace ArkDesktop
                 )
             );
             document.Changed += Document_Changed;
-            config = document.Root.Element("Config");
         }
 
         public void Load(Stream stream)
@@ -111,13 +113,26 @@ namespace ArkDesktop
                 }
                 config = found.First();
             }
-            document.Changed += Document_Changed;
         }
 
         private void Document_Changed(object sender, XObjectChangeEventArgs e)
         {
             NeedSave = true;
+            XDocument th = ((XElement)sender).Document;
+            if(th.Root.Name == "_LAUNCH")
+            {
+                throw new Exception("Protected space");
+            }
+            sandboxConverter[th] = th.Root;
         }
+
+        private void PushToSandbox(XElement real)
+        {
+            sandbox[real.Name] = new XDocument(real);
+            sandbox[real.Name].Changed += Document_Changed;
+            sandboxConverter[sandbox[real.Name]] = real;
+        }
+
 
         public XElement GetElement(XName name)
         {
@@ -126,10 +141,22 @@ namespace ArkDesktop
                 throw new Exception("Protected space");
             }
             var found = from e in config.Elements() where e.Name == name select e;
-            return found.Count() == 0 ? null : found.First();
+            if(!found.Any())
+            {
+                return null;
+            }
+            if(!found.Any())
+            {
+                return null;
+            }
+            if(!sandbox.ContainsKey(name))
+            {
+                PushToSandbox(found.First());
+            }
+            return sandbox[name].Root;
         }
 
-        public void ChangeDefaultConfig(string name)
+        internal void ChangeDefaultConfig(string name)
         {
             var found = from e in document.Root.Elements() where e.Name == "Config" && e.Attribute("name").Value == name select e;
             if (!found.Any())
@@ -143,7 +170,7 @@ namespace ArkDesktop
             found.First().Add(new XAttribute("default", "true"));
         }
 
-        public void CopyTo(string destName)
+        internal void CopyTo(string destName)
         {
             if (GetElement(destName) != null)
             {
@@ -218,7 +245,7 @@ namespace ArkDesktop
             config.Attribute("name").Value = newName;
         }
 
-        public void ChangeActiveConfig(string configName)
+        internal void ChangeActiveConfig(string configName)
         {
             var found = from e in document.Root.Elements() where e.Name == "Config" && e.Attribute("name").Value == configName select e;
             if (found.Any() == false)
