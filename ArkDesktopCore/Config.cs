@@ -31,7 +31,7 @@ namespace ArkDesktop
         }
 
         public bool NeedSave { get; private set; } = false;
-        internal ConfigInfo[] ConfigList
+        public ConfigInfo[] ConfigList
         {
             get
             {
@@ -53,8 +53,6 @@ namespace ArkDesktop
 
         private XDocument document = null;
         private XElement config;
-        private Dictionary<XDocument, XElement> sandboxConverter = new Dictionary<XDocument, XElement>();
-        private Dictionary<XName, XDocument> sandbox = new Dictionary<XName, XDocument>();
 
         public void Create()
         {
@@ -69,6 +67,7 @@ namespace ArkDesktop
                     new XElement("Plugins")
                 )
             );
+            config = document.Root.Element("Config");
             document.Changed += Document_Changed;
         }
 
@@ -113,26 +112,22 @@ namespace ArkDesktop
                 }
                 config = found.First();
             }
+            document.Changed += Document_Changed;
         }
 
         private void Document_Changed(object sender, XObjectChangeEventArgs e)
         {
-            NeedSave = true;
-            XDocument th = ((XElement)sender).Document;
-            if(th.Root.Name == "_LAUNCH")
+            XElement th = sender as XElement;
+            if(th == null)
             {
+                return;
+            }
+            if(th.Name == "_LAUNCH")
+            {
+                th.Name = "LAUNCH_";
                 throw new Exception("Protected space");
             }
-            sandboxConverter[th] = th.Root;
         }
-
-        private void PushToSandbox(XElement real)
-        {
-            sandbox[real.Name] = new XDocument(real);
-            sandbox[real.Name].Changed += Document_Changed;
-            sandboxConverter[sandbox[real.Name]] = real;
-        }
-
 
         public XElement GetElement(XName name)
         {
@@ -145,15 +140,7 @@ namespace ArkDesktop
             {
                 return null;
             }
-            if(!found.Any())
-            {
-                return null;
-            }
-            if(!sandbox.ContainsKey(name))
-            {
-                PushToSandbox(found.First());
-            }
-            return sandbox[name].Root;
+            return found.First();
         }
 
         internal void ChangeDefaultConfig(string name)
@@ -202,7 +189,7 @@ namespace ArkDesktop
              select e).Remove();
         }
 
-        internal string GetLaunchPlugin()
+        public string GetLaunchPlugin()
         {
             return config.Element("_LAUNCH")?.Value;
         }

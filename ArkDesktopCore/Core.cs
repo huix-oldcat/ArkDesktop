@@ -34,6 +34,7 @@ namespace ArkDesktop
         private PluginGuiContainer container;
         private Dictionary<string, string> pluginFrom = new Dictionary<string, string>();
         private Dictionary<string, bool> launchable = new Dictionary<string, bool>();
+        private List<ManualResetEvent> waits = new List<ManualResetEvent>();
 
         /// <summary>
         /// ArkDesktop Core构造类
@@ -68,6 +69,14 @@ namespace ArkDesktop
                 {
                     ImportPlugin(i);
                 }
+            }
+        }
+
+        public void MainThread()
+        {
+            if (waits.Any())
+            {
+                WaitHandle.WaitAll(waits.ToArray());
             }
         }
 
@@ -153,10 +162,17 @@ namespace ArkDesktop
             {
                 throw new Exception("Plugin is not launchable.");
             }
-            Thread thread = new Thread(new ParameterizedThreadStart(((IArkDesktopLaunchable)plugins[pluginName]).MainThread));
+            ManualResetEvent mre = new ManualResetEvent(false);
+            waits.Add(mre);
+            Thread thread = new Thread(new ParameterizedThreadStart((object o) =>
+            {
+                ((IArkDesktopLaunchable)plugins[pluginName]).MainThread(o);
+                mre.Set();
+            }));
             thread.IsBackground = true;
             thread.Start(this);
             threads.Add(thread);
+            
         }
 
         /// <summary>

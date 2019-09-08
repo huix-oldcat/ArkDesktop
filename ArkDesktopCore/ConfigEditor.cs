@@ -209,7 +209,7 @@ namespace ArkDesktop
         {
             if (listBox_LoadedPlugin.SelectedItem != null && ((PluginItem)listBox_LoadedPlugin.SelectedItem).Launchable)
             {
-                core.config.SetLaunchPlugin(((PluginItem)listBox_LoadedPlugin.SelectedItem).DllPath);
+                core.config.SetLaunchPlugin(((PluginItem)listBox_LoadedPlugin.SelectedItem).Name);
                 UpdateConfig();
             }
         }
@@ -251,6 +251,23 @@ namespace ArkDesktop
             LoadConfigList();
             listBox_Config.SelectedIndex = listBox_Config.Items.IndexOf((from i in core.config.ConfigList where i.isDefault select i.configName).FirstOrDefault());
             UpdateConfig();
+        }
+
+        private void ConfigEditor_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!core.config.NeedSave)
+            {
+                return;
+            }
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                if (MessageBox.Show("是否保存配置？", "QAQ", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    core.SaveConfig();
+            }
+            else
+            {
+                core.SaveBackupConfig();
+            }
         }
     }
 }

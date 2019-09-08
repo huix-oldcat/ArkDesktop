@@ -38,6 +38,7 @@
             this.textBox_PluginName = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.label_LaunchPlugin = new System.Windows.Forms.Label();
             this.button_Rename = new System.Windows.Forms.Button();
@@ -49,7 +50,6 @@
             this.listBox_Config = new System.Windows.Forms.ListBox();
             this.label5 = new System.Windows.Forms.Label();
             this.linkLabel2 = new System.Windows.Forms.LinkLabel();
-            this.button2 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -165,6 +165,16 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "配置信息";
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(84, 55);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(168, 23);
+            this.button2.TabIndex = 15;
+            this.button2.Text = "设为默认";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.Button2_Click);
+            // 
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(130, 110);
@@ -277,16 +287,6 @@
             this.linkLabel2.Text = "警告";
             this.linkLabel2.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabel2_LinkClicked);
             // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(84, 55);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(168, 23);
-            this.button2.TabIndex = 15;
-            this.button2.Text = "设为默认";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.Button2_Click);
-            // 
             // ConfigEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -300,6 +300,7 @@
             this.Controls.Add(this.listBox_LoadedPlugin);
             this.Name = "ConfigEditor";
             this.Text = "ConfigEditor";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ConfigEditor_FormClosing);
             this.Load += new System.EventHandler(this.ConfigEditor_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

@@ -47,7 +47,10 @@ namespace ArkDesktop
             frameTime = Convert.ToInt32(root.Element(ns + "FrameTime").Value);
             foreach (XElement element in from e in root.Element(ns + "Frames").Elements() where e.Name == ns + "FrameFile" select e)
             {
-                bitmaps.Add((Bitmap)Image.FromFile(element.Value));
+                if (File.Exists(element.Value))
+                {
+                    bitmaps.Add((Bitmap)Image.FromFile(element.Value));
+                }
             }
         }
 
