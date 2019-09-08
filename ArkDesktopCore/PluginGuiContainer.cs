@@ -21,6 +21,7 @@ namespace ArkDesktop
                 return createParams;
             }
         }
+        public event MethodInvoker RequestClose;
         public bool Ready { get; private set; } = false;
         public PluginGuiContainer()
         {
@@ -50,6 +51,11 @@ namespace ArkDesktop
         private void NotifyIcon_DoubleClick(object sender, EventArgs e)
         {
             WindowState = FormWindowState.Normal;
+        }
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            RequestClose();
         }
     }
 }

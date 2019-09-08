@@ -58,6 +58,7 @@ namespace ArkDesktop
                 config.Create();
             }
             container = new PluginGuiContainer();
+            container.RequestClose += CloseThreads;
             containerThread = new Thread(new ThreadStart(() => Application.Run(container)));
             containerThread.IsBackground = true;
             containerThread.SetApartmentState(ApartmentState.STA);
@@ -69,6 +70,18 @@ namespace ArkDesktop
                 {
                     ImportPlugin(i);
                 }
+            }
+        }
+
+        public void CloseThreads()
+        {
+            foreach(Thread thread in threads)
+            {
+                thread.Abort();
+            }
+            foreach(ManualResetEvent resetEvent in waits)
+            {
+                resetEvent.Set();
             }
         }
 
@@ -172,13 +185,12 @@ namespace ArkDesktop
             thread.IsBackground = true;
             thread.Start(this);
             threads.Add(thread);
-            
         }
 
         /// <summary>
         /// 请求一个插件的程序集
         /// 内建的插件列表:
-        /// <list type="bullet">
+        /// <list type="table">
         ///     <listheader>
         ///         <term><paramref name="pluginName"/></term>
         ///         <description>插件功能</description>
