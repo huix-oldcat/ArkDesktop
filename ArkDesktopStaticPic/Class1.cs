@@ -47,9 +47,10 @@ namespace ArkDesktop
             frameTime = Convert.ToInt32(root.Element(ns + "FrameTime").Value);
             foreach (XElement element in from e in root.Element(ns + "Frames").Elements() where e.Name == ns + "FrameFile" select e)
             {
-                if (File.Exists(element.Value))
+                string waiting = ReplaceToAbsolutePath(element.Value);
+                if (File.Exists(waiting))
                 {
-                    bitmaps.Add((Bitmap)Image.FromFile(element.Value));
+                    bitmaps.Add((Bitmap)Image.FromFile(waiting));
                 }
             }
         }
@@ -61,13 +62,17 @@ namespace ArkDesktop
                 new XElement(ns + "Frames")));
         }
 
+        private string ReplaceToAbsolutePath(string src) => src?.Replace("$(ResourceRoot)", Path.Combine(core.RootPath, "Resources", Name));
+
+        private string ReplaceToRelativePath(string src) => src?.Replace(Path.Combine(core.RootPath, "Resources", Name), "$(ResourceRoot)");
+
         public void SetFrameList(string[] frames)
         {
             XElement root = core.config.GetElement(ns + "StaticPic").Element(ns + "Frames");
             root.Elements()?.Remove();
             foreach (string frame in frames)
             {
-                root.Add(new XElement(ns + "FrameFile", frame));
+                root.Add(new XElement(ns + "FrameFile", ReplaceToRelativePath(frame)));
             }
         }
 
