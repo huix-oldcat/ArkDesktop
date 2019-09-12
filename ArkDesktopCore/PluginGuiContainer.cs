@@ -12,6 +12,7 @@ namespace ArkDesktop
 {
     public partial class PluginGuiContainer : Form
     {
+        public Core core;
         protected override CreateParams CreateParams
         {
             get
@@ -55,6 +56,11 @@ namespace ArkDesktop
 
         private void Button1_Click(object sender, EventArgs e)
         {
+            if(core.config.NeedSave)
+            {
+                if (MessageBox.Show("是否保存配置？", "QAQ", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    core.SaveConfig();
+            }
             RequestClose();
         }
     }

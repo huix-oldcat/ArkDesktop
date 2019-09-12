@@ -127,6 +127,7 @@ namespace ArkDesktop
                 th.Name = "LAUNCH_";
                 throw new Exception("Protected space");
             }
+            NeedSave = true;
         }
 
         public XElement GetElement(XName name)

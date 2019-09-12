@@ -58,6 +58,7 @@ namespace ArkDesktop
                 config.Create();
             }
             container = new PluginGuiContainer();
+            container.core = this;
             container.RequestClose += CloseThreads;
             containerThread = new Thread(new ThreadStart(() => Application.Run(container)));
             containerThread.IsBackground = true;
