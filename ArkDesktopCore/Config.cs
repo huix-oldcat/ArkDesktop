@@ -233,7 +233,7 @@ namespace ArkDesktop
             config.Attribute("name").Value = newName;
         }
 
-        internal void ChangeActiveConfig(string configName)
+        public void ChangeActiveConfig(string configName)
         {
             var found = from e in document.Root.Elements() where e.Name == "Config" && e.Attribute("name").Value == configName select e;
             if (found.Any() == false)

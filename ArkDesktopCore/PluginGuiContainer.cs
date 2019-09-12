@@ -32,6 +32,7 @@ namespace ArkDesktop
         private void PluginGuiContainer_Load(object sender, EventArgs e)
         {
             Ready = true;
+            WindowState = FormWindowState.Minimized;
         }
 
         private void PluginGuiContainer_Resize(object sender, EventArgs e)
