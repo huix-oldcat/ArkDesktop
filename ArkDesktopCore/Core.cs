@@ -148,14 +148,14 @@ namespace ArkDesktop
 
         public void SaveConfig()
         {
-            using (FileStream fs = File.OpenWrite(Path.Combine(RootPath, "Config.xml")))
+            using (FileStream fs = File.Open(Path.Combine(RootPath, "Config.xml"), FileMode.Create))
             {
                 config.Save(fs);
             }
         }
         public void SaveBackupConfig()
         {
-            using (FileStream fs = File.OpenWrite(Path.Combine(RootPath, "Config.bak.xml")))
+            using (FileStream fs = File.Open(Path.Combine(RootPath, "Config.xml"), FileMode.Create))
             {
                 config.Save(fs);
             }
