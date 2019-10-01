@@ -56,6 +56,7 @@
     <ProjectReference Include="..\ArkDesktopCore\ArkDesktopCore.csproj">
       <Project>{52814151-1a01-4058-8bcb-3d5c0d000b11}</Project>
       <Name>ArkDesktopCore</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

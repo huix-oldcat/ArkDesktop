@@ -45,7 +45,7 @@ namespace ArkDesktopTest
 
         private void Test3()
         {
-            Thread thread = new Thread(new ThreadStart(() => Application.Run(new ConfigEditor() { core = core }))); ;
+            Thread thread = new Thread(new ThreadStart(() => Application.Run(new ConfigEditor(core)))); ;
             thread.IsBackground = true;
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
