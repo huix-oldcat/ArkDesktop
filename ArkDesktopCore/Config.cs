@@ -115,6 +115,14 @@ namespace ArkDesktop
             document.Changed += Document_Changed;
         }
 
+        private bool userConfig;
+
+        internal void UnlockLaunchSpace() => userConfig = true;
+
+        public void LockLaunchSpace() => userConfig = false;
+
+        public bool GetUserConfigStatus() => userConfig;
+
         private void Document_Changed(object sender, XObjectChangeEventArgs e)
         {
             XElement th = sender as XElement;
@@ -122,7 +130,7 @@ namespace ArkDesktop
             {
                 return;
             }
-            if(th.Name == "_LAUNCH")
+            if(th.Name == "_LAUNCH" && !userConfig)
             {
                 th.Name = "LAUNCH_";
                 throw new Exception("Protected space");

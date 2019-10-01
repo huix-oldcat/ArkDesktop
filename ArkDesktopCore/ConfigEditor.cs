@@ -33,8 +33,10 @@ namespace ArkDesktop
             public bool Launchable { get; private set; }
             public override string ToString() => Name;
         }
-        public ConfigEditor()
+        public ConfigEditor(Core coreInst)
         {
+            core = coreInst;
+            core.config.UnlockLaunchSpace();
             InitializeComponent();
         }
 
@@ -203,6 +205,7 @@ namespace ArkDesktop
         private void Button2_Click(object sender, EventArgs e)
         {
             core.config.ChangeDefaultConfig(listBox_Config.SelectedItem.ToString());
+            UpdateConfig();
         }
 
         private void Button_SetLaunchPlugin_Click(object sender, EventArgs e)

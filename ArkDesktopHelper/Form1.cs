@@ -58,10 +58,27 @@ namespace ArkDesktopHelper
 
         private void Button3_Click(object sender, EventArgs e)
         {
-            using (ConfigEditor editor = new ConfigEditor())
+            using (ConfigEditor editor = new ConfigEditor(core))
             {
-                editor.core = core;
                 editor.ShowDialog();
+            }
+        }
+
+        private bool exitWith = false;
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if(exitWith == false)
+            Environment.Exit(0);
+        }
+
+        private void Button2_Click(object sender, EventArgs e)
+        {
+            if(comboBox1.SelectedItem != null)
+            {
+                core.config.ChangeActiveConfig(comboBox1.SelectedItem as string);
+                exitWith = true;
+                Close();
             }
         }
     }

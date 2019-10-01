@@ -47,6 +47,7 @@ namespace ArkDesktopHelper
                     return;
                 }
             }
+            coreInst.config.LockLaunchSpace();
             coreInst.CreateInst(coreInst.config.GetLaunchPlugin());
             coreInst.MainThread();
         }
