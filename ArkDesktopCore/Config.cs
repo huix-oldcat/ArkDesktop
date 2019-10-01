@@ -125,6 +125,7 @@ namespace ArkDesktop
 
         private void Document_Changed(object sender, XObjectChangeEventArgs e)
         {
+            NeedSave = true;
             XElement th = sender as XElement;
             if(th == null)
             {
@@ -135,7 +136,6 @@ namespace ArkDesktop
                 th.Name = "LAUNCH_";
                 throw new Exception("Protected space");
             }
-            NeedSave = true;
         }
 
         public XElement GetElement(XName name)

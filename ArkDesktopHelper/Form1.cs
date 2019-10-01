@@ -24,7 +24,7 @@ namespace ArkDesktopHelper
         private void Form1_Load(object sender, EventArgs e)
         {
             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run");
-            checkBox1.Checked = key.GetValue("ArkDesktopHelper")?.ToString() == AppDomain.CurrentDomain.BaseDirectory + " -autorun";
+            checkBox1.Checked = key.GetValue("ArkDesktopHelper")?.ToString() == GetType().Assembly.Location + " -autorun";
         }
 
         private void CheckBox1_CheckedChanged(object sender, EventArgs e)
@@ -32,7 +32,7 @@ namespace ArkDesktopHelper
             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
             if (checkBox1.Checked)
             {
-                key.SetValue("ArkDesktopHelper", AppDomain.CurrentDomain.BaseDirectory + " -autorun");
+                key.SetValue("ArkDesktopHelper", GetType().Assembly.Location + " -autorun");
             }
             else
             {
