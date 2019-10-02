@@ -136,6 +136,11 @@ namespace ArkDesktop
                     linkLabel_ZoomQuality.Text = "高质量";
                     zoomQuality = ZoomQuality.HighQuality;
                 }
+
+                if (config.GetElement(ns + "LayeredWindowManager").Element(ns + "HideTaskbarIcon") != null)
+                {
+                    HideTaskbarIcon = config.GetElement(ns + "LayeredWindowManager").Element(ns + "HideTaskbarIcon").Value == "Yes";
+                }
             }
             Ready = true;
         }
@@ -273,6 +278,28 @@ namespace ArkDesktop
                     window.Invoke((MethodInvoker)(() => Win32.SetWindowLong(window.Handle, -8, 0)));
                     break;
             }
+        }
+
+        private bool HideTaskbarIcon
+        {
+            set
+            {
+                window.Invoke((MethodInvoker)(() => window.ShowInTaskbar = !value));
+                if (config.GetElement(ns + "LayeredWindowManager").Element(ns + "HicdTaskbarIcon") != null)
+                {
+                    config.GetElement(ns + "LayeredWindowManager").Element(ns + "HicdTaskbarIcon").Value = value ? "Yes" : "No";
+                }
+                else
+                {
+                    config.GetElement(ns + "LayeredWindowManager").Add(new XElement(ns + "HicdTaskbarIcon", value ? "Yes" : "No"));
+                }
+                checkBox_ShowTaskbarIcon.Checked = value;
+            }
+        }
+
+        private void CheckBox_ShowTaskbarIcon_CheckedChanged(object sender, EventArgs e)
+        {
+            HideTaskbarIcon = checkBox_ShowTaskbarIcon.Checked;
         }
     }
 }
