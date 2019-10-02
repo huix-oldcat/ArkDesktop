@@ -14,14 +14,14 @@ namespace ArkDesktop
     public class ArkDesktopStaticPic : IArkDesktopV2
     {
         private bool closed = false;
-        private LayeredWindow window;
-        private LayeredWindowManager manager;
+        internal LayeredWindow window;
+        internal LayeredWindowManager manager;
         private List<Bitmap> bitmaps = new List<Bitmap>();
         private ConfigControl configControl;
         private bool needModify = false;
         private bool allowModify = false;
         private XNamespace ns = "ArkDesktop";
-        private Core core;
+        internal Core core;
         private int frameTime;
 
         public void RequestModifyBitmaps(List<Bitmap> newBitmaps)
@@ -45,9 +45,18 @@ namespace ArkDesktop
 
         public int Version { get => 1; }
 
+        public enum LaunchType
+        {
+            Normal,
+            Lua
+        }
+
+        public LaunchType Type => core.config.GetElement(ns + "StaticPic").Element(ns + "LuaScript") != null ? LaunchType.Lua : LaunchType.Normal;
+
         private void LoadConfig()
         {
             XElement root = core.config.GetElement(ns + "StaticPic");
+            if (Type == LaunchType.Lua) return;
             frameTime = Convert.ToInt32(root.Element(ns + "FrameTime").Value);
             foreach (XElement element in from e in root.Element(ns + "Frames").Elements() where e.Name == ns + "FrameFile" select e)
             {
@@ -101,24 +110,32 @@ namespace ArkDesktop
                 CreateConfig();
             }
             LoadConfig();
-
             while (!manager.Ready) ;
-            while (!closed)
+
+            if (core.config.GetElement(ns + "StaticPic").Element(ns + "LuaScript") != null)
             {
-                int size = bitmaps.Count;
-                allowModify = size == 0;
-                for (int i = 0; i < size; ++i)
-                {
-                    Thread.Sleep(1000 / frameTime);
-                    if (needModify)
-                    {
-                        allowModify = true;
-                        while (needModify) ;
-                        break;
-                    }
-                    manager.SetBits(bitmaps[i]);
-                }
+                LuaInterface.Lua lua = new LuaInterface.Lua();
+                LuaApi luaApi = new LuaApi(this, lua);
+                window.Click += (sender, e) => luaApi.OnClick();
+                lua.DoString(core.config.GetElement(ns + "StaticPic").Element(ns + "LuaScript").Value);
             }
+            else
+                while (!closed)
+                {
+                    int size = bitmaps.Count;
+                    allowModify = size == 0;
+                    for (int i = 0; i < size; ++i)
+                    {
+                        Thread.Sleep(1000 / frameTime);
+                        if (needModify)
+                        {
+                            allowModify = true;
+                            while (needModify) ;
+                            break;
+                        }
+                        manager.SetBits(bitmaps[i]);
+                    }
+                }
             while (!manager.IsDisposed) ;
         }
 

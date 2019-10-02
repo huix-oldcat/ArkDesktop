@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LuaInterface">
+      <HintPath>Lua\LuaInterface.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -50,6 +53,7 @@
     <Compile Include="ConfigControl.Designer.cs">
       <DependentUpon>ConfigControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="LuaApi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -64,5 +68,18 @@
       <DependentUpon>ConfigControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="luanet.dll" />
+    <Content Include="Lua\lua51.dll" />
+    <Content Include="Lua\LuaInterface.dll" />
+    <Content Include="Lua\luanet.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="test.lua" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy $(ProjectDir)Lua\lua51.dll $(TargetDir)\..\
+copy $(ProjectDir)Lua\luanet.dll $(TargetDir)\..\</PostBuildEvent>
+  </PropertyGroup>
 </Project>
