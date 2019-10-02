@@ -21,7 +21,7 @@ namespace ArkDesktopHelper
             Core coreInst = null;
             Thread coreThread = new Thread(new ThreadStart(() => coreInst = new Core(AppDomain.CurrentDomain.BaseDirectory)));
             coreThread.Start();
-            while (coreInst == null) ;
+            while (true) if (coreInst != null) break;
             if (Environment.GetCommandLineArgs().Length != 2 || Environment.GetCommandLineArgs()[1] != "-autorun")
             {
                 Application.Run(new Form1(coreInst));
