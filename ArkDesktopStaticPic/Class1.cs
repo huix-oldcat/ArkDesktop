@@ -11,7 +11,7 @@ using System.Xml.Linq;
 
 namespace ArkDesktop
 {
-    public class ArkDesktopStaticPic : IArkDesktopLaunchable
+    public class ArkDesktopStaticPic : IArkDesktopV2
     {
         private bool closed = false;
         private LayeredWindow window;
@@ -40,6 +40,10 @@ namespace ArkDesktop
                 return "ArkDesktop.StaticPic";
             }
         }
+
+        public string Description { get => "An offical plugin that provides the ability to play frame animations."; }
+
+        public int Version { get => 1; }
 
         private void LoadConfig()
         {

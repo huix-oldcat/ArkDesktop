@@ -15,6 +15,10 @@ namespace ArkDesktop
             }
         }
 
+        public string Description { get => "A plugin just for testing."; }
+
+        public int Version { get => 1; }
+
         public void MainThread(object coreInst)
         {
             Core core = (Core)coreInst;
@@ -27,7 +31,7 @@ namespace ArkDesktop
 
         public void RequestDispose()
         {
-            
+
         }
     }
 }
