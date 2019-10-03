@@ -141,6 +141,19 @@ namespace ArkDesktop
                 {
                     HideTaskbarIcon = config.GetElement(ns + "LayeredWindowManager").Element(ns + "HideTaskbarIcon").Value == "Yes";
                 }
+
+                if (config.GetElement(ns + "LayeredWindowManager").Element(ns + "ZOrder") != null)
+                {
+                    string type = config.GetElement(ns + "LayeredWindowManager").Element(ns + "ZOrder").Value;
+                    if (type == "TopVery")
+                    {
+                        comboBox1.SelectedIndex = 2;
+                    }
+                    else
+                    {
+                        comboBox1.SelectedIndex = 0;
+                    }
+                }
             }
             Ready = true;
         }
@@ -257,26 +270,45 @@ namespace ArkDesktop
 
         private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (config.GetElement(ns + "LayeredWindowManager").Element(ns + "ZOrder") == null)
+            {
+                config.GetElement(ns + "LayeredWindowManager").Add(new XElement(ns + "ZOrder", "Normal"));
+            }
             switch (comboBox1.SelectedItem.ToString())
             {
                 case "默认"://TODO
                     TopMost = false;
-                    window.Invoke((MethodInvoker)(() => { window.TopMost = false; window.TopLevel = false; }));
-                    window.Invoke((MethodInvoker)(() => Win32.SetWindowLong(window.Handle, -8, 0)));
+                    window.Invoke((MethodInvoker)(() => { window.TopMost = false; }));
+                    //window.Invoke((MethodInvoker)(() => Win32.SetWindowLong(window.Handle, -8, 0)));
+                    config.GetElement(ns + "LayeredWindowManager").Element(ns + "ZOrder").Value = "Normal";
+                    window.Invoke((MethodInvoker)(() => window.SizeChanged -= Window_SizeChanged));
                     break;
                 case "置于桌面":
-                    TopMost = false;
-                    window.Invoke((MethodInvoker)(() => { window.TopMost = false; window.TopLevel = false; }));
-                    IntPtr intPtr = WindowPositionHelper.GetDekstopLayerHwnd();
-                    if (intPtr != IntPtr.Zero)
-                    {
-                        window.Invoke((MethodInvoker)(() => Win32.SetWindowLong(window.Handle, -8, (uint)intPtr.ToInt32())));
-                    }
+                    MessageBox.Show("抱歉暂时无法使用");
+                    comboBox1.SelectedIndex = 0;
+                    //TopMost = false;
+                    //window.Invoke((MethodInvoker)(() => { window.TopMost = false; window.TopLevel = false; }));
+                    //IntPtr intPtr = WindowPositionHelper.GetDekstopLayerHwnd();
+                    //if (intPtr != IntPtr.Zero)
+                    //{
+                    //    //window.Invoke((MethodInvoker)(() => Win32.SetWindowLong(window.Handle, -8, (uint)intPtr.ToInt32())));
+                    //}
+                    //window.Invoke((MethodInvoker)(() => window.SizeChanged -= Window_SizeChanged));
                     break;
                 case "置顶（强力）":
                     TopMost = true;
-                    window.Invoke((MethodInvoker)(() => Win32.SetWindowLong(window.Handle, -8, 0)));
+                    //window.Invoke((MethodInvoker)(() => Win32.SetWindowLong(window.Handle, -8, 0)));
+                    config.GetElement(ns + "LayeredWindowManager").Element(ns + "ZOrder").Value = "TopVery";
+                    window.Invoke((MethodInvoker)(() => window.SizeChanged += Window_SizeChanged));
                     break;
+            }
+        }
+
+        private void Window_SizeChanged(object sender, EventArgs e)
+        {
+            if ((sender as LayeredWindow).WindowState == FormWindowState.Minimized)
+            {
+                (sender as LayeredWindow).WindowState = FormWindowState.Normal;
             }
         }
 
@@ -285,13 +317,13 @@ namespace ArkDesktop
             set
             {
                 window.Invoke((MethodInvoker)(() => window.ShowInTaskbar = !value));
-                if (config.GetElement(ns + "LayeredWindowManager").Element(ns + "HicdTaskbarIcon") != null)
+                if (config.GetElement(ns + "LayeredWindowManager").Element(ns + "HideTaskbarIcon") != null)
                 {
-                    config.GetElement(ns + "LayeredWindowManager").Element(ns + "HicdTaskbarIcon").Value = value ? "Yes" : "No";
+                    config.GetElement(ns + "LayeredWindowManager").Element(ns + "HideTaskbarIcon").Value = value ? "Yes" : "No";
                 }
                 else
                 {
-                    config.GetElement(ns + "LayeredWindowManager").Add(new XElement(ns + "HicdTaskbarIcon", value ? "Yes" : "No"));
+                    config.GetElement(ns + "LayeredWindowManager").Add(new XElement(ns + "HideTaskbarIcon", value ? "Yes" : "No"));
                 }
                 checkBox_ShowTaskbarIcon.Checked = value;
             }
@@ -300,6 +332,21 @@ namespace ArkDesktop
         private void CheckBox_ShowTaskbarIcon_CheckedChanged(object sender, EventArgs e)
         {
             HideTaskbarIcon = checkBox_ShowTaskbarIcon.Checked;
+        }
+
+        private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            MessageBox.Show("拖动这个按钮,内容即会同步移动", "QwQ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void LinkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            MessageBox.Show("现在\"置于桌面\"的功能还不能正常使用,但是置顶工作十分正常\n顺便一提,建议不要玩任务栏图标,否则可能会崩溃", "QwQ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void LinkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            MessageBox.Show("使用了置顶以后可能无法完全切换回默认,如果要切换为默认,请选中默认,保存配置,重启软件", "QwQ", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
