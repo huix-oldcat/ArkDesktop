@@ -57,12 +57,17 @@ namespace ArkDesktop
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            if(core.config.NeedSave)
+            if (core.config.NeedSave)
             {
                 if (MessageBox.Show("是否保存配置？", "QAQ", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     core.SaveConfig();
             }
             RequestClose();
+        }
+
+        private void Button2_Click(object sender, EventArgs e)
+        {
+            core.SaveConfig();
         }
     }
 }
