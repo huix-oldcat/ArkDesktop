@@ -217,6 +217,7 @@ namespace ArkDesktop
         public void Save(Stream stream)
         {
             document.Save(stream);
+            NeedSave = false;
         }
 
         internal void AddPlugin(string pluginName)
