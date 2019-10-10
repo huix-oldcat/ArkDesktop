@@ -20,6 +20,7 @@ namespace ArkDesktop
 
         private void LayeredWindow_Load(object sender, EventArgs e)
         {
+            FormBorderStyle = FormBorderStyle.None;
             Ready = true;
         }
 
