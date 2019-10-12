@@ -154,16 +154,22 @@ namespace ArkDesktop
 
         public void SetBits(Bitmap bitmap)
         {
+            bool needDispose = false;
             Bitmap realBitmap = bitmap;
             if (helpZoomChange && Zoom != 1)
             {
                 realBitmap = ZoomBits(bitmap, Zoom);
+                needDispose = true;
             }
             if (realBitmap.Size != window.Size)
             {
                 window.Invoke((MethodInvoker)(() => window.Size = realBitmap.Size));
             }
             window.Invoke((MethodInvoker)(() => window.SetBits(realBitmap)));
+            if (needDispose)
+            {
+                realBitmap.Dispose();
+            }
         }
 
         private void ManagedWindowPositionChange()

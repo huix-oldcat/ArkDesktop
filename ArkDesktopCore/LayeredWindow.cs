@@ -12,14 +12,25 @@ namespace ArkDesktop
     {
         public bool Ready { get; private set; } = false;
         public Timer timer = new Timer();
+        private IntPtr screenDC, memDC;
 
         public LayeredWindow()
         {
             Load += LayeredWindow_Load;
+            Disposed += LayeredWindow_Disposed;
+        }
+
+        private void LayeredWindow_Disposed(object sender, EventArgs e)
+        {
+            Win32.ReleaseDC(IntPtr.Zero, screenDC);
+            Win32.DeleteDC(memDC);
         }
 
         private void LayeredWindow_Load(object sender, EventArgs e)
         {
+            screenDC = Win32.GetDC(IntPtr.Zero);
+            memDC = Win32.CreateCompatibleDC(screenDC);
+            FormBorderStyle = FormBorderStyle.None;
             Ready = true;
         }
 
@@ -52,9 +63,7 @@ namespace ArkDesktop
             }
 
             IntPtr oldBits = IntPtr.Zero;
-            IntPtr screenDC = Win32.GetDC(IntPtr.Zero);
             IntPtr hBitmap = IntPtr.Zero;
-            IntPtr memDc = Win32.CreateCompatibleDC(screenDC);
 
             try
             {
@@ -64,24 +73,22 @@ namespace ArkDesktop
                 Win32.Point srcLoc = new Win32.Point(0, 0);
 
                 hBitmap = bitmap.GetHbitmap(Color.FromArgb(0));
-                oldBits = Win32.SelectObject(memDc, hBitmap);
+                oldBits = Win32.SelectObject(memDC, hBitmap);
 
                 blendFunc.BlendOp = Win32.AC_SRC_OVER;
                 blendFunc.SourceConstantAlpha = 255;
                 blendFunc.AlphaFormat = Win32.AC_SRC_ALPHA;
                 blendFunc.BlendFlags = 0;
 
-                Win32.UpdateLayeredWindow(Handle, screenDC, ref topLoc, ref bitMapSize, memDc, ref srcLoc, 0, ref blendFunc, Win32.ULW_ALPHA);
+                Win32.UpdateLayeredWindow(Handle, screenDC, ref topLoc, ref bitMapSize, memDC, ref srcLoc, 0, ref blendFunc, Win32.ULW_ALPHA);
             }
             finally
             {
                 if (hBitmap != IntPtr.Zero)
                 {
-                    Win32.SelectObject(memDc, oldBits);
+                    Win32.SelectObject(memDC, oldBits);
                     Win32.DeleteObject(hBitmap);
                 }
-                Win32.ReleaseDC(IntPtr.Zero, screenDC);
-                Win32.DeleteDC(memDc);
             }
         }
     }

@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArkDesktopStaticPic", "ArkD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArkDesktopHelper", "ArkDesktopHelper\ArkDesktopHelper.csproj", "{D56FBDA6-31B2-49E7-A8E3-43ACF3740D0F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArkDesktopLua", "ArkDesktopLua\ArkDesktopLua.csproj", "{AA4D8756-09C4-4C9A-A117-D3DB36085F0F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -138,6 +140,18 @@ Global
 		{D56FBDA6-31B2-49E7-A8E3-43ACF3740D0F}.Release|x64.Build.0 = Release|Any CPU
 		{D56FBDA6-31B2-49E7-A8E3-43ACF3740D0F}.Release|x86.ActiveCfg = Release|Any CPU
 		{D56FBDA6-31B2-49E7-A8E3-43ACF3740D0F}.Release|x86.Build.0 = Release|Any CPU
+		{AA4D8756-09C4-4C9A-A117-D3DB36085F0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA4D8756-09C4-4C9A-A117-D3DB36085F0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA4D8756-09C4-4C9A-A117-D3DB36085F0F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AA4D8756-09C4-4C9A-A117-D3DB36085F0F}.Debug|x64.Build.0 = Debug|Any CPU
+		{AA4D8756-09C4-4C9A-A117-D3DB36085F0F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AA4D8756-09C4-4C9A-A117-D3DB36085F0F}.Debug|x86.Build.0 = Debug|Any CPU
+		{AA4D8756-09C4-4C9A-A117-D3DB36085F0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA4D8756-09C4-4C9A-A117-D3DB36085F0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA4D8756-09C4-4C9A-A117-D3DB36085F0F}.Release|x64.ActiveCfg = Release|Any CPU
+		{AA4D8756-09C4-4C9A-A117-D3DB36085F0F}.Release|x64.Build.0 = Release|Any CPU
+		{AA4D8756-09C4-4C9A-A117-D3DB36085F0F}.Release|x86.ActiveCfg = Release|Any CPU
+		{AA4D8756-09C4-4C9A-A117-D3DB36085F0F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
