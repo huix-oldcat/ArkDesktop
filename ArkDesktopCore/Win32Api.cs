@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ArkDesktop
 {
-    class Win32
+    public class Win32
     {
         public enum Bool
         {
@@ -81,6 +81,38 @@ namespace ArkDesktop
         [DllImport("gdi32.dll ", ExactSpelling = true, SetLastError = true)]
         public static extern Bool DeleteObject(IntPtr hObject);
 
+        [DllImport("gdi32.dll")]
+        public static extern bool BitBlt(
+            IntPtr hdcDest,//目标设备的句柄
+            int nXDest,//目标对象的左上角x坐标
+            int nYDest,//目标对象的左上角Y坐标
+            int nWidth,//目标对象的矩形宽度
+            int nHeight,//目标对象的矩形长度
+            IntPtr hdcSrc,//源设备的句柄
+            int nXSrc,//源对象的左上角x坐标
+            int nYSrc,//源对象的左上角y坐标
+            int dwRop//光栅的操作值
+            );
+
+        public enum TernaryRasterOperations : uint
+        {
+            SRCCOPY = 0x00CC0020,
+            SRCPAINT = 0x00EE0086,
+            SRCAND = 0x008800C6,
+            SRCINVERT = 0x00660046,
+            SRCERASE = 0x00440328,
+            NOTSRCCOPY = 0x00330008,
+            NOTSRCERASE = 0x001100A6,
+            MERGECOPY = 0x00C000CA,
+            MERGEPAINT = 0x00BB0226,
+            PATCOPY = 0x00F00021,
+            PATPAINT = 0x00FB0A09,
+            PATINVERT = 0x005A0049,
+            DSTINVERT = 0x00550009,
+            BLACKNESS = 0x00000042,
+            WHITENESS = 0x00FF0062,
+            CAPTUREBLT = 0x40000000 //only if WinVer >= 5.0.0 (see wingdi.h)
+        }//https://docs.microsoft.com/zh-cn/windows/win32/api/wingdi/nf-wingdi-bitblt
         [DllImport("user32.dll ", EntryPoint = " SendMessage ")]
         public static extern int SendMessage(int hWnd, int wMsg, int wParam, int lParam);
 
