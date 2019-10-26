@@ -19,6 +19,8 @@ namespace ArkDesktopLua
         public string clickMethod = "";
         public Bitmap draft;
         public bool autoClearBackground = true;
+        public bool reverse = false;
+        public int reversePos = 0;
 
         public int LoadBitmap(string relativePath, bool necessary = true)
         {
@@ -66,7 +68,19 @@ namespace ArkDesktopLua
                 {
                     g.Clear(Color.Transparent);
                 }
-                g.DrawImage(bitmaps[index], dx, dy);
+                if (reverse)
+                {
+                    dx = draft.Width - dx - bitmaps[index].Width;
+                    using (Image i = new Bitmap(bitmaps[index]))
+                    {
+                        i.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                        g.DrawImage(i, dx, dy);
+                    }
+                }
+                else
+                {
+                    g.DrawImage(bitmaps[index], dx, dy);
+                }
             }
             return true;
         }
@@ -76,6 +90,11 @@ namespace ArkDesktopLua
             master.manager.SetBits(draft);
         }
 
+        public void MoveWindow(int deltaX, int deltaY)
+        {
+            master.manager.MoveWindow((reverse ? -1 : 1) * deltaX, deltaY);
+        }
+
         public void SetFlag(string flagName, bool flagValue)
         {
             switch (flagName)
@@ -83,6 +102,11 @@ namespace ArkDesktopLua
                 case "autoClearBackground":
                     {
                         autoClearBackground = flagValue;
+                        return;
+                    }
+                case "reverse":
+                    {
+                        reverse = flagValue;
                         return;
                     }
             }
@@ -107,6 +131,7 @@ namespace ArkDesktopLua
             lua.RegisterFunction("CreateDraft", this, typeof(LuaApi).GetMethod("CreateDraft"));
             lua.RegisterFunction("CopyBitmapToDraft", this, typeof(LuaApi).GetMethod("CopyBitmapToDraft"));
             lua.RegisterFunction("DrawDraft", this, typeof(LuaApi).GetMethod("DrawDraft"));
+            lua.RegisterFunction("MoveWindow", this, typeof(LuaApi).GetMethod("MoveWindow"));
             lua.RegisterFunction("SetFlag", this, typeof(LuaApi).GetMethod("SetFlag"));
         }
 
