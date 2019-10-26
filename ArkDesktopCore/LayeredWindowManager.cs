@@ -54,6 +54,18 @@ namespace ArkDesktop
                 config.GetElement(ns + "LayeredWindowManager").Element(ns + "Zoom").Value = zoom.ToString();
             }
         }
+
+        public void MoveWindow(int deltaX, int deltaY)
+        {
+            if (window.InvokeRequired)
+            {
+                window.Invoke((MethodInvoker)(() => MoveWindow(deltaX, deltaY)));
+                return;
+            }
+            window.Top += Convert.ToInt32(deltaY * Zoom);
+            window.Left += Convert.ToInt32(deltaX * Zoom);
+        }
+
         public enum ZoomQuality
         {
             HighQuality,
