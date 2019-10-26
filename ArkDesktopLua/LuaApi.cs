@@ -17,6 +17,8 @@ namespace ArkDesktopLua
         public ArkDesktopLua master;
         public Lua lua;
         public string clickMethod = "";
+        public Bitmap draft;
+        public bool autoClearBackground = true;
 
         public int LoadBitmap(string relativePath, bool necessary = true)
         {
@@ -46,6 +48,46 @@ namespace ArkDesktopLua
             clickMethod = methodName;
         }
 
+        public void CreateDraft(int width, int height)
+        {
+            if (draft != null)
+            {
+                draft.Dispose();
+            }
+            draft = new Bitmap(width, height);
+        }
+
+        public bool CopyBitmapToDraft(int index, int dx = 0, int dy = 0)
+        {
+            if (index < 0 || index >= bitmaps.Count) return false;
+            using (Graphics g = Graphics.FromImage(draft))
+            {
+                if (autoClearBackground)
+                {
+                    g.Clear(Color.Transparent);
+                }
+                g.DrawImage(bitmaps[index], dx, dy);
+            }
+            return true;
+        }
+
+        public void DrawDraft()
+        {
+            master.manager.SetBits(draft);
+        }
+
+        public void SetFlag(string flagName, bool flagValue)
+        {
+            switch (flagName)
+            {
+                case "autoClearBackground":
+                    {
+                        autoClearBackground = flagValue;
+                        return;
+                    }
+            }
+        }
+
         public void OnClick()
         {
             if (clickMethod == "") return;
@@ -62,6 +104,10 @@ namespace ArkDesktopLua
             lua.RegisterFunction("DisplayBitmap", this, typeof(LuaApi).GetMethod("DisplayBitmap"));
             lua.RegisterFunction("Sleep", this, typeof(LuaApi).GetMethod("Sleep"));
             lua.RegisterFunction("RequestClickEvent", this, typeof(LuaApi).GetMethod("RequestClickEvent"));
+            lua.RegisterFunction("CreateDraft", this, typeof(LuaApi).GetMethod("CreateDraft"));
+            lua.RegisterFunction("CopyBitmapToDraft", this, typeof(LuaApi).GetMethod("CopyBitmapToDraft"));
+            lua.RegisterFunction("DrawDraft", this, typeof(LuaApi).GetMethod("DrawDraft"));
+            lua.RegisterFunction("SetFlag", this, typeof(LuaApi).GetMethod("SetFlag"));
         }
 
         public LuaApi(ArkDesktopLua master, Lua lua)

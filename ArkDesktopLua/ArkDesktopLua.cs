@@ -19,9 +19,9 @@ namespace ArkDesktopLua
 
         private bool isDisposed = false;
         public Core core;
-        private LayeredWindow window;
+        public LayeredWindow window;
         public LayeredWindowManager manager;
-        private XElement config;
+        public XElement config;
         private XNamespace ns = "ArkDesktop";
 
         private enum LaunchType
