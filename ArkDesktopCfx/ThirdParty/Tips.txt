@@ -1,0 +1,9 @@
+Download third party pack : https://github.com/huix-oldcat/ArkDesktop/releases/download/0.2/bin.zip
+structure:
+
+----cef
+    |---....
+....
+ChromiumFX.dll
+libcfx.dll
+...

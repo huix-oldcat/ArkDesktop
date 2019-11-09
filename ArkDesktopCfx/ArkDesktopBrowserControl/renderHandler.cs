@@ -1,0 +1,144 @@
+﻿/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+using System.Drawing;
+using System.Windows.Forms;
+using Chromium.Event;
+using System.Drawing.Imaging;
+using Chromium;
+
+namespace ArkDesktopCfx
+{
+    partial class ArkDesktopBrowserControl
+    {
+        #region Not implemented methods --- Useless
+        //void renderHandler_UpdateDragCursor(object sender, CfxUpdateDragCursorEventArgs e)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //void renderHandler_StartDragging(object sender, CfxStartDraggingEventArgs e)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //void renderHandler_OnScrollOffsetChanged(object sender, CfxOnScrollOffsetChangedEventArgs e)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //void renderHandler_OnPopupSize(object sender, CfxOnPopupSizeEventArgs e)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //void renderHandler_OnPopupShow(object sender, CfxOnPopupShowEventArgs e)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //void renderHandler_OnCursorChange(object sender, CfxOnCursorChangeEventArgs e)
+        //{
+        //    switch (e.Type)
+        //    {
+        //        case CfxCursorType.Hand:
+        //            Cursor = Cursors.Hand;
+        //            break;
+        //        default:
+        //            Cursor = Cursors.Default;
+        //            break;
+        //    }
+        //}
+
+        //void renderHandler_GetScreenPoint(object sender, CfxGetScreenPointEventArgs e)
+        //{
+
+        //    if (InvokeRequired)
+        //    {
+        //        Invoke((MethodInvoker)(() => renderHandler_GetScreenPoint(sender, e)));
+        //        return;
+        //    }
+
+        //    if (!IsDisposed)
+        //    {
+        //        var origin = PointToScreen(new Point(e.ViewX, e.ViewY));
+        //        e.ScreenX = origin.X;
+        //        e.ScreenY = origin.Y;
+        //        e.SetReturnValue(true);
+        //    }
+        //}
+
+        //void renderHandler_GetScreenInfo(object sender, CfxGetScreenInfoEventArgs e)
+        //{
+        //}
+
+        //void renderHandler_GetRootScreenRect(object sender, CfxGetRootScreenRectEventArgs e)
+        //{
+        //}
+        #endregion
+
+        void RenderHandler_OnPaint(object sender, CfxOnPaintEventArgs e)
+        {
+
+            lock (pbLock)
+            {
+                if (pixelBuffer == null || pixelBuffer.Width < e.Width || pixelBuffer.Height < e.Height)
+                {
+                    if (pixelBuffer != null)
+                    {
+                        pixelBuffer.Dispose();
+                    }
+                    pixelBuffer = new Bitmap(e.Width, e.Height, PixelFormat.Format32bppArgb);
+                }
+                using (Bitmap bm = new Bitmap(e.Width, e.Height, e.Width * 4, PixelFormat.Format32bppArgb, e.Buffer))
+                using (Graphics g = Graphics.FromImage(pixelBuffer))
+                {
+                    g.Clear(Color.Transparent);
+                    g.DrawImageUnscaled(bm, 0, 0);
+                }
+                window.SetBits(pixelBuffer);
+            }
+            //foreach (CfxRect r in e.DirtyRects)
+            //{
+            //    Invalidate(new Rectangle(r.X, r.Y, r.Width, r.Height));
+            //}
+        }
+
+        void RenderHandler_GetViewRect(object sender, CfxGetViewRectEventArgs e)
+        {
+
+            if (window.InvokeRequired)
+            {
+                window.Invoke((MethodInvoker)(() => RenderHandler_GetViewRect(sender, e)));
+                return;
+            }
+
+            if (!window.IsDisposed)
+            {
+                var origin = window.PointToScreen(new Point(0, 0));
+                e.Rect.X = origin.X;
+                e.Rect.Y = origin.Y;
+                e.Rect.Width = window.Width == 0 ? 1 : window.Width;
+                e.Rect.Height = window.Height == 0 ? 1 : window.Height;
+            }
+        }
+
+        void RenderHandler_GetScreenPoint(object sender, CfxGetScreenPointEventArgs e)
+        {
+
+            if (window.InvokeRequired)
+            {
+                window.Invoke((MethodInvoker)(() => RenderHandler_GetScreenPoint(sender, e)));
+                return;
+            }
+
+            if (window.IsDisposed)
+            {
+                var origin = window.PointToScreen(new Point(e.ViewX, e.ViewY));
+                e.ScreenX = origin.X;
+                e.ScreenY = origin.Y;
+                e.ScreenX = 0;
+            }
+        }
+    }
+}
