@@ -13,7 +13,7 @@ namespace ArkDesktopCfx
 {
     public partial class ArkDesktopBrowserControl
     {
-        class ResourceHandler : Chromium.CfxResourceHandler
+        public class ResourceHandler : Chromium.CfxResourceHandler
         {
             string mimeType;
             int done;

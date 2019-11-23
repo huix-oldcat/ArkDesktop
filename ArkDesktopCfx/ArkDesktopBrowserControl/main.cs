@@ -22,7 +22,7 @@ namespace ArkDesktopCfx
 
         public ArkDesktop.LayeredWindow window;
 
-        public ArkDesktopBrowserControl()
+        public ArkDesktopBrowserControl(ArkDesktop.LayeredWindow window)
         { 
             #region Handler
             lifeSpanHandler = new CfxLifeSpanHandler();
@@ -48,7 +48,7 @@ namespace ArkDesktopCfx
             client.GetLifeSpanHandler += (sender, e) => e.SetReturnValue(lifeSpanHandler);
             client.GetRenderHandler += (sender, e) => e.SetReturnValue(renderHandler);
             //client.GetLoadHandler += (sender, e) => e.SetReturnValue(loadHandler);
-            //client.GetRequestHandler += (sender, e) => e.SetReturnValue(requestHandler);
+            client.GetRequestHandler += (sender, e) => e.SetReturnValue(requestHandler);
 
             var settings = new CfxBrowserSettings();
             settings.BackgroundColor = new CfxColor(0, 0, 0, 0);
@@ -57,6 +57,58 @@ namespace ArkDesktopCfx
             windowInfo.SetAsWindowless(IntPtr.Zero);
 
             CfxBrowserHost.CreateBrowser(windowInfo, client, "http://www.bing.com/", settings, null);
+
+            this.window = window;
+            window.MouseDown += Window_MouseDown;
+            window.MouseUp += Window_MouseUp;
+            window.MouseMove += Window_MouseMove;
+        }
+
+        private void Window_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            browser.Host.SendMouseMoveEvent(new CfxMouseEvent { X = e.X, Y = e.Y }, false);
+        }
+
+        private void Window_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            CfxMouseButtonType button;
+            switch (e.Button)
+            {
+                case System.Windows.Forms.MouseButtons.Left:
+                    button = CfxMouseButtonType.Left;
+                    break;
+                case System.Windows.Forms.MouseButtons.Right:
+                    button = CfxMouseButtonType.Right;
+                    break;
+                case System.Windows.Forms.MouseButtons.Middle:
+                    button = CfxMouseButtonType.Middle;
+                    break;
+                default:
+                    return;
+
+            }
+            browser.Host.SendMouseClickEvent(new CfxMouseEvent { X = e.X, Y = e.Y }, button, false, 1);
+        }
+
+        private void Window_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            CfxMouseButtonType button;
+            switch (e.Button)
+            {
+                case System.Windows.Forms.MouseButtons.Left:
+                    button = CfxMouseButtonType.Left;
+                    break;
+                case System.Windows.Forms.MouseButtons.Right:
+                    button = CfxMouseButtonType.Right;
+                    break;
+                case System.Windows.Forms.MouseButtons.Middle:
+                    button = CfxMouseButtonType.Middle;
+                    break;
+                default:
+                    return;
+
+            }
+            browser.Host.SendMouseClickEvent(new CfxMouseEvent { X = e.X, Y = e.Y }, button, true, 1);
         }
 
         private double zoomPercent = 1;

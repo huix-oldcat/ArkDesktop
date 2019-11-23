@@ -34,6 +34,10 @@ namespace ArkDesktopCfx
                 master.window.Width = int.Parse(textBox_W.Text);
                 master.window.Height = int.Parse(textBox_H.Text);
             }));
+            if (master.manager.browser != null)
+            {
+                master.manager.browser.Host.WasResized();
+            }
         }
     }
 }
