@@ -7,10 +7,33 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using ArkDesktop;
+using ArkDesktop.CoreKit;
 using LuaInterface;
 
 namespace ArkDesktopLua
 {
+    public class ArkDesktopLuaModule : IArkDesktopPluginModule
+    {
+        public string Name => "ArkDesktop-LuaModule";
+
+        public Guid Guid => new Guid("b1c03350-0f81-4fee-a7ab-bacfbb13c3d4");
+
+        public bool Disposed { get; set; } = false;
+
+        public string Description => "ArkDesktop提供的Lua能力实现";
+
+        public int Version => 2;
+
+        public void MainThread(ResourceManager resources)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RequestDispose()
+        {
+            throw new NotImplementedException();
+        }
+    }
     public class ArkDesktopLua : IArkDesktopV2
     {
         public string Name => "ArkDesktop.Lua";
