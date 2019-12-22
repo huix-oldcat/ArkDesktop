@@ -35,5 +35,24 @@ namespace TestApp
         {
             configManager.LoadConfig(Path.Combine(configManager.rootPath, "configs", "陈_站立_点击互动"));
         }
+
+        private void Button4_Click(object sender, EventArgs e)
+        {
+            configManager.ScanPlugins(Path.Combine(configManager.rootPath, "plugins"));
+        }
+
+        private void Button3_Click(object sender, EventArgs e)
+        {
+            configManager.ScanConfigs(Path.Combine(configManager.rootPath, "configs"));
+        }
+
+        private void Button5_Click(object sender, EventArgs e)
+        {
+            var r = (from ev in configManager.Configs where ev.ConfigName == textBox1.Text select ev);
+            if (r.Any())
+            {
+                r.First().Description = textBox2.Text;
+            }
+        }
     }
 }

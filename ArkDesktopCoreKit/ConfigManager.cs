@@ -168,7 +168,7 @@ namespace ArkDesktop.CoreKit
                         where typeof(IArkDesktopPluginModule).IsAssignableFrom(e)
                         select e;
             var ret = new List<PluginModuleInfo>();
-            foreach(Type i in found)
+            foreach (Type i in found)
             {
                 IArkDesktopPluginModule module = (IArkDesktopPluginModule)i.Assembly.CreateInstance(i.FullName);
                 ret.Add(new PluginModuleInfo(Path.GetFileName(filename), module));
@@ -179,22 +179,65 @@ namespace ArkDesktop.CoreKit
 
     public class ConfigInfo
     {
-        string ConfigName { get; set; }
-        Guid ConfigGuid { get; }
-        string Description { get; set; } = "";
-        PluginModuleInfo LaunchModule { get; set; }
-        string LaunchModuleName { get; }
-        Guid LaunchModuleGuid { get; }
-        
+        /// <summary>
+        /// Change before launch!
+        /// </summary>
+        public string ConfigName { get => configName; set { configName = value; Save(); } }
+        public Guid ConfigGuid { get; }
+        public string Description { get => description; set { description = value; Save(); } }
+        public PluginModuleInfo LaunchModule
+        {
+            get => launchModule;
+            set
+            {
+                launchModule = value;
+                LaunchModuleName = value.moduleName;
+                LaunchModuleGuid = value.moduleGuid;
+                Save();
+            }
+        }
+        public string LaunchModuleName { get; private set; }
+        public Guid LaunchModuleGuid { get; private set; }
+        private string rootPath;
+        private string configName;
+        private string description;
+        private PluginModuleInfo launchModule;
+
+        private void Save()
+        {
+            using (FileStream fs = File.OpenWrite(Path.Combine(rootPath, "config.xml")))
+            {
+                XDocument document = new XDocument(
+                    new XElement("ArkDesktop",
+                        new XElement("Version", 1),
+                        new XElement("Guid", ConfigGuid.ToString()),
+                        new XElement("Description", description),
+                        new XElement("LaunchModule",
+                            new XElement("Name", LaunchModuleName),
+                            new XElement("Guid", LaunchModuleGuid))));
+                document.Save(fs);
+            }
+            if (Path.GetFileName(rootPath) != configName)
+            {
+                Directory.Move(rootPath, Path.Combine(Path.GetDirectoryName(rootPath), configName));
+                rootPath = Path.Combine(Path.GetDirectoryName(rootPath), configName);
+            }
+        }
+        public void LoadPluginModule(PluginModuleInfo module)
+        {
+            launchModule = module;
+        }
+
         private ConfigInfo(XElement config, string dir, IEnumerable<PluginModuleInfo> modules)
         {
+            rootPath = dir;
             ConfigName = Path.GetFileName(dir);
             ConfigGuid = new Guid(config.Element("Guid").Value);
             Description = config.Element("Description")?.Value;
             LaunchModuleName = config.Element("LaunchModule").Element("Name").Value;
             LaunchModuleGuid = new Guid(config.Element("LaunchModule").Element("Guid").Value);
             var found = from r in modules where r.moduleGuid == LaunchModuleGuid select r;
-            if (found.Any()) LaunchModule = found.First();
+            if (found.Any()) LoadPluginModule(found.First());
         }
 
         public static ConfigInfo ReadConfigFromDisk(string dir, IEnumerable<PluginModuleInfo> modules)
@@ -209,7 +252,7 @@ namespace ArkDesktop.CoreKit
                 throw new Exception("Invalid config file.");
             }
             string[] requirement = new string[] { "Version", "Guid", "LaunchModule" };
-            foreach(string s in requirement)
+            foreach (string s in requirement)
             {
                 if (document.Root.Element(s) == null)
                 {
@@ -234,17 +277,68 @@ namespace ArkDesktop.CoreKit
         public string rootPath;
         public List<PluginModuleInfo> Modules { get; private set; } = new List<PluginModuleInfo>();
         public List<ConfigInfo> Configs { get; private set; } = new List<ConfigInfo>();
+        private HashSet<Guid> loadedConfigs = new HashSet<Guid>();
+        private HashSet<Guid> loadedModules = new HashSet<Guid>();
         public ConfigManager(string root)
         {
             rootPath = root;
         }
         public void LoadDll(string filename)
         {
-            Modules.AddRange(PluginModuleInfo.ReadFromDll(Path.Combine(Path.Combine(rootPath, "/plugins/"), filename)));
+            foreach (var i in PluginModuleInfo.ReadFromDll(Path.Combine(Path.Combine(rootPath, "/plugins/"), filename)))
+            {
+                if (loadedModules.Contains(i.moduleGuid) == false)
+                {
+                    loadedModules.Add(i.moduleGuid);
+                    Modules.Add(i);
+                    foreach (var j in from e in Configs where e.LaunchModule == null && e.LaunchModuleGuid == i.moduleGuid select e)
+                        j.LoadPluginModule(i);
+                }
+            }
         }
         public void LoadConfig(string dir)
         {
-            Configs.Add(ConfigInfo.ReadConfigFromDisk(Path.Combine(rootPath, dir), Modules));
+            var get = ConfigInfo.ReadConfigFromDisk(Path.Combine(rootPath, dir), Modules);
+            if (loadedConfigs.Contains(get.ConfigGuid) == false)
+            {
+                loadedConfigs.Add(get.ConfigGuid);
+                Configs.Add(get);
+            }
+        }
+
+        public void ScanPlugins(string dir)
+        {
+            var list = Directory.EnumerateFiles(dir);
+            foreach (var i in list)
+            {
+                if (i.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
+                {
+                    try
+                    {
+                        LoadDll(i);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            }
+        }
+
+        public void ScanConfigs(string dir)
+        {
+            foreach (var i in Directory.EnumerateDirectories(dir, "*", SearchOption.TopDirectoryOnly))
+            {
+                if (i.StartsWith("__shared") == false)
+                {
+                    try
+                    {
+                        LoadConfig(i);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            }
         }
     }
 }
