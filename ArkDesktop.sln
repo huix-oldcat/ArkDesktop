@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
+# Blend for Visual Studio Version 16
 VisualStudioVersion = 16.0.29123.88
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArkDesktopCSCefOsr", "ArkDesktopCSCefOsr\ArkDesktopCSCefOsr.csproj", "{3FC81718-7E88-4E43-8E35-1B5222A85672}"
@@ -34,6 +34,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArkDesktopCoreKit", "ArkDesktopCoreKit\ArkDesktopCoreKit.csproj", "{ED7282FD-04A9-400D-ABC4-540724FA8A44}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "TestApp\TestApp.csproj", "{764ECBC1-EB5C-46CE-9C35-E58729D31847}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArkDesktopHelperWPF", "ArkDesktopHelperWPF\ArkDesktopHelperWPF.csproj", "{B98F0DA4-B7D5-48DD-A5DD-9474A2FC79EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -171,6 +173,18 @@ Global
 		{764ECBC1-EB5C-46CE-9C35-E58729D31847}.Release|x64.Build.0 = Release|Any CPU
 		{764ECBC1-EB5C-46CE-9C35-E58729D31847}.Release|x86.ActiveCfg = Release|Any CPU
 		{764ECBC1-EB5C-46CE-9C35-E58729D31847}.Release|x86.Build.0 = Release|Any CPU
+		{B98F0DA4-B7D5-48DD-A5DD-9474A2FC79EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B98F0DA4-B7D5-48DD-A5DD-9474A2FC79EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B98F0DA4-B7D5-48DD-A5DD-9474A2FC79EB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B98F0DA4-B7D5-48DD-A5DD-9474A2FC79EB}.Debug|x64.Build.0 = Debug|Any CPU
+		{B98F0DA4-B7D5-48DD-A5DD-9474A2FC79EB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B98F0DA4-B7D5-48DD-A5DD-9474A2FC79EB}.Debug|x86.Build.0 = Debug|Any CPU
+		{B98F0DA4-B7D5-48DD-A5DD-9474A2FC79EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B98F0DA4-B7D5-48DD-A5DD-9474A2FC79EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B98F0DA4-B7D5-48DD-A5DD-9474A2FC79EB}.Release|x64.ActiveCfg = Release|Any CPU
+		{B98F0DA4-B7D5-48DD-A5DD-9474A2FC79EB}.Release|x64.Build.0 = Release|Any CPU
+		{B98F0DA4-B7D5-48DD-A5DD-9474A2FC79EB}.Release|x86.ActiveCfg = Release|Any CPU
+		{B98F0DA4-B7D5-48DD-A5DD-9474A2FC79EB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

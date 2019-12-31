@@ -35,6 +35,10 @@
             this.button5 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
+            this.button6 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
+            this.button8 = new System.Windows.Forms.Button();
+            this.button9 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -101,11 +105,55 @@
             this.textBox2.Size = new System.Drawing.Size(170, 21);
             this.textBox2.TabIndex = 6;
             // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(12, 211);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(170, 23);
+            this.button6.TabIndex = 7;
+            this.button6.Text = "新建LayeredWindowManager";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.Button6_Click);
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(12, 269);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(170, 21);
+            this.button7.TabIndex = 8;
+            this.button7.Text = "刷新窗口";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.Button7_Click);
+            // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(12, 240);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(170, 23);
+            this.button8.TabIndex = 9;
+            this.button8.Text = "新建LWM(使用配置)";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.Button8_Click);
+            // 
+            // button9
+            // 
+            this.button9.Location = new System.Drawing.Point(12, 296);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(170, 23);
+            this.button9.TabIndex = 10;
+            this.button9.Text = "Dispose";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.Button9_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button9);
+            this.Controls.Add(this.button8);
+            this.Controls.Add(this.button7);
+            this.Controls.Add(this.button6);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button5);
@@ -130,6 +178,10 @@
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Button button9;
     }
 }
 

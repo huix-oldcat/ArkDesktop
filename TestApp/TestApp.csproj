@@ -90,4 +90,7 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>xcopy /Y $(ProjectDir)testimg.png $(TargetDir)</PreBuildEvent>
+  </PropertyGroup>
 </Project>

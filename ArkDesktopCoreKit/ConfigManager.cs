@@ -117,18 +117,19 @@ namespace ArkDesktop.CoreKit
             throw new NotImplementedException("Lazy...");
         }
 
-        public XDocument GetConfig(string moduleName)
+        public XElement GetConfig(string moduleName)
         {
-            string realPath = Path.Combine(rootPath, "/config/", moduleName + ".xml");
+            string realPath = Path.Combine(rootPath, "config", moduleName + ".xml");
             if (CheckInDir(realPath) == false || File.Exists(realPath) == false)
             {
-                return new XDocument();
+                var v = XDocument.Parse("<?xml version=\"1.0\" encoding=\"utf-8\"?><Config></Config>");
+                v.Save(realPath);
             }
             if (activeConfigs.ContainsKey(moduleName) == false)
             {
                 activeConfigs[moduleName] = XDocument.Parse(File.ReadAllText(realPath));
             }
-            return activeConfigs[moduleName];
+            return activeConfigs[moduleName].Root;
         }
 
         public void SaveConfig(string moduleName)
@@ -137,7 +138,7 @@ namespace ArkDesktop.CoreKit
             {
                 return;
             }
-            string realPath = Path.Combine(rootPath, "/config/", moduleName + ".xml");
+            string realPath = Path.Combine(rootPath, "config", moduleName + ".xml");
             activeConfigs[moduleName].Save(realPath);
         }
     }

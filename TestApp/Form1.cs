@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using ArkDesktop.CoreKit;
 
 namespace TestApp
@@ -53,6 +54,46 @@ namespace TestApp
             {
                 r.First().Description = textBox2.Text;
             }
+        }
+        LayeredWindowManager manager;
+        XDocument document = new XDocument();
+
+        private void Button6_Click(object sender, EventArgs e)
+        {
+            manager = new LayeredWindowManager(document.Root);
+            manager.Parent = this;
+            manager.Ready.WaitOne();
+            manager.Location = new Point(200, 0);
+            using (Bitmap bitmap = Bitmap.FromFile("testimg.png") as Bitmap)
+            {
+                manager.SetBits(bitmap);
+            }
+        }
+
+        private void Button7_Click(object sender, EventArgs e)
+        {
+            using (Bitmap bitmap = Bitmap.FromFile("testimg.png") as Bitmap)
+            {
+                manager.SetBits(bitmap);
+            }
+        }
+
+        private void Button8_Click(object sender, EventArgs e)
+        {
+            configManager.ScanConfigs(Path.Combine(configManager.rootPath, "configs"));
+            manager = new LayeredWindowManager(new ResourceManager(Path.Combine(configManager.rootPath, "configs", "陈_站立_点击互动")));
+            manager.Parent = this;
+            manager.Ready.WaitOne();
+            manager.Location = new Point(200, 0);
+            using (Bitmap bitmap = Bitmap.FromFile("testimg.png") as Bitmap)
+            {
+                manager.SetBits(bitmap);
+            }
+        }
+
+        private void Button9_Click(object sender, EventArgs e)
+        {
+            manager.Dispose();
         }
     }
 }

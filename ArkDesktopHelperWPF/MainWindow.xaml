@@ -1,0 +1,57 @@
+﻿<Window x:Class="ArkDesktopHelperWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:ArkDesktopHelperWPF"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="573" Width="966.25" WindowStyle="None">
+    <Grid>
+        <materialDesign:ColorZone
+  Mode="PrimaryMid"
+  Padding="16">
+            <DockPanel Margin="0">
+                <Button
+                    Style="{StaticResource MaterialDesignIconButton}"
+                    DockPanel.Dock="Right" >
+                    <materialDesign:PackIcon Kind="WindowClose" Foreground="White" />
+                </Button>
+                <Button
+                    Style="{StaticResource MaterialDesignIconButton}"
+                    DockPanel.Dock="Right" >
+                    <materialDesign:PackIcon Kind="WindowMinimize" Foreground="White" />
+                </Button>
+                <StackPanel
+      Orientation="Horizontal"
+      materialDesign:RippleAssist.IsCentered="True">
+                    <ToggleButton
+        Style="{DynamicResource MaterialDesignHamburgerToggleButton}" />
+                    <TextBlock
+      VerticalAlignment="Center"
+      Margin="16 0 0 0" FontSize="18" FontFamily="Consolas">
+    ArkDesktop
+                    </TextBlock>
+                </StackPanel>
+            </DockPanel>
+        </materialDesign:ColorZone>
+        <materialDesign:PopupBox
+  Style="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"
+  PlacementMode="TopAndAlignLeftEdges"
+  ToolTipService.Placement="Right"
+  ToolTip="PopupBox, Style MaterialDesignMultiFloatingActionPopupBox" Margin="0,0,10,10" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <!--Opened="PopupBox_OnOpened" Closed="PopupBox_OnClosed"-->
+            <StackPanel>
+                <Button ToolTip="One with custom opacity" Opacity="0.5">
+                    1
+                </Button>
+                <Button ToolTip="Two">
+                    2
+                </Button>
+                <Button ToolTip="Three">
+                    3
+                </Button>
+            </StackPanel>
+        </materialDesign:PopupBox>
+    </Grid>
+</Window>
