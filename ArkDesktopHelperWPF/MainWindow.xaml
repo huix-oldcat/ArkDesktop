@@ -7,19 +7,21 @@
         xmlns:local="clr-namespace:ArkDesktopHelperWPF"
         mc:Ignorable="d"
         Title="MainWindow" Height="573" Width="966.25" WindowStyle="None">
-    <Grid>
+    <Grid x:Name="root">
         <materialDesign:ColorZone
   Mode="PrimaryMid"
-  Padding="16">
+  Padding="16" MouseDown="ColorZone_MouseDown">
             <DockPanel Margin="0">
                 <Button
+                    x:Name="button_closeWindow"
                     Style="{StaticResource MaterialDesignIconButton}"
-                    DockPanel.Dock="Right" >
+                    DockPanel.Dock="Right" Click="CloseWindowButton_Click" >
                     <materialDesign:PackIcon Kind="WindowClose" Foreground="White" />
                 </Button>
                 <Button
+                    x:Name="button_minWindow"
                     Style="{StaticResource MaterialDesignIconButton}"
-                    DockPanel.Dock="Right" >
+                    DockPanel.Dock="Right" Click="MinWindowButton_Click" >
                     <materialDesign:PackIcon Kind="WindowMinimize" Foreground="White" />
                 </Button>
                 <StackPanel
@@ -39,7 +41,7 @@
   Style="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"
   PlacementMode="TopAndAlignLeftEdges"
   ToolTipService.Placement="Right"
-  ToolTip="PopupBox, Style MaterialDesignMultiFloatingActionPopupBox" Margin="0,0,10,10" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+  ToolTip="PopupBox, Style MaterialDesignMultiFloatingActionPopupBox" Margin="0,0,10,10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Panel.ZIndex="99999">
             <!--Opened="PopupBox_OnOpened" Closed="PopupBox_OnClosed"-->
             <StackPanel>
                 <Button ToolTip="One with custom opacity" Opacity="0.5">
@@ -53,5 +55,7 @@
                 </Button>
             </StackPanel>
         </materialDesign:PopupBox>
+        <Grid x:Name="main" HorizontalAlignment="Left" Height="470" Margin="10,85,0,0" VerticalAlignment="Top" Width="938.25">
+        </Grid>
     </Grid>
 </Window>
