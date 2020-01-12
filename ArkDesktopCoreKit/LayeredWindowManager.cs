@@ -65,7 +65,7 @@ namespace ArkDesktop.CoreKit
                 if (TopMost)
                 {
                     if (config.Element("TopMost") == null)
-                        config.Add("TopMost");
+                        config.Add(new XElement("TopMost"));
                 }
                 else
                 {
@@ -217,14 +217,14 @@ namespace ArkDesktop.CoreKit
             resourceManager = resource;
             if (settings == null) settings = new WindowFeatures();
             if (window != null) this.window = window; else this.window = new LayeredWindow();
-            this.config = resource.GetConfig("ArkDesktop.LayeredManager");
+            this.config = resource.GetConfig("ArkDesktop.LayeredWindowManager");
             this.settings = settings;
             InitializeComponent();
         }
 
         public new void Dispose()
         {
-            resourceManager?.SaveConfig("ArkDesktop.LayeredManager");
+            resourceManager?.SaveConfig("ArkDesktop.LayeredWindowManager");
             base.Dispose(true);
             window.Invoke((MethodInvoker)(() => window.Dispose()));
         }

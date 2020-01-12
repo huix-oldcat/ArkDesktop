@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ArkDesktop.CoreKit;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,12 +21,18 @@ namespace ArkDesktopHelperWPF
     /// </summary>
     public partial class ConfigSelect : UserControl
     {
-        public ConfigSelect()
+        private readonly ConfigManager manager;
+        private readonly MainWindow.StartConfigInvoker startConfig;
+
+        public ConfigSelect(ConfigManager manager, MainWindow.StartConfigInvoker startConfig)
         {
             InitializeComponent();
-            for (int i = 0; i < 12; ++i)
+            this.manager = manager;
+            this.startConfig = startConfig;
+            manager.ScanConfigs();
+            foreach (var i in manager.Configs)
             {
-                configList.Children.Add(new ConfigCard());
+                configList.Children.Add(new ConfigCard(i, startConfig));
             }
         }
     }

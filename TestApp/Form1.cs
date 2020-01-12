@@ -81,7 +81,7 @@ namespace TestApp
         private void Button8_Click(object sender, EventArgs e)
         {
             configManager.ScanConfigs(Path.Combine(configManager.rootPath, "configs"));
-            manager = new LayeredWindowManager(new ResourceManager(Path.Combine(configManager.rootPath, "configs", "陈_站立_点击互动")));
+            manager = new LayeredWindowManager(new ResourceManager(Path.Combine(configManager.rootPath, "configs", "陈_站立_点击互动"), null));
             manager.Parent = this;
             manager.Ready.WaitOne();
             manager.Location = new Point(200, 0);

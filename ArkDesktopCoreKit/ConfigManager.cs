@@ -58,9 +58,11 @@ namespace ArkDesktop.CoreKit
         private FileStream packageStream;
         private Dictionary<string, Tuple<int, int>> packagedFile = new Dictionary<string, Tuple<int, int>>();
         private Dictionary<string, XDocument> activeConfigs = new Dictionary<string, XDocument>();
-        public ResourceManager(string rootPath)
+        private ConfigManager.ManageConfigSaveMethod manageConfigSave;
+        public ResourceManager(string rootPath, ConfigManager.ManageConfigSaveMethod manageConfigSave)
         {
             this.rootPath = rootPath;
+            this.manageConfigSave = manageConfigSave;
             if (Directory.Exists(rootPath) == false)
             {
                 throw new ArgumentException("Cannot found specified path.", nameof(rootPath));
@@ -79,6 +81,8 @@ namespace ArkDesktop.CoreKit
 
         public Stream OpenRead(string filename, bool packagedFirst = false)
         {
+            if (filename.StartsWith("/") || filename.StartsWith("\\"))
+                filename = filename.Substring(1);
             bool packaged = false;
             if (packagedFile.ContainsKey(filename))
             {
@@ -86,7 +90,7 @@ namespace ArkDesktop.CoreKit
                 if (packagedFirst)
                     throw new NotImplementedException("Lazy...");
             }
-            string realPath = Path.Combine(rootPath, filename);
+            string realPath = Path.Combine(rootPath, "resources", filename);
             if (CheckInDir(realPath) == false)
             {
                 return new MemoryStream();
@@ -128,6 +132,7 @@ namespace ArkDesktop.CoreKit
             if (activeConfigs.ContainsKey(moduleName) == false)
             {
                 activeConfigs[moduleName] = XDocument.Parse(File.ReadAllText(realPath));
+                manageConfigSave?.Invoke(realPath, activeConfigs[moduleName]);
             }
             return activeConfigs[moduleName].Root;
         }
@@ -180,6 +185,7 @@ namespace ArkDesktop.CoreKit
 
     public class ConfigInfo
     {
+        public bool disableSave = true;
         /// <summary>
         /// Change before launch!
         /// </summary>
@@ -203,21 +209,20 @@ namespace ArkDesktop.CoreKit
         private string configName;
         private string description;
         private PluginModuleInfo launchModule;
+        private ConfigManager.ManageConfigSaveMethod manageConfigSave;
 
         private void Save()
         {
-            using (FileStream fs = File.OpenWrite(Path.Combine(rootPath, "config.xml")))
-            {
-                XDocument document = new XDocument(
-                    new XElement("ArkDesktop",
-                        new XElement("Version", 1),
-                        new XElement("Guid", ConfigGuid.ToString()),
-                        new XElement("Description", description),
-                        new XElement("LaunchModule",
-                            new XElement("Name", LaunchModuleName),
-                            new XElement("Guid", LaunchModuleGuid))));
-                document.Save(fs);
-            }
+            if (disableSave) return;
+            XDocument document = new XDocument(
+                new XElement("ArkDesktop",
+                    new XElement("Version", 1),
+                    new XElement("Guid", ConfigGuid.ToString()),
+                    new XElement("Description", description),
+                    new XElement("LaunchModule",
+                        new XElement("Name", LaunchModuleName),
+                        new XElement("Guid", LaunchModuleGuid))));
+            document.Save(Path.Combine(rootPath, "config.xml"));
             if (Path.GetFileName(rootPath) != configName)
             {
                 Directory.Move(rootPath, Path.Combine(Path.GetDirectoryName(rootPath), configName));
@@ -229,9 +234,10 @@ namespace ArkDesktop.CoreKit
             launchModule = module;
         }
 
-        private ConfigInfo(XElement config, string dir, IEnumerable<PluginModuleInfo> modules)
+        private ConfigInfo(XElement config, string dir, IEnumerable<PluginModuleInfo> modules, ConfigManager.ManageConfigSaveMethod manageConfigSave)
         {
             rootPath = dir;
+            this.manageConfigSave = manageConfigSave;
             ConfigName = Path.GetFileName(dir);
             ConfigGuid = new Guid(config.Element("Guid").Value);
             Description = config.Element("Description")?.Value;
@@ -239,9 +245,10 @@ namespace ArkDesktop.CoreKit
             LaunchModuleGuid = new Guid(config.Element("LaunchModule").Element("Guid").Value);
             var found = from r in modules where r.moduleGuid == LaunchModuleGuid select r;
             if (found.Any()) LoadPluginModule(found.First());
+            disableSave = false;
         }
 
-        public static ConfigInfo ReadConfigFromDisk(string dir, IEnumerable<PluginModuleInfo> modules)
+        public static ConfigInfo ReadConfigFromDisk(string dir, IEnumerable<PluginModuleInfo> modules, ConfigManager.ManageConfigSaveMethod manageConfigSave)
         {
             if (File.Exists(Path.Combine(dir, "config.xml")) == false)
             {
@@ -269,8 +276,10 @@ namespace ArkDesktop.CoreKit
             {
                 throw new Exception("Invalid launch info in config.xml.");
             }
-            return new ConfigInfo(document.Root, dir, modules);
+            return new ConfigInfo(document.Root, dir, modules, manageConfigSave);
         }
+
+        public ResourceManager ResourceManager => new ResourceManager(rootPath, manageConfigSave);
     }
 
     public class ConfigManager
@@ -278,8 +287,10 @@ namespace ArkDesktop.CoreKit
         public string rootPath;
         public List<PluginModuleInfo> Modules { get; private set; } = new List<PluginModuleInfo>();
         public List<ConfigInfo> Configs { get; private set; } = new List<ConfigInfo>();
+        public List<Tuple<string, XDocument>> managedConfigSave = new List<Tuple<string, XDocument>>();
         private HashSet<Guid> loadedConfigs = new HashSet<Guid>();
         private HashSet<Guid> loadedModules = new HashSet<Guid>();
+
         public ConfigManager(string root)
         {
             rootPath = root;
@@ -299,7 +310,7 @@ namespace ArkDesktop.CoreKit
         }
         public void LoadConfig(string dir)
         {
-            var get = ConfigInfo.ReadConfigFromDisk(Path.Combine(rootPath, dir), Modules);
+            var get = ConfigInfo.ReadConfigFromDisk(Path.Combine(rootPath, dir), Modules, ManageConfigSave);
             if (loadedConfigs.Contains(get.ConfigGuid) == false)
             {
                 loadedConfigs.Add(get.ConfigGuid);
@@ -324,9 +335,11 @@ namespace ArkDesktop.CoreKit
                 }
             }
         }
+        public void ScanPlugins() => ScanPlugins(Path.Combine(rootPath, "plugins"));
 
         public void ScanConfigs(string dir)
         {
+            if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
             foreach (var i in Directory.EnumerateDirectories(dir, "*", SearchOption.TopDirectoryOnly))
             {
                 if (i.StartsWith("__shared") == false)
@@ -340,6 +353,18 @@ namespace ArkDesktop.CoreKit
                     }
                 }
             }
+        }
+        public void ScanConfigs() => ScanConfigs(Path.Combine(rootPath, "configs"));
+
+        public void SaveAllConfigs()
+        {
+            foreach (var i in managedConfigSave) i.Item2.Save(i.Item1);
+        }
+
+        public delegate void ManageConfigSaveMethod(string path, XDocument document);
+        public void ManageConfigSave(string path, XDocument document)
+        {
+            managedConfigSave.Add(new Tuple<string, XDocument>(path, document));
         }
     }
 }

@@ -14,7 +14,7 @@ namespace ArkDesktopLua
     public class LuaApi
     {
         public List<Bitmap> bitmaps = new List<Bitmap>();
-        public ArkDesktopLua master;
+        public ArkDesktopLuaModule master;
         public Lua lua;
         public string clickMethod = "";
         public Bitmap draft;
@@ -24,12 +24,14 @@ namespace ArkDesktopLua
 
         public int LoadBitmap(string relativePath, bool necessary = true)
         {
-            string realPath = Path.GetFullPath(Path.Combine(master.core.RootPath, "./Resources/ArkDesktop.StaticPic/", "./"+relativePath)), rootPath = Path.GetFullPath(Path.Combine(master.core.RootPath, "./Resources/"));
-            realPath = Path.GetFullPath(realPath);
-            FileInfo info = new FileInfo(realPath);
-            if (info.Exists == false) if (necessary) throw new Exception("Bitmap \"" + realPath + "\" not found."); else return -1;
-            if (info.FullName.Substring(0, rootPath.Length) != rootPath)if (necessary) throw new Exception("Bitmap \"" + realPath + "\" is not int the resource dir."); else return -1;
-            bitmaps.Add(new Bitmap(realPath));
+            Stream stream = master.resourceManager.OpenRead(relativePath);
+            if (stream.Length == 0)
+            {
+                if (necessary)
+                    throw new Exception("Bitmap \"" + relativePath + "\" not found.");
+                else return -1;
+            }
+            bitmaps.Add(new Bitmap(stream));
             return bitmaps.Count - 1;
         }
 
@@ -135,7 +137,7 @@ namespace ArkDesktopLua
             lua.RegisterFunction("SetFlag", this, typeof(LuaApi).GetMethod("SetFlag"));
         }
 
-        public LuaApi(ArkDesktopLua master, Lua lua)
+        public LuaApi(ArkDesktopLuaModule master, Lua lua)
         {
             this.master = master ?? throw new ArgumentNullException(nameof(master));
             this.lua = lua ?? throw new ArgumentNullException(nameof(lua));

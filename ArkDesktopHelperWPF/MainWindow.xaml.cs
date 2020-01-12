@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ArkDesktop.CoreKit;
 
 namespace ArkDesktopHelperWPF
 {
@@ -21,16 +22,33 @@ namespace ArkDesktopHelperWPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        ConfigManager manager;
+
+        public delegate void StartConfigInvoker(ConfigInfo info);
+
+        public void StartConfig(ConfigInfo info)
+        {
+            Close();
+            PluginGuiContainer pluginGuiContainer = new PluginGuiContainer(manager);
+            InstanceManager instanceManager = new InstanceManager(new InstanceHelper(pluginGuiContainer));
+            instanceManager.Start();
+            instanceManager.LaunchModule(info);
+            Application.Current.Shutdown();
+        }
+
         public MainWindow()
         {
+            manager = new ConfigManager(AppDomain.CurrentDomain.BaseDirectory);
+            manager.ScanPlugins();
             InitializeComponent();
-            ConfigSelect control1 = new ConfigSelect();
+            ConfigSelect control1 = new ConfigSelect(manager, StartConfig);
             main.Children.Add(control1);
         }
 
         private void CloseWindowButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
+            Application.Current.Shutdown();
         }
 
         private void MinWindowButton_Click(object sender, RoutedEventArgs e)

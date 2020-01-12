@@ -6,11 +6,11 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:ArkDesktopHelperWPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="573" Width="966.25" WindowStyle="None">
+        Title="MainWindow" Height="573" Width="959.25" WindowStyle="None" ResizeMode="NoResize" Icon="GlobalIcon.png">
     <Grid x:Name="root">
         <materialDesign:ColorZone
   Mode="PrimaryMid"
-  Padding="16" MouseDown="ColorZone_MouseDown">
+  Padding="16" MouseDown="ColorZone_MouseDown" materialDesign:ShadowAssist.ShadowDepth="Depth2">
             <DockPanel Margin="0">
                 <Button
                     x:Name="button_closeWindow"
@@ -38,6 +38,7 @@
             </DockPanel>
         </materialDesign:ColorZone>
         <materialDesign:PopupBox
+            materialDesign:ShadowAssist.ShadowDepth="Depth5"
   Style="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"
   PlacementMode="TopAndAlignLeftEdges"
   ToolTipService.Placement="Right"

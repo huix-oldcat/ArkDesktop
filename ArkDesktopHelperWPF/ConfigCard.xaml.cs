@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ArkDesktop.CoreKit;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,18 @@ namespace ArkDesktopHelperWPF
     /// </summary>
     public partial class ConfigCard : UserControl
     {
-        public ConfigCard()
+        private readonly ConfigInfo info;
+        private readonly MainWindow.StartConfigInvoker startConfig;
+
+        public ConfigCard(ConfigInfo info, MainWindow.StartConfigInvoker startConfig)
         {
             InitializeComponent();
+            this.info = info;
+            this.startConfig = startConfig;
+            name.Text = info.ConfigName;
+            description.Text = info.Description == "" ? "暂无描述" : info.Description;
+            if (info.LaunchModule == null)
+                invalidMask.Visibility = Visibility.Visible;
         }
 
         private void Image_MouseEnter(object sender, MouseEventArgs e)
@@ -43,6 +53,7 @@ namespace ArkDesktopHelperWPF
         private void RunMask_MouseUp(object sender, MouseButtonEventArgs e)
         {
             rect.Fill = new SolidColorBrush(Color.FromArgb(175, 255, 255, 255));
+            startConfig(info);
         }
     }
 }

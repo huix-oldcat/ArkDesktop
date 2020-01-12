@@ -13,7 +13,7 @@ namespace ArkDesktop.CoreKit
         bool Disposed { get; }
         string Description { get; }
         int Version { get; }
-        void MainThread(ResourceManager resources);
+        void MainThread(ResourceManager resources, InstanceHelper instanceHelper);
         void RequestDispose();
     }
 }
