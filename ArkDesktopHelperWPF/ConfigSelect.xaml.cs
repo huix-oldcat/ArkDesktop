@@ -22,17 +22,15 @@ namespace ArkDesktopHelperWPF
     public partial class ConfigSelect : UserControl
     {
         private readonly ConfigManager manager;
-        private readonly MainWindow.StartConfigInvoker startConfig;
 
-        public ConfigSelect(ConfigManager manager, MainWindow.StartConfigInvoker startConfig)
+        public ConfigSelect(ConfigManager manager)
         {
             InitializeComponent();
             this.manager = manager;
-            this.startConfig = startConfig;
             manager.ScanConfigs();
             foreach (var i in manager.Configs)
             {
-                configList.Children.Add(new ConfigCard(i, startConfig));
+                configList.Children.Add(new ConfigCard(i));
             }
         }
     }

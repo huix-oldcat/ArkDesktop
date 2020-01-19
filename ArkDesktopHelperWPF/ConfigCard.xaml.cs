@@ -22,17 +22,16 @@ namespace ArkDesktopHelperWPF
     public partial class ConfigCard : UserControl
     {
         private readonly ConfigInfo info;
-        private readonly MainWindow.StartConfigInvoker startConfig;
+        public bool isChecked = false;
 
-        public ConfigCard(ConfigInfo info, MainWindow.StartConfigInvoker startConfig)
+        public ConfigCard(ConfigInfo info)
         {
             InitializeComponent();
             this.info = info;
-            this.startConfig = startConfig;
             name.Text = info.ConfigName;
             description.Text = info.Description == "" ? "暂无描述" : info.Description;
-            if (info.LaunchModule == null)
-                invalidMask.Visibility = Visibility.Visible;
+            if (info.LaunchModule == null) errorTag.ToolTip = "一个或多个插件未加载";
+            else errorTag.Visibility = Visibility.Hidden;
         }
 
         private void Image_MouseEnter(object sender, MouseEventArgs e)
@@ -42,7 +41,7 @@ namespace ArkDesktopHelperWPF
 
         private void RunMask_MouseLeave(object sender, MouseEventArgs e)
         {
-            runMask.Visibility = Visibility.Hidden;
+            if (isChecked == false) runMask.Visibility = Visibility.Hidden;
         }
 
         private void RunMask_MouseDown(object sender, MouseButtonEventArgs e)
@@ -53,7 +52,8 @@ namespace ArkDesktopHelperWPF
         private void RunMask_MouseUp(object sender, MouseButtonEventArgs e)
         {
             rect.Fill = new SolidColorBrush(Color.FromArgb(175, 255, 255, 255));
-            startConfig(info);
+            isChecked = !isChecked;
+            checkedIcon.Kind = isChecked ? MaterialDesignThemes.Wpf.PackIconKind.RadioboxMarked : MaterialDesignThemes.Wpf.PackIconKind.RadioboxBlank;
         }
     }
 }

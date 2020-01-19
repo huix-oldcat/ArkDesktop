@@ -24,8 +24,6 @@ namespace ArkDesktopHelperWPF
     {
         ConfigManager manager;
 
-        public delegate void StartConfigInvoker(ConfigInfo info);
-
         public void StartConfig(ConfigInfo info)
         {
             Close();
@@ -41,7 +39,7 @@ namespace ArkDesktopHelperWPF
             manager = new ConfigManager(AppDomain.CurrentDomain.BaseDirectory);
             manager.ScanPlugins();
             InitializeComponent();
-            ConfigSelect control1 = new ConfigSelect(manager, StartConfig);
+            ConfigSelect control1 = new ConfigSelect(manager);
             main.Children.Add(control1);
         }
 

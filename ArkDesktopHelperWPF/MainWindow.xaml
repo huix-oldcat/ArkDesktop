@@ -42,17 +42,20 @@
   Style="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"
   PlacementMode="TopAndAlignLeftEdges"
   ToolTipService.Placement="Right"
-  ToolTip="PopupBox, Style MaterialDesignMultiFloatingActionPopupBox" Margin="0,0,10,10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Panel.ZIndex="99999">
+  ToolTip="更多操作" Margin="0,0,10,10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Panel.ZIndex="99999">
             <!--Opened="PopupBox_OnOpened" Closed="PopupBox_OnClosed"-->
             <StackPanel>
-                <Button ToolTip="One with custom opacity" Opacity="0.5">
-                    1
+                <Button ToolTip="导出配置">
+                    <materialDesign:PackIcon Kind="ExportVariant"/>
                 </Button>
-                <Button ToolTip="Two">
-                    2
+                <Button ToolTip="删除配置">
+                    <materialDesign:PackIcon Kind="Delete"/>
                 </Button>
-                <Button ToolTip="Three">
-                    3
+                <Button ToolTip="复制配置">
+                    <materialDesign:PackIcon Kind="ContentCopy"/>
+                </Button>
+                <Button ToolTip="运行!">
+                    <materialDesign:PackIcon Kind="play"/>
                 </Button>
             </StackPanel>
         </materialDesign:PopupBox>

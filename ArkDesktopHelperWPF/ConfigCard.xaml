@@ -25,15 +25,16 @@
                 <TextBlock x:Name="description" Grid.Row="1" Style="{StaticResource MaterialDesignCaptionTextBlock}" Margin="10"  TextWrapping = "Wrap">
                     描述描述描述没什么事没什么没什么事没什么是没什么事
                 </TextBlock>
+                <Rectangle x:Name="errorTag" Fill="Red" HorizontalAlignment="Left" Height="30" Margin="151.038,-21.438,-30.038,0" VerticalAlignment="Top" Width="30" ToolTip="这里是错误信息">
+                    <Rectangle.RenderTransform>
+                        <RotateTransform Angle="45"></RotateTransform>
+                    </Rectangle.RenderTransform>
+                </Rectangle>
             </Grid>
-            
+
             <Grid x:Name="runMask" Grid.Row="0" HorizontalAlignment="Left" Height="119" VerticalAlignment="Top" Width="119" Visibility="Hidden" MouseLeave="RunMask_MouseLeave" MouseDown="RunMask_MouseDown" MouseUp="RunMask_MouseUp">
                 <Rectangle x:Name="rect" Fill="#AFFFFFFF" HorizontalAlignment="Left" Height="119" Stroke="Black" VerticalAlignment="Top" Width="119"/>
-                <materialDesign:PackIcon Kind="Play" Margin="42,44,0,0" Height="32" Width="32" />
-            </Grid>
-            <Grid x:Name="invalidMask" Grid.Row="0" HorizontalAlignment="Left" Height="119" VerticalAlignment="Top" Width="119" Visibility="Hidden">
-                <Rectangle x:Name="rect1" Fill="#AFFFFFFF" HorizontalAlignment="Left" Height="119" Stroke="Black" VerticalAlignment="Top" Width="119"/>
-                <materialDesign:PackIcon Kind="CircleOffOutline" Margin="42,44,0,0" Height="32" Width="32" />
+                <materialDesign:PackIcon x:Name="checkedIcon" Kind="RadioboxBlank" Margin="42,44,0,0" Height="32" Width="32" />
             </Grid>
         </Grid>
     </materialDesign:Card>
