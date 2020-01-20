@@ -65,6 +65,7 @@
                         </Grid>
                     </DockPanel>
                 </materialDesign:DrawerHost>
+                <materialDesign:Snackbar x:Name="MainSnackbar" MessageQueue="{materialDesign:MessageQueue}"/>
             </Grid>
         </Border>
     </Grid>

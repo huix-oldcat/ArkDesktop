@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:ArkDesktopHelperWPF"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="1000">
-    <Grid Background="White">
+    <Grid Background="White" Width="959" Height="493">
         <CheckBox x:Name="AutoRunCheckbox" Style="{StaticResource MaterialDesignCheckBox}" Margin="30,30,570,445" Checked="AutoRunCheckbox_Checked" Unchecked="AutoRunCheckbox_Checked">
             开机自启动(重新勾选以将主界面选中的配置更新为默认配置)
         </CheckBox>
@@ -22,6 +22,30 @@
     materialDesign:HintAssist.Hint="Multiline text" Margin="30,60,570,337.184" IsEnabled="False">
             很讨厌ky的人呢......为什么看气氛就那么难呢
         </TextBox>
-        <CheckBox x:Name="AutoUpdateCheckBox" Style="{StaticResource MaterialDesignCheckBox}" Margin="30,167.816,570,307.184" Content="自动从akd.huix.cc获取更新" Checked="AutoUpdateCheckBox_Checked" Unchecked="AutoUpdateCheckBox_Checked"/>
+        <CheckBox x:Name="AutoUpdateCheckBox" Style="{StaticResource MaterialDesignCheckBox}" Margin="30,168,570,307" Content="自动从akd.huix.cc获取更新" Checked="AutoUpdateCheckBox_Checked" Unchecked="AutoUpdateCheckBox_Checked"/>
+        <TextBlock x:Name="UpdateTextBlock" HorizontalAlignment="Left" Height="253" Margin="30,193,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="400"><Run Text="没有查询版本哦"/><InlineUIContainer>
+            </InlineUIContainer></TextBlock>
+        <Button Style="{DynamicResource MaterialDesignFlatButton}" HorizontalAlignment="Left"
+                    x:Name="UpdateButton" Margin="240,451,0,10" Width="190" IsEnabled="False" Click="UpdateButton_Click">
+            <StackPanel Orientation="Horizontal">
+                <materialDesign:PackIcon Kind="Download"/>
+                <TextBlock Margin="8 0 0 0" VerticalAlignment="Center" FontFamily="Consolas"><Run Text="Download"/></TextBlock>
+            </StackPanel>
+        </Button>
+        <Button Style="{DynamicResource MaterialDesignFlatButton}" HorizontalAlignment="Left"
+            x:Name="QueryUpdate" Margin="30,451,0,10" Width="190" Click="QueryUpdate_Click">
+            <StackPanel Orientation="Horizontal">
+                <materialDesign:PackIcon Kind="CrosshairsGps"/>
+                <TextBlock Margin="8 0 0 0" VerticalAlignment="Center" FontFamily="Consolas"><Run Text="Query"/></TextBlock>
+            </StackPanel>
+        </Button>
+        <TextBox
+  x:Name="GuidTextBox"
+  materialDesign:HintAssist.Hint="GUID"
+  materialDesign:HintAssist.HelperText="A random GUID. Please used this GUID in your files." Margin="549,28,10,439" FontFamily="Consolas">
+        </TextBox>
+        <Button x:Name="GuidGenerateButton"
+  Content="{materialDesign:PackIcon Kind=Flag}"
+  ToolTip="Generate A GUID" Margin="476,28,415,423" Height="Auto" Click="GuidGenerateButton_Click" />
     </Grid>
 </UserControl>

@@ -95,5 +95,13 @@ namespace TestApp
         {
             manager.Dispose();
         }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            string a, b;
+            (a, b) = UpdateChecker.GetUpdateInfo();
+            MessageBox.Show(a);
+            if (b != null) MessageBox.Show(b);
+        }
     }
 }

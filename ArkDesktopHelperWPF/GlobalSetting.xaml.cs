@@ -61,5 +61,36 @@ namespace ArkDesktopHelperWPF
             if (AutoUpdateCheckBox.IsChecked == true) File.Create("AutoUpdate.flag");
             else if (File.Exists("AutoUpdate.flag")) File.Delete("AutoUpdate.flag");
         }
+
+        private string _updateUrl;
+
+        private void QueryUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            Task.Factory.StartNew(() => {
+                (var a, var b) = ArkDesktop.CoreKit.UpdateChecker.GetUpdateInfo();
+                Dispatcher.Invoke(() =>
+                {
+                    if (a == "Latest") UpdateTextBlock.Text = "已经是最新版本了哦QwQ";
+                    else if (a == "") UpdateTextBlock.Text = "更新查询失败QAQ";
+                    else
+                    {
+                        UpdateButton.IsEnabled = true;
+                        UpdateTextBlock.Text = b;
+                        _updateUrl = a;
+                    }
+                });
+            });
+        }
+
+        private void UpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(_updateUrl);
+        }
+
+        private void GuidGenerateButton_Click(object sender, RoutedEventArgs e)
+        {
+            Guid guid = Guid.NewGuid();
+            GuidTextBox.Text = guid.ToString();
+        }
     }
 }

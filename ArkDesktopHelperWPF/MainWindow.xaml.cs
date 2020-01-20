@@ -54,7 +54,7 @@ namespace ArkDesktopHelperWPF
                             if (i.ConfigGuid == g && i.LaunchModule != null)
                                 validStartupConfig.Add(i);
                     }
-                    catch(Exception)
+                    catch (Exception)
                     {
                         break;
                     }
@@ -74,6 +74,23 @@ namespace ArkDesktopHelperWPF
                 InitializeComponent();
                 drawerItemsListBox.ItemsSource = DrawerItems;
                 drawerItemsListBox.SelectedIndex = 0;
+                if (File.Exists("AutoUpdate.flag"))
+                {
+                    MainSnackbar.MessageQueue.Enqueue("正在检查更新...");
+                    Task.Factory.StartNew(() =>
+                    {
+                        (string a, _) = UpdateChecker.GetUpdateInfo();
+                        if (a != "" && a != "Latest")
+                        {
+                            Dispatcher.Invoke(() => MainSnackbar.MessageQueue.Enqueue("发现新版本!请前往全局设置下载"));
+                        }
+                        else if (a == "Latest")
+                        {
+                            Dispatcher.Invoke(() => MainSnackbar.MessageQueue.Enqueue("已是最新版本"));
+                        }
+                        else Dispatcher.Invoke(() => MainSnackbar.MessageQueue.Enqueue("查询过程发生错误"));
+                    });
+                }
             }
             else StartMultiConfig(validStartupConfig, false);
         }

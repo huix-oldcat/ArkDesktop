@@ -56,11 +56,6 @@
       <Project>{ed7282fd-04a9-400d-abc4-540724fa8a44}</Project>
       <Name>ArkDesktopCoreKit</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ArkDesktopCore\ArkDesktopCore.csproj">
-      <Project>{52814151-1a01-4058-8bcb-3d5c0d000b11}</Project>
-      <Name>ArkDesktopCore</Name>
-      <Private>False</Private>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Lua\lua51.dll" />
