@@ -25,9 +25,11 @@ namespace ArkDesktopHelperWPF
             InitializeComponent();
         }
 
-        private void GitHubButton_Click(object sender, RoutedEventArgs e)
+        private void GoWildButton_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://www.github.com/huix-oldcat/ArkDesktop");
+            if (sender.Equals(GitHubButton)) System.Diagnostics.Process.Start("https://www.github.com/huix-oldcat/ArkDesktop");
+            else if(sender.Equals(WebsiteButton)) System.Diagnostics.Process.Start("https://akd.huix.cc/");
+            else if(sender.Equals(QQGroupButton)) System.Diagnostics.Process.Start("https://jq.qq.com/?_wv=1027&k=5j3ooR8");
         }
     }
 }

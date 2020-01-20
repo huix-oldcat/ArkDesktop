@@ -42,13 +42,20 @@ namespace ArkDesktopHelperWPF
             switch (button.Name)
             {
                 case "runButton":
-                    List<ConfigInfo> configInfos = new List<ConfigInfo>();
-                    foreach (ConfigCard i in configList.Children)
-                        if (i.isChecked)
-                            configInfos.Add(i.info);
-                    requestStart?.Invoke(configInfos);
+                    requestStart?.Invoke(GetSelectedConfigs());
                     break;
             }
         }
+
+        private List<ConfigInfo> GetSelectedConfigs()
+        {
+            List<ConfigInfo> configInfos = new List<ConfigInfo>();
+            foreach (ConfigCard i in configList.Children)
+                if (i.isChecked)
+                    configInfos.Add(i.info);
+            return configInfos;
+        }
+
+        public MainWindow.RequestConfigList RequestDelegate => GetSelectedConfigs;
     }
 }

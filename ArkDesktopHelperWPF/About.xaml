@@ -16,15 +16,31 @@
             画师:溪涧殇 https://www.pixiv.net/users/8703481
             画师微博:@溪涧殇
         </TextBlock>
-        <TextBlock HorizontalAlignment="Left" Height="32" Margin="570.98,283.119,0,0" TextWrapping="Wrap" Text="huix-oldcat/ArkDesktop" VerticalAlignment="Top" Width="356" FontSize="20" FontFamily="Consolas"/>
+        <TextBlock HorizontalAlignment="Left" Height="32" Margin="581.977,283.119,0,0" TextWrapping="Wrap" Text="huix-oldcat/ArkDesktop" VerticalAlignment="Top" Width="356" FontSize="20" FontFamily="Consolas"/>
 
         <Button Style="{DynamicResource MaterialDesignFlatButton}" HorizontalAlignment="Left"
-                                            x:Name="GitHubButton" Margin="436,278.827,0,182.173" Click="GitHubButton_Click">
+                                            x:Name="GitHubButton" Margin="436,278.827,0,182.173" Click="GoWildButton_Click">
             <StackPanel Orientation="Horizontal">
                 <materialDesign:PackIcon Kind="GithubCircle" Height="24" Width="24" />
                 <TextBlock Margin="8 0 0 0" VerticalAlignment="Center" FontSize="20" FontFamily="Consolas">GitHub</TextBlock>
             </StackPanel>
         </Button>
         <TextBlock HorizontalAlignment="Left" Height="39" Margin="436,199.827,0,0" TextWrapping="Wrap" Text="Alpha version! Distribute only in QQ group 1021330668." VerticalAlignment="Top" Width="400" FontFamily="Consolas" FontSize="16" FontWeight="Bold" FontStyle="Italic" Foreground="Red" Background="Yellow"/>
+        <Button Style="{DynamicResource MaterialDesignFlatButton}" HorizontalAlignment="Left"
+            x:Name="WebsiteButton" Margin="436,315.827,0,145.173" Click="GoWildButton_Click">
+            <StackPanel Orientation="Horizontal">
+                <materialDesign:PackIcon Kind="Cloud" Height="24" Width="24" />
+                <TextBlock Margin="8 0 0 0" VerticalAlignment="Center" FontSize="20" FontFamily="Consolas"><Run Text="Website"/></TextBlock>
+            </StackPanel>
+        </Button>
+        <TextBlock HorizontalAlignment="Left" Height="32" Margin="581.977,320.119,0,0" TextWrapping="Wrap" Text="Package &amp; Update" VerticalAlignment="Top" Width="254.023" FontSize="20" FontFamily="Consolas"/>
+        <Button Style="{DynamicResource MaterialDesignFlatButton}" HorizontalAlignment="Left"
+            x:Name="QQGroupButton" Margin="436,352.827,0,108.173" Click="GoWildButton_Click">
+            <StackPanel Orientation="Horizontal">
+                <materialDesign:PackIcon Kind="Qqchat" Height="24" Width="24" />
+                <TextBlock Margin="8 0 0 0" VerticalAlignment="Center" FontSize="20" FontFamily="Consolas"><Run Text="Q Group"/></TextBlock>
+            </StackPanel>
+        </Button>
+        <TextBlock HorizontalAlignment="Left" Height="32" Margin="581.977,357.119,0,0" TextWrapping="Wrap" Text="1021330668" VerticalAlignment="Top" Width="254.023" FontSize="20" FontFamily="Consolas"/>
     </Grid>
 </UserControl>

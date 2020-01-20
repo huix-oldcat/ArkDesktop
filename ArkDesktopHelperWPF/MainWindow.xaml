@@ -6,64 +6,66 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:ArkDesktopHelperWPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="573" Width="959.25" WindowStyle="None" ResizeMode="NoResize" Icon="GlobalIcon.png">
+        Title="MainWindow" Height="573" Width="959.25" WindowStyle="None" ResizeMode="NoResize" Icon="GlobalIcon.png" Background="Transparent" AllowsTransparency="True">
     <Grid>
-        <Grid x:Name="root">
-            <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
-                <materialDesign:DrawerHost.LeftDrawerContent>
-                    <DockPanel MinWidth="212">
-                        <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" 
+        <Border BorderThickness="1" BorderBrush="Gray" Background="White" CornerRadius="10,10,10,10">
+            <Grid x:Name="root">
+                <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
+                    <materialDesign:DrawerHost.LeftDrawerContent>
+                        <DockPanel MinWidth="212">
+                            <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" 
                                     DockPanel.Dock="Top"
                                     HorizontalAlignment="Right" Margin="16"
                                     IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}" />
-                        <ListBox x:Name="drawerItemsListBox" Margin="0 16 0 16" PreviewMouseLeftButtonUp="drawerItemsListBox_PreviewMouseLeftButtonUp" SelectedIndex="0">
-                            <ListBox.Resources>
-                                <Style TargetType="ScrollBar" BasedOn="{StaticResource MaterialDesignScrollBarMinimal}"/>
-                            </ListBox.Resources>
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Name}" Margin="32 0 32 0"/>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </DockPanel>
-                </materialDesign:DrawerHost.LeftDrawerContent>
-                <DockPanel>
-                    <materialDesign:ColorZone
+                            <ListBox x:Name="drawerItemsListBox" Margin="0 16 0 16" PreviewMouseLeftButtonUp="drawerItemsListBox_PreviewMouseLeftButtonUp" SelectedIndex="0">
+                                <ListBox.Resources>
+                                    <Style TargetType="ScrollBar" BasedOn="{StaticResource MaterialDesignScrollBarMinimal}"/>
+                                </ListBox.Resources>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}" Margin="32 0 32 0"/>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </DockPanel>
+                    </materialDesign:DrawerHost.LeftDrawerContent>
+                    <DockPanel>
+                        <materialDesign:ColorZone
   Mode="PrimaryMid"
-  Padding="16" MouseDown="ColorZone_MouseDown" materialDesign:ShadowAssist.ShadowDepth="Depth2" DockPanel.Dock="Top">
-                        <DockPanel Margin="0">
-                            <Button
+  Padding="16" MouseDown="ColorZone_MouseDown" materialDesign:ShadowAssist.ShadowDepth="Depth2" DockPanel.Dock="Top" CornerRadius="10,10,0,0">
+                            <DockPanel Margin="0">
+                                <Button
                     x:Name="button_closeWindow"
                     Style="{StaticResource MaterialDesignIconButton}"
                     DockPanel.Dock="Right" Click="CloseWindowButton_Click" >
-                                <materialDesign:PackIcon Kind="WindowClose" Foreground="White" />
-                            </Button>
-                            <Button
+                                    <materialDesign:PackIcon Kind="WindowClose" Foreground="White" />
+                                </Button>
+                                <Button
                     x:Name="button_minWindow"
                     Style="{StaticResource MaterialDesignIconButton}"
                     DockPanel.Dock="Right" Click="MinWindowButton_Click" >
-                                <materialDesign:PackIcon Kind="WindowMinimize" Foreground="White" />
-                            </Button>
-                            <StackPanel
+                                    <materialDesign:PackIcon Kind="WindowMinimize" Foreground="White" />
+                                </Button>
+                                <StackPanel
       Orientation="Horizontal"
       materialDesign:RippleAssist.IsCentered="True">
-                                <ToggleButton x:Name="MenuToggleButton"
+                                    <ToggleButton x:Name="MenuToggleButton"
         Style="{DynamicResource MaterialDesignHamburgerToggleButton}" />
-                                <TextBlock
+                                    <TextBlock
       VerticalAlignment="Center"
       Margin="16 0 0 0" FontSize="18" FontFamily="Consolas">
     ArkDesktop
-                                </TextBlock>
-                            </StackPanel>
-                        </DockPanel>
-                    </materialDesign:ColorZone>
-                    <Grid>
-                        <!--<Grid x:Name="main"/>-->
-                        <ContentControl Content="{Binding ElementName=drawerItemsListBox,Path=SelectedItem.Control}"/>
-                    </Grid>
-                </DockPanel>
-            </materialDesign:DrawerHost>
-        </Grid>
+                                    </TextBlock>
+                                </StackPanel>
+                            </DockPanel>
+                        </materialDesign:ColorZone>
+                        <Grid>
+                            <!--<Grid x:Name="main"/>-->
+                            <ContentControl Content="{Binding ElementName=drawerItemsListBox,Path=SelectedItem.Control}"/>
+                        </Grid>
+                    </DockPanel>
+                </materialDesign:DrawerHost>
+            </Grid>
+        </Border>
     </Grid>
 </Window>

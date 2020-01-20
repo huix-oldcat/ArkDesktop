@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -32,22 +33,57 @@ namespace ArkDesktopHelperWPF
         }
         public DrawerItemData[] DrawerItems { get; set; }
         ConfigManager manager;
+        List<ConfigInfo> validStartupConfig = new List<ConfigInfo>();
+
+        private bool ValidAutorun()
+        {
+            var args = Environment.GetCommandLineArgs();
+            string realPath = AppDomain.CurrentDomain.BaseDirectory;
+            string autorunFile = System.IO.Path.Combine(realPath, "AutoRun.txt");
+            if (args.Length != 2 || args[1] != "-autorun" || File.Exists(autorunFile) == false) return false;
+            using (StringReader sr = new StringReader(File.ReadAllText(autorunFile)))
+            {
+                while (true)
+                {
+                    string s = sr.ReadLine();
+                    if (s == "") break;
+                    try
+                    {
+                        Guid g = Guid.Parse(s);
+                        foreach (var i in manager.Configs)
+                            if (i.ConfigGuid == g && i.LaunchModule != null)
+                                validStartupConfig.Add(i);
+                    }
+                    catch(Exception)
+                    {
+                        break;
+                    }
+                }
+            }
+            return validStartupConfig.Any();
+        }
 
         public MainWindow()
         {
             manager = new ConfigManager(AppDomain.CurrentDomain.BaseDirectory);
             manager.ScanPlugins();
-            InitDrawer();
-            InitializeComponent();
-            drawerItemsListBox.ItemsSource = DrawerItems;
-            drawerItemsListBox.SelectedIndex = 0;
+            manager.ScanConfigs();
+            if (ValidAutorun() == false)
+            {
+                InitDrawer();
+                InitializeComponent();
+                drawerItemsListBox.ItemsSource = DrawerItems;
+                drawerItemsListBox.SelectedIndex = 0;
+            }
+            else StartMultiConfig(validStartupConfig, false);
         }
 
         private void InitDrawer()
         {
-            DrawerItems = new DrawerItemData[2];
-            DrawerItems[0] = new DrawerItemData { Name = "主界面", Control = new ConfigSelect(manager, StartMultiConfig) };
-            DrawerItems[1] = new DrawerItemData { Name = "关于", Control = new AboutInfo() };
+            DrawerItems = new DrawerItemData[3];
+            DrawerItems[0] = new DrawerItemData { Name = "主界面", Control = new ConfigSelect(manager, (i) => StartMultiConfig(i)) };
+            DrawerItems[1] = new DrawerItemData { Name = "全局设置", Control = new GlobalSetting((DrawerItems[0].Control as ConfigSelect).RequestDelegate) };
+            DrawerItems[2] = new DrawerItemData { Name = "关于", Control = new AboutInfo() };
         }
 
         private void CloseWindowButton_Click(object sender, RoutedEventArgs e)
@@ -68,10 +104,10 @@ namespace ArkDesktopHelperWPF
 
         public delegate void RequestStart(List<ConfigInfo> configInfos);
 
-        private void StartMultiConfig(List<ConfigInfo> configInfos)
+        private void StartMultiConfig(List<ConfigInfo> configInfos, bool needClose = true)
         {
             List<ManualResetEvent> events = new List<ManualResetEvent>();
-            Close();
+            if (needClose) Close();
             PluginGuiContainer pluginGuiContainer = new PluginGuiContainer(manager);
             InstanceManager instanceManager = new InstanceManager(pluginGuiContainer);
             foreach (var configInfo in configInfos)
@@ -102,5 +138,7 @@ namespace ArkDesktopHelperWPF
             }
             MenuToggleButton.IsChecked = false;
         }
+
+        public delegate List<ConfigInfo> RequestConfigList();
     }
 }
