@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="ArkDesktopHelperWPF.AboutInfo"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ArkDesktopHelperWPF"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="591" d:DesignWidth="1055">
+    <Grid Width="959" Height="493" Background="White">
+        <TextBlock HorizontalAlignment="Left" Height="101" TextWrapping="Wrap" Text="ArkDesktop" VerticalAlignment="Top" Width="400" FontSize="72" Margin="436,74.827,0,0" FontFamily="Century Gothic"/>
+        <Image HorizontalAlignment="Left" Height="290" Margin="40,40,0,0" VerticalAlignment="Top" Width="290" Source="GlobalIcon.png"/>
+        <TextBlock HorizontalAlignment="Left" Height="24" Margin="663,175.827,0,0" TextWrapping="Wrap" Text="Version:3.0.0.0" VerticalAlignment="Top" Width="173" FontFamily="Consolas" FontSize="20"/>
+        <TextBlock HorizontalAlignment="Left" Height="63" Margin="40,335,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="290">
+            图标来源:https://www.pixiv.net/artworks/75931413
+            画师:溪涧殇 https://www.pixiv.net/users/8703481
+            画师微博:@溪涧殇
+        </TextBlock>
+        <TextBlock HorizontalAlignment="Left" Height="32" Margin="570.98,283.119,0,0" TextWrapping="Wrap" Text="huix-oldcat/ArkDesktop" VerticalAlignment="Top" Width="356" FontSize="20" FontFamily="Consolas"/>
+
+        <Button Style="{DynamicResource MaterialDesignFlatButton}" HorizontalAlignment="Left"
+                                            x:Name="GitHubButton" Margin="436,278.827,0,182.173" Click="GitHubButton_Click">
+            <StackPanel Orientation="Horizontal">
+                <materialDesign:PackIcon Kind="GithubCircle" Height="24" Width="24" />
+                <TextBlock Margin="8 0 0 0" VerticalAlignment="Center" FontSize="20" FontFamily="Consolas">GitHub</TextBlock>
+            </StackPanel>
+        </Button>
+        <TextBlock HorizontalAlignment="Left" Height="39" Margin="436,199.827,0,0" TextWrapping="Wrap" Text="Alpha version! Distribute only in QQ group 1021330668." VerticalAlignment="Top" Width="400" FontFamily="Consolas" FontSize="16" FontWeight="Bold" FontStyle="Italic" Foreground="Red" Background="Yellow"/>
+    </Grid>
+</UserControl>

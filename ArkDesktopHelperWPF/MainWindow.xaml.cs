@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -23,15 +24,30 @@ namespace ArkDesktopHelperWPF
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        public class DrawerItemData
+        {
+            public string Name { get; set; }
+            public Control Control { get; set; }
+        }
+        public DrawerItemData[] DrawerItems { get; set; }
         ConfigManager manager;
 
         public MainWindow()
         {
             manager = new ConfigManager(AppDomain.CurrentDomain.BaseDirectory);
             manager.ScanPlugins();
+            InitDrawer();
             InitializeComponent();
-            ConfigSelect control1 = new ConfigSelect(manager);
-            main.Children.Add(control1);
+            drawerItemsListBox.ItemsSource = DrawerItems;
+            drawerItemsListBox.SelectedIndex = 0;
+        }
+
+        private void InitDrawer()
+        {
+            DrawerItems = new DrawerItemData[2];
+            DrawerItems[0] = new DrawerItemData { Name = "主界面", Control = new ConfigSelect(manager, StartMultiConfig) };
+            DrawerItems[1] = new DrawerItemData { Name = "关于", Control = new AboutInfo() };
         }
 
         private void CloseWindowButton_Click(object sender, RoutedEventArgs e)
@@ -50,22 +66,15 @@ namespace ArkDesktopHelperWPF
             DragMove();
         }
 
-        private delegate void SingleConfig(ConfigInfo info);
+        public delegate void RequestStart(List<ConfigInfo> configInfos);
 
-        private void EnumSelectedConfig(SingleConfig work)
-        {
-            foreach (ConfigCard card in (main.Children[0] as ConfigSelect).configList.Children)
-                if (card.isChecked)
-                    work(card.info);
-        }
-
-        private void StartMultiConfig()
+        private void StartMultiConfig(List<ConfigInfo> configInfos)
         {
             List<ManualResetEvent> events = new List<ManualResetEvent>();
             Close();
             PluginGuiContainer pluginGuiContainer = new PluginGuiContainer(manager);
             InstanceManager instanceManager = new InstanceManager(pluginGuiContainer);
-            EnumSelectedConfig((ConfigInfo configInfo) =>
+            foreach (var configInfo in configInfos)
             {
                 if (configInfo.LaunchModule == null) return;
                 ManualResetEvent e = new ManualResetEvent(false);
@@ -77,20 +86,21 @@ namespace ArkDesktopHelperWPF
                 }));
                 thread.IsBackground = true;
                 thread.Start();
-            });
+            }
             if (events.Count > 0) foreach (var i in events) i.WaitOne();
             Application.Current.Shutdown();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void drawerItemsListBox_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            Button button = sender as Button;
-            switch (button.Name)
+            //until we had a StaysOpen glag to Drawer, this will help with scroll bars
+            var dependencyObject = Mouse.Captured as DependencyObject;
+            while (dependencyObject != null)
             {
-                case "runButton":
-                    StartMultiConfig();
-                    break;
+                if (dependencyObject is System.Windows.Controls.Primitives.ScrollBar) return;
+                dependencyObject = VisualTreeHelper.GetParent(dependencyObject);
             }
+            MenuToggleButton.IsChecked = false;
         }
     }
 }

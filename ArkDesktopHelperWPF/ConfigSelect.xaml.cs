@@ -22,15 +22,32 @@ namespace ArkDesktopHelperWPF
     public partial class ConfigSelect : UserControl
     {
         private readonly ConfigManager manager;
+        private readonly MainWindow.RequestStart requestStart;
 
-        public ConfigSelect(ConfigManager manager)
+        public ConfigSelect(ConfigManager manager, MainWindow.RequestStart requestStart)
         {
             InitializeComponent();
             this.manager = manager;
+            this.requestStart = requestStart;
             manager.ScanConfigs();
             foreach (var i in manager.Configs)
             {
                 configList.Children.Add(new ConfigCard(i));
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            switch (button.Name)
+            {
+                case "runButton":
+                    List<ConfigInfo> configInfos = new List<ConfigInfo>();
+                    foreach (ConfigCard i in configList.Children)
+                        if (i.isChecked)
+                            configInfos.Add(i.info);
+                    requestStart?.Invoke(configInfos);
+                    break;
             }
         }
     }

@@ -7,59 +7,63 @@
         xmlns:local="clr-namespace:ArkDesktopHelperWPF"
         mc:Ignorable="d"
         Title="MainWindow" Height="573" Width="959.25" WindowStyle="None" ResizeMode="NoResize" Icon="GlobalIcon.png">
-    <Grid x:Name="root">
-        <materialDesign:ColorZone
+    <Grid>
+        <Grid x:Name="root">
+            <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
+                <materialDesign:DrawerHost.LeftDrawerContent>
+                    <DockPanel MinWidth="212">
+                        <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" 
+                                    DockPanel.Dock="Top"
+                                    HorizontalAlignment="Right" Margin="16"
+                                    IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}" />
+                        <ListBox x:Name="drawerItemsListBox" Margin="0 16 0 16" PreviewMouseLeftButtonUp="drawerItemsListBox_PreviewMouseLeftButtonUp" SelectedIndex="0">
+                            <ListBox.Resources>
+                                <Style TargetType="ScrollBar" BasedOn="{StaticResource MaterialDesignScrollBarMinimal}"/>
+                            </ListBox.Resources>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}" Margin="32 0 32 0"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </DockPanel>
+                </materialDesign:DrawerHost.LeftDrawerContent>
+                <DockPanel>
+                    <materialDesign:ColorZone
   Mode="PrimaryMid"
-  Padding="16" MouseDown="ColorZone_MouseDown" materialDesign:ShadowAssist.ShadowDepth="Depth2">
-            <DockPanel Margin="0">
-                <Button
+  Padding="16" MouseDown="ColorZone_MouseDown" materialDesign:ShadowAssist.ShadowDepth="Depth2" DockPanel.Dock="Top">
+                        <DockPanel Margin="0">
+                            <Button
                     x:Name="button_closeWindow"
                     Style="{StaticResource MaterialDesignIconButton}"
                     DockPanel.Dock="Right" Click="CloseWindowButton_Click" >
-                    <materialDesign:PackIcon Kind="WindowClose" Foreground="White" />
-                </Button>
-                <Button
+                                <materialDesign:PackIcon Kind="WindowClose" Foreground="White" />
+                            </Button>
+                            <Button
                     x:Name="button_minWindow"
                     Style="{StaticResource MaterialDesignIconButton}"
                     DockPanel.Dock="Right" Click="MinWindowButton_Click" >
-                    <materialDesign:PackIcon Kind="WindowMinimize" Foreground="White" />
-                </Button>
-                <StackPanel
+                                <materialDesign:PackIcon Kind="WindowMinimize" Foreground="White" />
+                            </Button>
+                            <StackPanel
       Orientation="Horizontal"
       materialDesign:RippleAssist.IsCentered="True">
-                    <ToggleButton
+                                <ToggleButton x:Name="MenuToggleButton"
         Style="{DynamicResource MaterialDesignHamburgerToggleButton}" />
-                    <TextBlock
+                                <TextBlock
       VerticalAlignment="Center"
       Margin="16 0 0 0" FontSize="18" FontFamily="Consolas">
     ArkDesktop
-                    </TextBlock>
-                </StackPanel>
-            </DockPanel>
-        </materialDesign:ColorZone>
-        <materialDesign:PopupBox
-            materialDesign:ShadowAssist.ShadowDepth="Depth5"
-  Style="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"
-  PlacementMode="TopAndAlignLeftEdges"
-  ToolTipService.Placement="Right"
-  ToolTip="更多操作" Margin="0,0,10,10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Panel.ZIndex="99999">
-            <!--Opened="PopupBox_OnOpened" Closed="PopupBox_OnClosed"-->
-            <StackPanel>
-                <Button ToolTip="导出配置">
-                    <materialDesign:PackIcon Kind="ExportVariant"/>
-                </Button>
-                <Button ToolTip="删除配置">
-                    <materialDesign:PackIcon Kind="Delete" x:Name="deleteButton"/>
-                </Button>
-                <Button ToolTip="复制配置">
-                    <materialDesign:PackIcon Kind="ContentCopy" x:Name="copyButton"/>
-                </Button>
-                <Button ToolTip="运行!" Click="Button_Click" x:Name="runButton">
-                    <materialDesign:PackIcon Kind="play"/>
-                </Button>
-            </StackPanel>
-        </materialDesign:PopupBox>
-        <Grid x:Name="main" HorizontalAlignment="Left" Height="470" Margin="10,85,0,0" VerticalAlignment="Top" Width="938.25">
+                                </TextBlock>
+                            </StackPanel>
+                        </DockPanel>
+                    </materialDesign:ColorZone>
+                    <Grid>
+                        <!--<Grid x:Name="main"/>-->
+                        <ContentControl Content="{Binding ElementName=drawerItemsListBox,Path=SelectedItem.Control}"/>
+                    </Grid>
+                </DockPanel>
+            </materialDesign:DrawerHost>
         </Grid>
     </Grid>
 </Window>
