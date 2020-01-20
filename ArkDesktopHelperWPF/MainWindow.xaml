@@ -49,12 +49,12 @@
                     <materialDesign:PackIcon Kind="ExportVariant"/>
                 </Button>
                 <Button ToolTip="删除配置">
-                    <materialDesign:PackIcon Kind="Delete"/>
+                    <materialDesign:PackIcon Kind="Delete" x:Name="deleteButton"/>
                 </Button>
                 <Button ToolTip="复制配置">
-                    <materialDesign:PackIcon Kind="ContentCopy"/>
+                    <materialDesign:PackIcon Kind="ContentCopy" x:Name="copyButton"/>
                 </Button>
-                <Button ToolTip="运行!">
+                <Button ToolTip="运行!" Click="Button_Click" x:Name="runButton">
                     <materialDesign:PackIcon Kind="play"/>
                 </Button>
             </StackPanel>

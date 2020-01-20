@@ -21,7 +21,7 @@ namespace ArkDesktopHelperWPF
     /// </summary>
     public partial class ConfigCard : UserControl
     {
-        private readonly ConfigInfo info;
+        public readonly ConfigInfo info;
         public bool isChecked = false;
 
         public ConfigCard(ConfigInfo info)

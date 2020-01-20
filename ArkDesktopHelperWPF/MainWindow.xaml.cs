@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,16 +24,6 @@ namespace ArkDesktopHelperWPF
     public partial class MainWindow : Window
     {
         ConfigManager manager;
-
-        public void StartConfig(ConfigInfo info)
-        {
-            Close();
-            PluginGuiContainer pluginGuiContainer = new PluginGuiContainer(manager);
-            InstanceManager instanceManager = new InstanceManager(new InstanceHelper(pluginGuiContainer));
-            instanceManager.Start();
-            instanceManager.LaunchModule(info);
-            Application.Current.Shutdown();
-        }
 
         public MainWindow()
         {
@@ -57,6 +48,49 @@ namespace ArkDesktopHelperWPF
         private void ColorZone_MouseDown(object sender, MouseButtonEventArgs e)
         {
             DragMove();
+        }
+
+        private delegate void SingleConfig(ConfigInfo info);
+
+        private void EnumSelectedConfig(SingleConfig work)
+        {
+            foreach (ConfigCard card in (main.Children[0] as ConfigSelect).configList.Children)
+                if (card.isChecked)
+                    work(card.info);
+        }
+
+        private void StartMultiConfig()
+        {
+            List<ManualResetEvent> events = new List<ManualResetEvent>();
+            Close();
+            PluginGuiContainer pluginGuiContainer = new PluginGuiContainer(manager);
+            InstanceManager instanceManager = new InstanceManager(pluginGuiContainer);
+            EnumSelectedConfig((ConfigInfo configInfo) =>
+            {
+                if (configInfo.LaunchModule == null) return;
+                ManualResetEvent e = new ManualResetEvent(false);
+                events.Add(e);
+                Thread thread = new Thread(new ThreadStart(() =>
+                {
+                    instanceManager.LaunchModule(configInfo);
+                    e.Set();
+                }));
+                thread.IsBackground = true;
+                thread.Start();
+            });
+            if (events.Count > 0) foreach (var i in events) i.WaitOne();
+            Application.Current.Shutdown();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            switch (button.Name)
+            {
+                case "runButton":
+                    StartMultiConfig();
+                    break;
+            }
         }
     }
 }

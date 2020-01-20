@@ -10,10 +10,13 @@ namespace ArkDesktop.CoreKit
 {
     public class InstanceHelper
     {
+        private readonly string extraName;
+
         public PluginGuiContainer PluginGuiContainer { get; private set; }
-        public InstanceHelper(PluginGuiContainer container)
+        public InstanceHelper(PluginGuiContainer container, string extraName)
         {
             PluginGuiContainer = container;
+            this.extraName = extraName;
         }
 
         public void AddControl(string controlName, Control control)
@@ -23,6 +26,7 @@ namespace ArkDesktop.CoreKit
                 PluginGuiContainer.tabControl.Invoke((MethodInvoker)(() => AddControl(controlName, control)));
                 return;
             }
+            controlName = string.Format("[{0}]{1}", extraName, controlName);
             if (PluginGuiContainer.tabControl.TabPages.ContainsKey(controlName))
             {
                 throw new Exception("Control name exists.");
@@ -44,25 +48,21 @@ namespace ArkDesktop.CoreKit
             }
         }
     }
-
+        
     public class InstanceManager
     {
-        public InstanceHelper instanceHelper;
+        public PluginGuiContainer pluginGuiContainer;
         public ManualResetEvent Ready;
         public Thread thread;
 
-        public InstanceManager(InstanceHelper instanceHelper)
+        public InstanceManager(PluginGuiContainer pluginGuiContainer)
         {
-            this.instanceHelper = instanceHelper;
-            Ready = instanceHelper.PluginGuiContainer.Ready;
-        }
-
-        public void Start()
-        {
+            this.pluginGuiContainer = pluginGuiContainer;
+            Ready = pluginGuiContainer.Ready;
             thread = new Thread(new ThreadStart(() =>
             {
                 Application.EnableVisualStyles();
-                Application.Run(instanceHelper.PluginGuiContainer);
+                Application.Run(pluginGuiContainer);
             }));
             thread.SetApartmentState(ApartmentState.STA);
             thread.IsBackground = true;
@@ -72,9 +72,9 @@ namespace ArkDesktop.CoreKit
         public void LaunchModule(ConfigInfo info)
         {
             IArkDesktopPluginModule module = info.LaunchModule.assembly.CreateInstance(info.LaunchModule.fullName) as IArkDesktopPluginModule;
-            instanceHelper.PluginGuiContainer.RequestClose += module.RequestDispose;
+            pluginGuiContainer.RequestClose += module.RequestDispose;
             Ready.WaitOne();
-            module.MainThread(info.ResourceManager, instanceHelper);
+            module.MainThread(info.ResourceManager, new InstanceHelper(pluginGuiContainer, info.ConfigName));
         }
     }
 }
