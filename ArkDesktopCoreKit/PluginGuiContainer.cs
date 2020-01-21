@@ -31,6 +31,10 @@ namespace ArkDesktop.CoreKit
             InitializeComponent();
             this.configManager = configManager;
         }
+        public void BroadcastNotice(string notice)
+        {
+            notifyIcon.ShowBalloonTip(3000, "ArkDesktop", notice, ToolTipIcon.Info);
+        }
 
         private void PluginGuiContainer_Load(object sender, EventArgs e)
         {

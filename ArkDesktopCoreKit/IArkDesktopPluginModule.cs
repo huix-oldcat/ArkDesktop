@@ -13,6 +13,7 @@ namespace ArkDesktop.CoreKit
         bool Disposed { get; }
         string Description { get; }
         int Version { get; }
+        bool CheckFeature(string featureName);
         void MainThread(ResourceManager resources, InstanceHelper instanceHelper);
         void RequestDispose();
     }

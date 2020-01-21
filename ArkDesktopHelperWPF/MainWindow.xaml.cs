@@ -92,7 +92,15 @@ namespace ArkDesktopHelperWPF
                     });
                 }
             }
-            else StartMultiConfig(validStartupConfig, false);
+            else
+            {
+                var task = new Task<string>(() =>
+                   {
+                       (string a, _) = UpdateChecker.GetUpdateInfo();
+                       return a;
+                   });
+                StartMultiConfig(validStartupConfig, false, task);
+            }
         }
 
         private void InitDrawer()
@@ -121,12 +129,13 @@ namespace ArkDesktopHelperWPF
 
         public delegate void RequestStart(List<ConfigInfo> configInfos);
 
-        private void StartMultiConfig(List<ConfigInfo> configInfos, bool needClose = true)
+        private void StartMultiConfig(List<ConfigInfo> configInfos, bool needClose = true, Task<string> task = null)
         {
             List<ManualResetEvent> events = new List<ManualResetEvent>();
             if (needClose) Close();
             PluginGuiContainer pluginGuiContainer = new PluginGuiContainer(manager);
             InstanceManager instanceManager = new InstanceManager(pluginGuiContainer);
+
             foreach (var configInfo in configInfos)
             {
                 if (configInfo.LaunchModule == null) return;
@@ -139,6 +148,13 @@ namespace ArkDesktopHelperWPF
                 }));
                 thread.IsBackground = true;
                 thread.Start();
+            }
+            if (task != null)
+            {
+                task.Start();
+                task.Wait();
+                string s = task.Result;
+                if (s != null && s != "" && s != "Latest") pluginGuiContainer.BroadcastNotice("发现新版本!请前往全局设置下载");
             }
             if (events.Count > 0) foreach (var i in events) i.WaitOne();
             Application.Current.Shutdown();

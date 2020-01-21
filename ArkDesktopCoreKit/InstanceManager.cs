@@ -42,6 +42,7 @@ namespace ArkDesktop.CoreKit
             {
                 PluginGuiContainer.tabControl.Invoke((MethodInvoker)(() => RemoveControl(controlName)));
             }
+            controlName = string.Format("[{0}]{1}", extraName, controlName);
             if (PluginGuiContainer.tabControl.TabPages.ContainsKey(controlName))
             {
                 PluginGuiContainer.tabControl.TabPages.Remove(PluginGuiContainer.tabControl.TabPages[PluginGuiContainer.tabControl.TabPages.IndexOfKey(controlName)]);

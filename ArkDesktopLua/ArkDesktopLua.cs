@@ -16,6 +16,7 @@ namespace ArkDesktopLua
 {
     public class ArkDesktopLuaModule : IArkDesktopPluginModule
     {
+        public readonly string[] featureList;
 
         public string Name => "ArkDesktop.LuaModule";
 
@@ -26,6 +27,8 @@ namespace ArkDesktopLua
         public string Description => "ArkDesktop提供的Lua能力实现";
 
         public int Version => 2;
+
+        public bool CheckFeature(string featureName) => featureList.Contains(featureName);
 
         private XElement config;
 
@@ -40,6 +43,25 @@ namespace ArkDesktopLua
         }
         LaunchType launchType;
 
+        public ArkDesktopLuaModule()
+        {
+            featureList = new string[]
+                {
+                    "LAUNCH_PositiveLaunch",
+                    "API_LoadBitmap",
+                    "API_DisplayBitmap",
+                    "API_Sleep",
+                    "API_RequestClickEvent",
+                    "API_CreateDraft",
+                    "API_CopyBitmapToDraft",
+                    "API_DrawDraft",
+                    "API_MoveWindow(Alpha)",
+                    "API_SetFlag",
+                    "FLAG_autoClearBackground",
+                    "FLAG_reverse"
+                };
+        }
+
         public void MainThread(ResourceManager resources, InstanceHelper instanceHelper)
         {
             resourceManager = resources;
@@ -51,7 +73,7 @@ namespace ArkDesktopLua
                 return;
             };
             manager = new LayeredWindowManager(resources);
-            instanceHelper.AddControl("渲染窗口管理", manager);
+            instanceHelper.AddControl("", manager);
             Lua lua = new Lua();
             LuaApi api = new LuaApi(this, lua);
             manager.window.Click += (sender, e) => api.OnClick();

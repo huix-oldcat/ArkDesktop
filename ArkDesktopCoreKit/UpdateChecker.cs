@@ -34,5 +34,7 @@ namespace ArkDesktop.CoreKit
                 return ("", null);
             }
         }
+        public static string CoreVersion { get => System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(); }
+
     }
 }

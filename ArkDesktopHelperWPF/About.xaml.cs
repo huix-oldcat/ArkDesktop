@@ -23,6 +23,8 @@ namespace ArkDesktopHelperWPF
         public AboutInfo()
         {
             InitializeComponent();
+            HelperVersionTextBlock.Text = "Helper version:" + GetType().Assembly.GetName().Version.ToString();
+            CoreVersionTextBlock.Text = "Core   Version:" + ArkDesktop.CoreKit.UpdateChecker.CoreVersion;
         }
 
         private void GoWildButton_Click(object sender, RoutedEventArgs e)
