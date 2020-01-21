@@ -56,6 +56,7 @@
     <Compile Include="LayeredWindowManager.Designer.cs">
       <DependentUpon>LayeredWindowManager.cs</DependentUpon>
     </Compile>
+    <Compile Include="Logger.cs" />
     <Compile Include="PluginGuiContainer.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -43,11 +43,20 @@ namespace ArkDesktopLua
         }
         LaunchType launchType;
 
+        private enum LoadPosition
+        {
+            InConfig, OutFile
+        }
+        LoadPosition loadPosition;
+
+        private string luaScript;
+
         public ArkDesktopLuaModule()
         {
             featureList = new string[]
                 {
                     "LAUNCH_PositiveLaunch",
+                    "LAUNCH_PassiveLaunch",
                     "API_LoadBitmap",
                     "API_DisplayBitmap",
                     "API_Sleep",
@@ -77,20 +86,83 @@ namespace ArkDesktopLua
             Lua lua = new Lua();
             LuaApi api = new LuaApi(this, lua);
             manager.window.Click += (sender, e) => api.OnClick();
+            if (loadPosition == LoadPosition.InConfig)
+            {
+
+                if (config.Element("Script") == null)
+                {
+                    MessageBox.Show("似乎没有加载到脚本,请联系配置包制作者");
+                    return;
+                }
+                luaScript = config.Element("Script").Value;
+            }
+            else
+            {
+                using (var sr = new System.IO.StreamReader(resourceManager.OpenRead("script.lua"))) luaScript = sr.ReadToEnd();
+                if (luaScript == "")
+                {
+                    MessageBox.Show("似乎没有加载到脚本,请联系配置包制作者", "QAQ");
+                    return;
+                }
+            }
             var luaThread = new Thread(new ThreadStart(() =>
             {
-                while (true)
-                    if (launchType == LaunchType.Positive)
-                    {
+                if (launchType == LaunchType.Positive)
+                {
+                    while (true)
                         try
                         {
-                            lua.DoString(config.Element("Script").Value);
+                            lua.DoString(luaScript);
+                        }
+                        catch (ThreadAbortException)
+                        {
+
                         }
                         catch (Exception e)
                         {
                             MessageBox.Show("发生异常:" + e.Message + "\n" + e.StackTrace);
                         }
+                }
+                else
+                {
+                    int st = 0;
+                    try
+                    {
+                        if (st == 0)
+                        {
+                            lua.DoString(luaScript);
+                            st = 1;
+                        }
+                        if (st == 1)
+                        {
+                            lua.DoString("init()");
+                            st = 2;
+                        }
+                        if (st == 2)
+                        {
+                            while (true)
+                            {
+                                var begin = DateTime.Now;
+                                var obj = lua.DoString("return update()");
+                                double duration = 1.0 / 30;
+                                if (obj.Length >= 1 && obj[0].GetType()
+                                    .IsAssignableFrom(typeof(double)))
+                                    duration = (double)obj[0];
+                                var used = DateTime.Now - begin;
+                                var need = new TimeSpan(0, 0, 0, 0, Convert.ToInt32(duration * 1000));
+                                if (need > used) Thread.Sleep(need - used);
+                            }
+                        }
                     }
+                    catch (ThreadAbortException)
+                    {
+
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show("发生异常:" + e.Message + "\n" + e.StackTrace);
+                    }
+                }
             }));
             luaThread.IsBackground = true;
             luaThread.Start();
@@ -101,13 +173,10 @@ namespace ArkDesktopLua
 
         private bool EnsureConfigCorrect()
         {
-            if (config.Element("Script") == null)
-            {
-                MessageBox.Show("没有检测到Lua脚本哦,请确保配置里面有脚本");
-                return false;
-            }
             if (config.Element("LaunchType") == null) config.Add(new XElement("LaunchType", "Positive"));
+            if (config.Element("LoadPosition") == null) config.Add(new XElement("LoadPosition", "InConfig"));
             launchType = config.Element("LaunchType").Value == "Positive" ? LaunchType.Positive : LaunchType.Passive;
+            loadPosition = config.Element("LoadPosition").Value == "OutFile" ? LoadPosition.OutFile : LoadPosition.InConfig;
             return true;
         }
 

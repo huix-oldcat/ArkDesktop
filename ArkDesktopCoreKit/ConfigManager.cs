@@ -205,7 +205,7 @@ namespace ArkDesktop.CoreKit
         }
         public string LaunchModuleName { get; private set; }
         public Guid LaunchModuleGuid { get; private set; }
-        private string rootPath;
+        public string rootPath;
         private string configName;
         private string description;
         private PluginModuleInfo launchModule;

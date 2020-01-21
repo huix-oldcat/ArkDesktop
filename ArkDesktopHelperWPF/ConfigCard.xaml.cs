@@ -1,6 +1,7 @@
 ﻿using ArkDesktop.CoreKit;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,6 +33,8 @@ namespace ArkDesktopHelperWPF
             description.Text = info.Description == "" ? "暂无描述" : info.Description;
             if (info.LaunchModule == null) errorTag.ToolTip = "一个或多个插件未加载";
             else errorTag.Visibility = Visibility.Hidden;
+            if (File.Exists(System.IO.Path.Combine(info.rootPath, "preview.png")))
+                previewImage.Source = new BitmapImage(new Uri(System.IO.Path.Combine(info.rootPath, "preview.png"), UriKind.Absolute));
         }
 
         private void Image_MouseEnter(object sender, MouseEventArgs e)
