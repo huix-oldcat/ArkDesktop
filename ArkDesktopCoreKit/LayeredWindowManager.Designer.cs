@@ -35,6 +35,8 @@
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.checkBox_HideTaskbarIcon = new System.Windows.Forms.CheckBox();
             this.checkBox_TopMost = new System.Windows.Forms.CheckBox();
+            this.TransparentEventsCheckBox = new System.Windows.Forms.CheckBox();
+            this.TransparentImageLinkLabel = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // button_Pos
@@ -116,10 +118,34 @@
             this.checkBox_TopMost.UseVisualStyleBackColor = true;
             this.checkBox_TopMost.CheckedChanged += new System.EventHandler(this.checkBox_TopMost_CheckedChanged);
             // 
+            // TransparentEventsCheckBox
+            // 
+            this.TransparentEventsCheckBox.AutoSize = true;
+            this.TransparentEventsCheckBox.Location = new System.Drawing.Point(3, 88);
+            this.TransparentEventsCheckBox.Name = "TransparentEventsCheckBox";
+            this.TransparentEventsCheckBox.Size = new System.Drawing.Size(72, 16);
+            this.TransparentEventsCheckBox.TabIndex = 12;
+            this.TransparentEventsCheckBox.Text = "鼠标穿透";
+            this.TransparentEventsCheckBox.UseVisualStyleBackColor = true;
+            this.TransparentEventsCheckBox.CheckedChanged += new System.EventHandler(this.TransparentEventsCheckBox_CheckedChanged);
+            // 
+            // TransparentImageLinkLabel
+            // 
+            this.TransparentImageLinkLabel.AutoSize = true;
+            this.TransparentImageLinkLabel.Location = new System.Drawing.Point(3, 107);
+            this.TransparentImageLinkLabel.Name = "TransparentImageLinkLabel";
+            this.TransparentImageLinkLabel.Size = new System.Drawing.Size(95, 12);
+            this.TransparentImageLinkLabel.TabIndex = 14;
+            this.TransparentImageLinkLabel.TabStop = true;
+            this.TransparentImageLinkLabel.Text = "透明度：255/255";
+            this.TransparentImageLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.TransparentImageLinkLabel_LinkClicked);
+            // 
             // LayeredWindowManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.TransparentImageLinkLabel);
+            this.Controls.Add(this.TransparentEventsCheckBox);
             this.Controls.Add(this.checkBox_TopMost);
             this.Controls.Add(this.checkBox_HideTaskbarIcon);
             this.Controls.Add(this.linkLabel1);
@@ -128,7 +154,7 @@
             this.Controls.Add(this.linkLabel_Zoom);
             this.Controls.Add(this.button_Pos);
             this.Name = "LayeredWindowManager";
-            this.Size = new System.Drawing.Size(124, 100);
+            this.Size = new System.Drawing.Size(124, 129);
             this.Load += new System.EventHandler(this.LayeredWindowManager_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -144,5 +170,7 @@
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.CheckBox checkBox_HideTaskbarIcon;
         private System.Windows.Forms.CheckBox checkBox_TopMost;
+        private System.Windows.Forms.CheckBox TransparentEventsCheckBox;
+        private System.Windows.Forms.LinkLabel TransparentImageLinkLabel;
     }
 }

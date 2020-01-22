@@ -106,7 +106,7 @@ namespace ArkDesktopHelperWPF
         private void InitDrawer()
         {
             DrawerItems = new DrawerItemData[3];
-            DrawerItems[0] = new DrawerItemData { Name = "主界面", Control = new ConfigSelect(manager, (i) => StartMultiConfig(i)) };
+            DrawerItems[0] = new DrawerItemData { Name = "主界面", Control = new ConfigSelect(manager, (i) => StartMultiConfig(i), BroadcaseMessage) };
             DrawerItems[1] = new DrawerItemData { Name = "全局设置", Control = new GlobalSetting((DrawerItems[0].Control as ConfigSelect).RequestDelegate) };
             DrawerItems[2] = new DrawerItemData { Name = "关于", Control = new AboutInfo() };
         }
@@ -128,6 +128,12 @@ namespace ArkDesktopHelperWPF
         }
 
         public delegate void RequestStart(List<ConfigInfo> configInfos);
+        public delegate void RequestBroadcast(string message);
+
+        private void BroadcaseMessage(string message)
+        {
+            MainSnackbar.MessageQueue.Enqueue(message);
+        }
 
         private void StartMultiConfig(List<ConfigInfo> configInfos, bool needClose = true, Task<string> task = null)
         {
@@ -173,5 +179,80 @@ namespace ArkDesktopHelperWPF
         }
 
         public delegate List<ConfigInfo> RequestConfigList();
+
+        private void Main_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop) == false) return;
+            e.Effects = DragDropEffects.Copy;
+            DragNotice.Visibility = Visibility.Visible;
+        }
+
+        private void Main_DragLeave(object sender, DragEventArgs e)
+        {
+            DragNotice.Visibility = Visibility.Hidden;
+        }
+
+        private void ImportPackage(string path)
+        {
+            DropDetails.Text += path + "\n";
+            using (var fs = File.OpenRead(path))
+            {
+                (var a, var b) = PackageManager.ReadPackageInfo(fs);
+                if (a.version == 255)
+                {
+                    DropDetails.Text += "    无效的包\n";
+                    return;
+                }
+                if (a.version == 254)
+                {
+                    DropDetails.Text += "    版本不支持\n";
+                    return;
+                }
+                foreach (var i in b)
+                {
+                    var found = from v in manager.Configs where v.ConfigGuid == i.configGuid select true;
+                    var st = "";
+                    var exportPath = "";
+                    if (found.Any())
+                    {
+                        st = "重复的配置";
+                    }
+                    else if (Directory.Exists(System.IO.Path.Combine(manager.rootPath, "configs", i.defaultConfigName)))
+                    {
+                        string newName = i.defaultConfigName + "_" + Guid.NewGuid().ToString().Substring(28);
+                        exportPath = System.IO.Path.Combine(manager.rootPath, "configs", newName);
+                        st = "GUID未重复但配置名重复,已重命名配置为" + newName;
+                    }
+                    else
+                    {
+                        exportPath = System.IO.Path.Combine(manager.rootPath, "configs", i.defaultConfigName);
+                        st = "导入成功";
+                    }
+                    if (exportPath != "")
+                    {
+                        Directory.CreateDirectory(exportPath);
+                        fs.Position = i.firstFilePosition;
+                        PackageManager.ExtractFiles(exportPath, fs);
+                    }
+                    DropDetails.Text += string.Format("    读入配置{0}({1}) ==> {2}\n", i.defaultConfigName, i.configGuid.ToString().Substring(24), st);
+                }
+            }
+        }
+
+        private void Main_Drop(object sender, DragEventArgs e)
+        {
+            var datas = e.Data.GetData(DataFormats.FileDrop) as string[];
+            DropDetails.Text = "";
+            foreach (var data in datas)
+                if (data.EndsWith(".akdpkg"))
+                    ImportPackage(data);
+            (DrawerItems[0].Control as ConfigSelect).LoadConfigs();
+            DropDetails.Text += "读入完成,5秒后关闭提示框";
+            Task.Factory.StartNew(() =>
+            {
+                Thread.Sleep(5000);
+                DragNotice.Dispatcher.Invoke(() => DragNotice.Visibility = Visibility.Hidden);
+            });
+        }
     }
 }

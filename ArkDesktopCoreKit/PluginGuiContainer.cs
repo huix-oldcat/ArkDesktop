@@ -62,22 +62,6 @@ namespace ArkDesktop.CoreKit
             WindowState = FormWindowState.Normal;
         }
 
-        private void Button1_Click(object sender, EventArgs e)
-        {
-            //if (configManager.config.NeedSave)
-            //{
-            //    if (MessageBox.Show("是否保存配置？", "QAQ", MessageBoxButtons.YesNo) == DialogResult.Yes)
-            //        core.SaveConfig();
-            //}
-            RequestClose?.Invoke();
-            Dispose();
-        }
-
-        private void Button2_Click(object sender, EventArgs e)
-        {
-            configManager.SaveAllConfigs();
-        }
-
         private void Button1_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)

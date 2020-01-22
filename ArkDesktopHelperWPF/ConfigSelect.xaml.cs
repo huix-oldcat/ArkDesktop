@@ -23,17 +23,15 @@ namespace ArkDesktopHelperWPF
     {
         private readonly ConfigManager manager;
         private readonly MainWindow.RequestStart requestStart;
+        private readonly MainWindow.RequestBroadcast requestBrocast;
 
-        public ConfigSelect(ConfigManager manager, MainWindow.RequestStart requestStart)
+        public ConfigSelect(ConfigManager manager, MainWindow.RequestStart requestStart, MainWindow.RequestBroadcast requestBrocast)
         {
             InitializeComponent();
             this.manager = manager;
             this.requestStart = requestStart;
-            manager.ScanConfigs();
-            foreach (var i in manager.Configs)
-            {
-                configList.Children.Add(new ConfigCard(i));
-            }
+            this.requestBrocast = requestBrocast;
+            LoadConfigs();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -44,6 +42,12 @@ namespace ArkDesktopHelperWPF
                 case "runButton":
                     requestStart?.Invoke(GetSelectedConfigs());
                     break;
+                case "ExportButton":
+                    string path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Guid.NewGuid().ToString() + ".akdpkg");
+                    PackageManager.PackConfigs(GetSelectedConfigs(), path);
+                    requestBrocast("已导出至" + path);
+                    break;
+
             }
         }
 
@@ -57,5 +61,11 @@ namespace ArkDesktopHelperWPF
         }
 
         public MainWindow.RequestConfigList RequestDelegate => GetSelectedConfigs;
+
+        public void LoadConfigs()
+        {
+            manager.ScanConfigs();
+            foreach (var i in manager.Configs) configList.Children.Add(new ConfigCard(i)); 
+        }
     }
 }

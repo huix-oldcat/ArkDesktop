@@ -59,8 +59,11 @@
                                 </StackPanel>
                             </DockPanel>
                         </materialDesign:ColorZone>
-                        <Grid>
-                            <!--<Grid x:Name="main"/>-->
+                        <Grid x:Name="Main" Drop="Main_Drop" DragEnter="Main_DragEnter" DragLeave="Main_DragLeave" AllowDrop="True">
+                            <Grid x:Name="DragNotice" Background="#AAAAAAAA" Panel.ZIndex="1008611" Visibility="Hidden">
+                                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Import Packages" VerticalAlignment="Center" Height="96" Width="957" FontSize="72" FontFamily="Century Gothic" FontStyle="Italic"  Block.TextAlignment="Center" Margin="0,0,0,395"/>
+                                <TextBlock x:Name="DropDetails" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Details...." VerticalAlignment="Top" Margin="10,101,0,0" Height="380" Width="937" FontSize="16" Background="#ddffffff"/>
+                            </Grid>
                             <ContentControl Content="{Binding ElementName=drawerItemsListBox,Path=SelectedItem.Control}"/>
                         </Grid>
                     </DockPanel>

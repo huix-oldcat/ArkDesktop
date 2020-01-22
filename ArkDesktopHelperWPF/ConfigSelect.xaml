@@ -22,7 +22,7 @@
       ToolTip="更多操作" Margin="0,0,30,30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Panel.ZIndex="114514" DockPanel.Dock="Right">
             <!--Opened="PopupBox_OnOpened" Closed="PopupBox_OnClosed"-->
             <StackPanel>
-                <Button ToolTip="导出配置">
+                <Button ToolTip="导出配置" Click="Button_Click" x:Name="ExportButton">
                     <materialDesign:PackIcon Kind="ExportVariant"/>
                 </Button>
                 <Button ToolTip="删除配置">

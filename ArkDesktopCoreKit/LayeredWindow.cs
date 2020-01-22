@@ -46,7 +46,7 @@ namespace ArkDesktop.CoreKit
             }
         }
 
-        public void SetBits(Bitmap bitmap)//调用UpdateLayeredWindow（）方法。this.BackgroundImage为你事先准备的带透明图片。
+        public void SetBits(Bitmap bitmap, byte transparency = 255)//调用UpdateLayeredWindow（）方法。this.BackgroundImage为你事先准备的带透明图片。
         {
             if (InvokeRequired)
             {
@@ -78,7 +78,7 @@ namespace ArkDesktop.CoreKit
                 oldBits = Win32.SelectObject(memDC, hBitmap);
 
                 blendFunc.BlendOp = Win32.AC_SRC_OVER;
-                blendFunc.SourceConstantAlpha = 255;
+                blendFunc.SourceConstantAlpha = transparency;
                 blendFunc.AlphaFormat = Win32.AC_SRC_ALPHA;
                 blendFunc.BlendFlags = 0;
 

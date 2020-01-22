@@ -146,11 +146,17 @@ namespace ArkDesktop.CoreKit
         [DllImport("user32.dll")]
         public static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
 
+        public const int GWL_EXSTYLE = -20;
+        public const int WS_EX_TRANSPARENT = 32;
+
         [DllImport("user32.dll")]
         public static extern int SetWindowLong(IntPtr hWnd, int nIndex, uint dwNewLong);
 
+        [DllImport("user32.dll")]
+        public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+
         public delegate bool EnumWindowsProc(IntPtr hWnd, int lParam);
-        [DllImport("user32")]
+        [DllImport("user32.dll")]
         public static extern int EnumWindows(EnumWindowsProc ewp, int lParam);
 
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]

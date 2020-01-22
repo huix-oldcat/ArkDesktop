@@ -142,6 +142,7 @@
     <ProjectReference Include="..\ArkDesktopCoreKit\ArkDesktopCoreKit.csproj">
       <Project>{ed7282fd-04a9-400d-abc4-540724fa8a44}</Project>
       <Name>ArkDesktopCoreKit</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

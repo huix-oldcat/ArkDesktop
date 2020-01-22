@@ -132,9 +132,40 @@ namespace ArkDesktop.CoreKit
             set
             {
                 window.Invoke((MethodInvoker)(() => window.ShowInTaskbar = !value));
-                config.Element("HideTaskbarIcon").Value = value ? "True" : "False";
             }
             get => checkBox_HideTaskbarIcon.Checked;
+        }
+
+        public bool TransparentEvents
+        {
+            set
+            {
+                window.Invoke((MethodInvoker)(() =>
+                {
+                    int origin = Win32.GetWindowLong(window.Handle, Win32.GWL_EXSTYLE);
+                    bool isSet = (origin & Win32.WS_EX_TRANSPARENT) != 0;
+                    if (isSet != value)
+                    {
+                        if (value) origin |= Win32.WS_EX_TRANSPARENT;
+                        else origin ^= Win32.WS_EX_TRANSPARENT;
+                    }
+                    Win32.SetWindowLong(window.Handle, Win32.GWL_EXSTYLE, unchecked((uint)origin));
+                    config.Element("TransparentEvents").Value = value ? "True" : "False";
+                }));
+            }
+            get => TransparentEventsCheckBox.Checked;
+        }
+
+        private byte _imageTransparency;
+        public byte ImageTransparency
+        {
+            get => _imageTransparency;
+            set
+            {
+                _imageTransparency = value;
+                TransparentImageLinkLabel.Text = string.Format("透明度：{0}/255", value);
+                config.Element("ImageTransparancy").Value = value.ToString();
+            }
         }
 
         //SetBits --> using (ZoomBitmap) { Window.SetBits() }
@@ -241,6 +272,10 @@ namespace ArkDesktop.CoreKit
             ZoomQuality = config.Element("ZoomQuality").Value == "Speed" ? ZoomQualityLevel.HighSpeed : ZoomQualityLevel.HighQuality;
             checkBox_HideTaskbarIcon.Checked = config.Element("HideTaskbarIcon").Value == "True";
             checkBox_TopMost.Checked = config.Element("TopMost") != null;
+            TransparentEventsCheckBox.Checked = config.Element("TransparentEvents").Value == "True";
+            int read_tr = Convert.ToInt32(config.Element("ImageTransparancy").Value);
+            if (read_tr > 255 || read_tr < 0) read_tr = 255;
+            ImageTransparency = unchecked((byte)read_tr);
             if (settings.windowLocation != WindowFeatures.ManageLevel.Hideden) this.window.LocationChanged += Window_LocationChanged;
             Ready.Set();
             ready = true;
@@ -273,6 +308,14 @@ namespace ArkDesktop.CoreKit
                 config.Add(new XElement("HideTaskbarIcon", "False"));
 
             //Zorder : null
+
+            //TransparentEvents
+            if (config.Element("TransparentEvents") == null)
+                config.Add(new XElement("TransparentEvents", "False"));
+
+            //TransparentImage
+            if (config.Element("ImageTransparancy") == null)
+                config.Add(new XElement("ImageTransparancy", "255"));
         }
 
         //public Bitmap ZoomBits(Bitmap bitmap, double level)
@@ -300,7 +343,7 @@ namespace ArkDesktop.CoreKit
             {
                 window.Invoke((MethodInvoker)(() => window.Size = realBitmap.Size));
             }
-            window.Invoke((MethodInvoker)(() => window.SetBits(realBitmap)));
+            window.Invoke((MethodInvoker)(() => window.SetBits(realBitmap, ImageTransparency)));
             if (needDispose) realBitmap.Dispose();
         }
 
@@ -377,6 +420,25 @@ namespace ArkDesktop.CoreKit
         private void checkBox_TopMost_CheckedChanged(object sender, EventArgs e)
         {
             TopMost = true;
+        }
+
+        private void TransparentEventsCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            TransparentEvents = TransparentEventsCheckBox.Checked;
+        }
+
+        private void TransparentImageLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            string input = Interaction.InputBox("输入新的透明度(0透明~255不透明)", "QwQ", ImageTransparency.ToString());
+            try
+            {
+                int to = Convert.ToInt32(input);
+                if (to < 0) to = 0;
+                if (to > 255) to = 255;
+                ImageTransparency = unchecked((byte)to);
+            }
+            catch(Exception)
+            { }
         }
     }
 }
