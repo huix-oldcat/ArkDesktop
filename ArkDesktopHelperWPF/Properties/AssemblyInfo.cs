@@ -7,12 +7,12 @@ using System.Windows;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("ArkDesktopHelperWPF")]
+[assembly: AssemblyTitle("ArkDesktop引导启动器")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("ArkDesktopHelperWPF")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2019")]
+[assembly: AssemblyCompany("huix-oldcat")]
+[assembly: AssemblyProduct("ArkDesktop")]
+[assembly: AssemblyCopyright("Copyleft 2020 by huix-oldcat MPL v2 License")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

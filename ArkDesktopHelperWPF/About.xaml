@@ -12,6 +12,7 @@
         <Image HorizontalAlignment="Left" Height="290" Margin="40,40,0,0" VerticalAlignment="Top" Width="290" Source="GlobalIcon.png"/>
         <TextBlock x:Name="HelperVersionTextBlock" HorizontalAlignment="Left" Height="24" Margin="436,200,0,0" TextWrapping="Wrap" Text="Helper Version:3.0.0.0" VerticalAlignment="Top" Width="400" FontFamily="Consolas" FontSize="20"/>
         <TextBlock HorizontalAlignment="Left" Height="63" Margin="40,335,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="290">
+            本图标不包含于本开源项目中,亦不适用MPLv2许可证
             图标来源:https://www.pixiv.net/artworks/75931413
             画师:溪涧殇 https://www.pixiv.net/users/8703481
             画师微博:@溪涧殇
@@ -42,5 +43,6 @@
         </Button>
         <TextBlock HorizontalAlignment="Left" Height="32" Margin="581.977,357.119,0,0" TextWrapping="Wrap" Text="1021330668" VerticalAlignment="Top" Width="254.023" FontSize="20" FontFamily="Consolas"/>
         <TextBlock x:Name="CoreVersionTextBlock" HorizontalAlignment="Left" Height="24" Margin="436,176,0,0" TextWrapping="Wrap" Text="Core   Version:3.0.0.0" VerticalAlignment="Top" Width="400" FontFamily="Consolas" FontSize="20"/>
+        <TextBlock HorizontalAlignment="Left" Height="24" Margin="10,459,0,0" TextWrapping="Wrap" Text="项目源代码许可证使用Mozilla Public License v2,源代码可在上方代码仓库免费获得" VerticalAlignment="Top" TextAlignment="Center" Width="939" FontFamily="Consolas" FontSize="20" FontStyle="Italic" TextDecorations="Underline"/>
     </Grid>
 </UserControl>
