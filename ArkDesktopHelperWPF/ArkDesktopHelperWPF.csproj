@@ -152,7 +152,14 @@
     <Resource Include="GlobalIcon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Guide#1.png" />
+    <AdditionalFiles Include="!!!!!!界面介绍.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AdditionalFiles>
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="!!!!!!操作必看.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AdditionalFiles>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.3.0.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.3.0.0\build\MaterialDesignThemes.targets')" />
@@ -162,4 +169,8 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\MaterialDesignThemes.3.0.0\build\MaterialDesignThemes.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MaterialDesignThemes.3.0.0\build\MaterialDesignThemes.targets'))" />
   </Target>
+  <PropertyGroup>
+    <PostBuildEvent>copy $(ProjectDir)!!!!!!操作必看.txt $(TargetDir)\
+copy $(ProjectDir)!!!!!!界面介绍.png $(TargetDir)\</PostBuildEvent>
+  </PropertyGroup>
 </Project>
