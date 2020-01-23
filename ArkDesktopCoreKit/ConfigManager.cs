@@ -169,7 +169,19 @@ namespace ArkDesktop.CoreKit
         }
         public static List<PluginModuleInfo> ReadFromDll(string filename)
         {
-            Assembly assembly = Assembly.LoadFile(filename);
+            Assembly assembly;
+            using (var fs = File.OpenRead(filename))
+            {
+                byte[] vs = new byte[fs.Length];
+                int read = 0, toRead = unchecked((int)fs.Length);
+                while (toRead != 0)
+                {
+                    int readed = fs.Read(vs, read, toRead);
+                    read += readed;
+                    toRead -= readed;
+                }
+                assembly = Assembly.Load(vs);
+            }
             var found = from e in assembly.GetTypes()
                         where typeof(IArkDesktopPluginModule).IsAssignableFrom(e)
                         select e;

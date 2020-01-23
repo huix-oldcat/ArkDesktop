@@ -107,7 +107,7 @@ namespace ArkDesktopHelperWPF
         {
             DrawerItems = new DrawerItemData[3];
             DrawerItems[0] = new DrawerItemData { Name = "主界面", Control = new ConfigSelect(manager, (i) => StartMultiConfig(i), BroadcaseMessage) };
-            DrawerItems[1] = new DrawerItemData { Name = "全局设置", Control = new GlobalSetting((DrawerItems[0].Control as ConfigSelect).RequestDelegate) };
+            DrawerItems[1] = new DrawerItemData { Name = "全局设置", Control = new GlobalSetting((DrawerItems[0].Control as ConfigSelect).RequestDelegate, manager) };
             DrawerItems[2] = new DrawerItemData { Name = "关于", Control = new AboutInfo() };
         }
 
@@ -115,6 +115,7 @@ namespace ArkDesktopHelperWPF
         {
             Close();
             Application.Current.Shutdown();
+            Environment.Exit(0);
         }
 
         private void MinWindowButton_Click(object sender, RoutedEventArgs e)
@@ -194,18 +195,19 @@ namespace ArkDesktopHelperWPF
 
         private void ImportPackage(string path)
         {
-            DropDetails.Text += path + "\n";
+            void addText(string t) => Dispatcher.Invoke(() => DropDetails.Text += t);
+            addText(path + "\n");
             using (var fs = File.OpenRead(path))
             {
                 (var a, var b) = PackageManager.ReadPackageInfo(fs);
                 if (a.version == 255)
                 {
-                    DropDetails.Text += "    无效的包\n";
+                    addText("    无效的包\n");
                     return;
                 }
                 if (a.version == 254)
                 {
-                    DropDetails.Text += "    版本不支持\n";
+                    addText("    版本不支持\n");
                     return;
                 }
                 foreach (var i in b)
@@ -213,6 +215,7 @@ namespace ArkDesktopHelperWPF
                     var found = from v in manager.Configs where v.ConfigGuid == i.configGuid select true;
                     var st = "";
                     var exportPath = "";
+                    addText(string.Format("    读入配置{0}({1}) ", i.defaultConfigName, i.configGuid.ToString().Substring(24)));
                     if (found.Any())
                     {
                         st = "重复的配置";
@@ -234,7 +237,7 @@ namespace ArkDesktopHelperWPF
                         fs.Position = i.firstFilePosition;
                         PackageManager.ExtractFiles(exportPath, fs);
                     }
-                    DropDetails.Text += string.Format("    读入配置{0}({1}) ==> {2}\n", i.defaultConfigName, i.configGuid.ToString().Substring(24), st);
+                    addText(string.Format("==> {0}\n", st));
                 }
             }
         }
@@ -243,15 +246,18 @@ namespace ArkDesktopHelperWPF
         {
             var datas = e.Data.GetData(DataFormats.FileDrop) as string[];
             DropDetails.Text = "";
-            foreach (var data in datas)
-                if (data.EndsWith(".akdpkg"))
-                    ImportPackage(data);
-            (DrawerItems[0].Control as ConfigSelect).LoadConfigs();
-            DropDetails.Text += "读入完成,5秒后关闭提示框";
             Task.Factory.StartNew(() =>
             {
-                Thread.Sleep(5000);
-                DragNotice.Dispatcher.Invoke(() => DragNotice.Visibility = Visibility.Hidden);
+                foreach (var data in datas)
+                    if (data.EndsWith(".akdpkg"))
+                        ImportPackage(data);
+                Dispatcher.Invoke(() => (DrawerItems[0].Control as ConfigSelect).LoadConfigs());
+                Dispatcher.Invoke(() => DropDetails.Text += "读入完成,5秒后关闭提示框");
+                Task.Factory.StartNew(() =>
+                {
+                    Thread.Sleep(5000);
+                    DragNotice.Dispatcher.Invoke(() => DragNotice.Visibility = Visibility.Hidden);
+                });
             });
         }
     }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using ArkDesktop.CoreKit;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,11 +24,31 @@ namespace ArkDesktopHelperWPF
     public partial class GlobalSetting : UserControl
     {
         private readonly MainWindow.RequestConfigList requestConfigList;
+        private readonly ConfigManager manager;
 
-        public GlobalSetting(MainWindow.RequestConfigList requestConfigList)
+        public GlobalSetting(MainWindow.RequestConfigList requestConfigList, ArkDesktop.CoreKit.ConfigManager manager)
         {
             InitializeComponent();
             this.requestConfigList = requestConfigList;
+            this.manager = manager;
+            if (File.Exists("AutoRun.txt"))
+            {
+                AutoRunListTextBox.Text = "";
+                using (var fs = File.OpenRead("AutoRun.txt"))
+                using (var sr = new StreamReader(fs))
+                    while (sr.EndOfStream == false)
+                        try
+                        {
+                            string s = sr.ReadLine();
+                            var g = Guid.Parse(s);
+                            AutoRunListTextBox.Text += g.ToString().Substring(24) + ' ';
+                            var f = from i in manager.Configs where i.ConfigGuid == g select i.ConfigName;
+                            if (f.Any()) AutoRunListTextBox.Text += f.First();
+                            else AutoRunListTextBox.Text += "(未找到)";
+                            AutoRunListTextBox.Text += '\n';
+                        }
+                        catch (Exception) { }
+            }
         }
 
         private void AutoRunCheckbox_Checked(object sender, RoutedEventArgs e)
@@ -66,7 +87,8 @@ namespace ArkDesktopHelperWPF
 
         private void QueryUpdate_Click(object sender, RoutedEventArgs e)
         {
-            Task.Factory.StartNew(() => {
+            Task.Factory.StartNew(() =>
+            {
                 (var a, var b) = ArkDesktop.CoreKit.UpdateChecker.GetUpdateInfo();
                 Dispatcher.Invoke(() =>
                 {

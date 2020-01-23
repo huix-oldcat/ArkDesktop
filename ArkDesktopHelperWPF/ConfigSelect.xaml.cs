@@ -44,8 +44,13 @@ namespace ArkDesktopHelperWPF
                     break;
                 case "ExportButton":
                     string path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Guid.NewGuid().ToString() + ".akdpkg");
-                    PackageManager.PackConfigs(GetSelectedConfigs(), path);
-                    requestBrocast("已导出至" + path);
+                    requestBrocast("开始导出...");
+                    var list = GetSelectedConfigs();
+                    Task.Factory.StartNew(() =>
+                    {
+                        PackageManager.PackConfigs(list, path);
+                        Dispatcher.Invoke(() => requestBrocast("已导出至" + path));
+                    });
                     break;
 
             }
@@ -64,6 +69,7 @@ namespace ArkDesktopHelperWPF
 
         public void LoadConfigs()
         {
+            configList.Children.Clear();
             manager.ScanConfigs();
             foreach (var i in manager.Configs) configList.Children.Add(new ConfigCard(i)); 
         }
