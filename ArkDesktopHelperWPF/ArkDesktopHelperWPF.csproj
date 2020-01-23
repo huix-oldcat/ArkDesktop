@@ -170,7 +170,7 @@
     <Error Condition="!Exists('..\packages\MaterialDesignThemes.3.0.0\build\MaterialDesignThemes.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MaterialDesignThemes.3.0.0\build\MaterialDesignThemes.targets'))" />
   </Target>
   <PropertyGroup>
-    <PostBuildEvent>copy $(ProjectDir)!!!!!!操作必看.txt $(TargetDir)\
-copy $(ProjectDir)!!!!!!界面介绍.png $(TargetDir)\</PostBuildEvent>
+    <PostBuildEvent>copy $(ProjectDir)!!!!!!操作必看.txt $(TargetDir)
+copy $(ProjectDir)!!!!!!界面介绍.png $(TargetDir)</PostBuildEvent>
   </PropertyGroup>
 </Project>
