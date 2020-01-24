@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AA4D8756-09C4-4C9A-A117-D3DB36085F0F}</ProjectGuid>
+    <ProjectGuid>{ED7282FD-04A9-400D-ABC4-540724FA8A44}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ArkDesktopLua</RootNamespace>
-    <AssemblyName>ArkDesktopLua</AssemblyName>
+    <RootNamespace>ArkDesktop.CoreKit</RootNamespace>
+    <AssemblyName>ArkDesktopCoreKit</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\Build\Debug\plugins\</OutputPath>
+    <OutputPath>..\Build\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -25,16 +25,13 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\Build\Release\plugins\</OutputPath>
+    <OutputPath>..\Build\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LuaInterface, Version=1.5.3.0, Culture=neutral, PublicKeyToken=1e1fb15b02227b8a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Lua\LuaInterface.dll</HintPath>
-    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -47,26 +44,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LuaApi.cs" />
-    <Compile Include="ArkDesktopLua.cs" />
+    <Compile Include="ConfigManager.cs" />
+    <Compile Include="IArkDesktopPluginModule.cs" />
+    <Compile Include="InstanceManager.cs" />
+    <Compile Include="LayeredWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LayeredWindowManager.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="LayeredWindowManager.Designer.cs">
+      <DependentUpon>LayeredWindowManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PackageManager.cs" />
+    <Compile Include="PluginGuiContainer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PluginGuiContainer.Designer.cs">
+      <DependentUpon>PluginGuiContainer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UpdateChecker.cs" />
+    <Compile Include="Win32Api.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ArkDesktopCoreKit\ArkDesktopCoreKit.csproj">
-      <Project>{ed7282fd-04a9-400d-abc4-540724fa8a44}</Project>
-      <Name>ArkDesktopCoreKit</Name>
-      <Private>False</Private>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Lua\lua51.dll" />
-    <Content Include="Lua\LuaInterface.dll" />
-    <Content Include="Lua\luanet.dll" />
+    <EmbeddedResource Include="LayeredWindowManager.resx">
+      <DependentUpon>LayeredWindowManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PluginGuiContainer.resx">
+      <DependentUpon>PluginGuiContainer.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>copy $(ProjectDir)Lua\lua51.dll $(TargetDir)\..\
-copy $(ProjectDir)Lua\luanet.dll $(TargetDir)\..\</PostBuildEvent>
-  </PropertyGroup>
 </Project>
