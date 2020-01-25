@@ -20,6 +20,7 @@ namespace ArkDesktopLua
         public Bitmap draft;
         public bool autoClearBackground = true;
         public bool reverse = false;
+        public bool strictMode = false;
         public int reversePos = 0;
 
         public int LoadBitmap(string relativePath, bool necessary = true)
@@ -37,7 +38,11 @@ namespace ArkDesktopLua
 
         public bool DisplayBitmap(int index)
         {
-            if (index < 0 || index >= bitmaps.Count) return false;
+            if (index < 0 || index >= bitmaps.Count)
+                if (strictMode)
+                    throw new ArgumentOutOfRangeException(nameof(index), "Index out of range.");
+                else
+                    return false;
             master.manager.SetBits(bitmaps[index]);
             return true;
         }
@@ -63,7 +68,11 @@ namespace ArkDesktopLua
 
         public bool CopyBitmapToDraft(int index, int dx = 0, int dy = 0)
         {
-            if (index < 0 || index >= bitmaps.Count) return false;
+            if (index < 0 || index >= bitmaps.Count)
+                if (strictMode)
+                    throw new ArgumentOutOfRangeException(nameof(index), "Index out of range.");
+                else
+                    return false;
             using (Graphics g = Graphics.FromImage(draft))
             {
                 if (autoClearBackground)
@@ -109,6 +118,11 @@ namespace ArkDesktopLua
                 case "reverse":
                     {
                         reverse = flagValue;
+                        return;
+                    }
+                case "strictMode":
+                    {
+                        strictMode = flagValue;
                         return;
                     }
             }

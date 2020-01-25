@@ -67,7 +67,8 @@ namespace ArkDesktopLua
                     "API_MoveWindow(Alpha)",
                     "API_SetFlag",
                     "FLAG_autoClearBackground",
-                    "FLAG_reverse"
+                    "FLAG_reverse",
+                    "FLAG_strictMode"
                 };
         }
 
@@ -116,7 +117,7 @@ namespace ArkDesktopLua
                         }
                         catch (ThreadAbortException)
                         {
-
+                            break;
                         }
                         catch (Exception e)
                         {
@@ -126,21 +127,22 @@ namespace ArkDesktopLua
                 else
                 {
                     int st = 0;
-                    try
+
+                    while (true)
                     {
-                        if (st == 0)
+                        try
                         {
-                            lua.DoString(luaScript);
-                            st = 1;
-                        }
-                        if (st == 1)
-                        {
-                            lua.DoString("init()");
-                            st = 2;
-                        }
-                        if (st == 2)
-                        {
-                            while (true)
+                            if (st == 0)
+                            {
+                                lua.DoString(luaScript);
+                                st = 1;
+                            }
+                            if (st == 1)
+                            {
+                                lua.DoString("init()");
+                                st = 2;
+                            }
+                            if (st == 2)
                             {
                                 var begin = DateTime.Now;
                                 var obj = lua.DoString("return update()");
@@ -153,14 +155,14 @@ namespace ArkDesktopLua
                                 if (need > used) Thread.Sleep(need - used);
                             }
                         }
-                    }
-                    catch (ThreadAbortException)
-                    {
-
-                    }
-                    catch (Exception e)
-                    {
-                        MessageBox.Show("发生异常:" + e.Message + "\n" + e.StackTrace);
+                        catch (ThreadAbortException)
+                        {
+                            break;
+                        }
+                        catch (Exception e)
+                        {
+                            MessageBox.Show("发生异常:" + e.Message + "\n" + e.StackTrace);
+                        }
                     }
                 }
             }));
