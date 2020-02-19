@@ -65,6 +65,7 @@ namespace ArkDesktopHelperWPF
 
         public MainWindow()
         {
+            bool firstUse = Directory.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "configs")) == false;
             manager = new ConfigManager(AppDomain.CurrentDomain.BaseDirectory);
             manager.ScanPlugins();
             manager.ScanConfigs();
@@ -74,6 +75,7 @@ namespace ArkDesktopHelperWPF
                 InitializeComponent();
                 drawerItemsListBox.ItemsSource = DrawerItems;
                 drawerItemsListBox.SelectedIndex = 0;
+                if (firstUse) MainSnackbar.MessageQueue.Enqueue("第一次使用本软件?请阅读软件目录下的操作说明和界面介绍");
                 if (File.Exists("AutoUpdate.flag"))
                 {
                     MainSnackbar.MessageQueue.Enqueue("正在检查更新...");
