@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using ArkDesktop;
 using ArkDesktop.CoreKit;
-using LuaInterface;
+using Neo.IronLua;
 using LayeredWindow = ArkDesktop.CoreKit.LayeredWindow;
 using LayeredWindowManager = ArkDesktop.CoreKit.LayeredWindowManager;
 
@@ -67,7 +67,8 @@ namespace ArkDesktopLua
                     "API_MoveWindow(Alpha)",
                     "API_SetFlag",
                     "FLAG_autoClearBackground",
-                    "FLAG_reverse"
+                    "FLAG_reverse",
+                    "FLAG_strictMode"
                 };
         }
 
@@ -83,9 +84,6 @@ namespace ArkDesktopLua
             };
             manager = new LayeredWindowManager(resources);
             instanceHelper.AddControl("", manager);
-            Lua lua = new Lua();
-            LuaApi api = new LuaApi(this, lua);
-            manager.window.Click += (sender, e) => api.OnClick();
             if (loadPosition == LoadPosition.InConfig)
             {
 
@@ -105,70 +103,76 @@ namespace ArkDesktopLua
                     return;
                 }
             }
-            var luaThread = new Thread(new ThreadStart(() =>
+            using (Lua lua = new Lua())
             {
-                if (launchType == LaunchType.Positive)
+                dynamic env = lua.CreateEnvironment();
+                LuaApi api = new LuaApi(this, lua, env);
+                var chunk = lua.CompileChunk(luaScript, "script.lua", new LuaCompileOptions { DebugEngine = LuaStackTraceDebugger.Default });
+                manager.window.Click += (sender, e) => api.OnClick();
+                var luaThread = new Thread(new ThreadStart(() =>
                 {
-                    while (true)
-                        try
-                        {
-                            lua.DoString(luaScript);
-                        }
-                        catch (ThreadAbortException)
-                        {
-
-                        }
-                        catch (Exception e)
-                        {
-                            MessageBox.Show("发生异常:" + e.Message + "\n" + e.StackTrace);
-                        }
-                }
-                else
-                {
-                    int st = 0;
-                    try
+                    if (launchType == LaunchType.Positive)
                     {
-                        if (st == 0)
-                        {
-                            lua.DoString(luaScript);
-                            st = 1;
-                        }
-                        if (st == 1)
-                        {
-                            lua.DoString("init()");
-                            st = 2;
-                        }
-                        if (st == 2)
-                        {
-                            while (true)
+                        while (true)
+                            try
                             {
-                                var begin = DateTime.Now;
-                                var obj = lua.DoString("return update()");
-                                double duration = 1.0 / 30;
-                                if (obj.Length >= 1 && obj[0].GetType()
-                                    .IsAssignableFrom(typeof(double)))
-                                    duration = (double)obj[0];
-                                var used = DateTime.Now - begin;
-                                var need = new TimeSpan(0, 0, 0, 0, Convert.ToInt32(duration * 1000));
-                                if (need > used) Thread.Sleep(need - used);
+                                env.dochunk(chunk);
+                            }
+                            catch (ThreadAbortException)
+                            {
+                                break;
+                            }
+                            catch (Exception e)
+                            {
+                                MessageBox.Show("发生异常:" + e.Message + "\n" + e.StackTrace);
+                            }
+                    }
+                    else
+                    {
+                        int st = 0;
+                        LuaChunk initChunk = null, updateChunk = null;
+                        while (true)
+                        {
+                            try
+                            {
+                                if (st == 0)
+                                {
+                                    env.dochunk(chunk);
+                                    initChunk = lua.CompileChunk("init()", "script.lua", new LuaCompileOptions());
+                                    updateChunk = lua.CompileChunk("update()", "script.lua", new LuaCompileOptions());
+                                    st = 1;
+                                }
+                                if (st == 1)
+                                {
+                                    env.dochunk(initChunk);
+                                    st = 2;
+                                }
+                                if (st == 2)
+                                {
+                                    var begin = DateTime.Now;
+                                    double duration = env.update();
+                                    var used = DateTime.Now - begin;
+                                    var need = new TimeSpan(0, 0, 0, 0, Convert.ToInt32(duration * 1000));
+                                    if (need > used) Thread.Sleep(need - used);
+                                }
+                            }
+                            catch (ThreadAbortException)
+                            {
+                                break;
+                            }
+                            catch (Exception e)
+                            {
+                                MessageBox.Show("发生异常:" + e.Message + "\n" + e.StackTrace);
                             }
                         }
                     }
-                    catch (ThreadAbortException)
-                    {
-
-                    }
-                    catch (Exception e)
-                    {
-                        MessageBox.Show("发生异常:" + e.Message + "\n" + e.StackTrace);
-                    }
-                }
-            }));
-            luaThread.IsBackground = true;
-            luaThread.Start();
-            needDispose.WaitOne();
-            luaThread.Abort();
-            disposed.Set();
+                }));
+                luaThread.IsBackground = true;
+                luaThread.Start();
+                needDispose.WaitOne();
+                luaThread.Abort();
+                disposed.Set();
+            }
         }
 
         private bool EnsureConfigCorrect()

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using LuaInterface;
+using Neo.IronLua;
 using System.Reflection;
 using System.Threading;
 
@@ -15,12 +15,15 @@ namespace ArkDesktopLua
     {
         public List<Bitmap> bitmaps = new List<Bitmap>();
         public ArkDesktopLuaModule master;
-        public Lua lua;
+        private readonly Lua lua;
+        public dynamic env;
         public string clickMethod = "";
         public Bitmap draft;
         public bool autoClearBackground = true;
         public bool reverse = false;
+        public bool strictMode = false;
         public int reversePos = 0;
+        public LuaChunk clickMethodChunk;
 
         public int LoadBitmap(string relativePath, bool necessary = true)
         {
@@ -37,7 +40,11 @@ namespace ArkDesktopLua
 
         public bool DisplayBitmap(int index)
         {
-            if (index < 0 || index >= bitmaps.Count) return false;
+            if (index < 0 || index >= bitmaps.Count)
+                if (strictMode)
+                    throw new ArgumentOutOfRangeException(nameof(index), "Index out of range.");
+                else
+                    return false;
             master.manager.SetBits(bitmaps[index]);
             return true;
         }
@@ -50,6 +57,8 @@ namespace ArkDesktopLua
         public void RequestClickEvent(string methodName)
         {
             clickMethod = methodName;
+            if (methodName == "") clickMethodChunk = null;
+            else clickMethodChunk = lua.CompileChunk(methodName + "()", "script.lua", new LuaCompileOptions());
         }
 
         public void CreateDraft(int width, int height)
@@ -63,7 +72,11 @@ namespace ArkDesktopLua
 
         public bool CopyBitmapToDraft(int index, int dx = 0, int dy = 0)
         {
-            if (index < 0 || index >= bitmaps.Count) return false;
+            if (index < 0 || index >= bitmaps.Count)
+                if (strictMode)
+                    throw new ArgumentOutOfRangeException(nameof(index), "Index out of range.");
+                else
+                    return false;
             using (Graphics g = Graphics.FromImage(draft))
             {
                 if (autoClearBackground)
@@ -111,36 +124,42 @@ namespace ArkDesktopLua
                         reverse = flagValue;
                         return;
                     }
+                case "strictMode":
+                    {
+                        strictMode = flagValue;
+                        return;
+                    }
             }
         }
 
         public void OnClick()
         {
-            if (clickMethod == "") return;
+            if (clickMethodChunk == null) return;
             try
             {
-                lua.DoString(clickMethod + "()");
+                env.dochunk(clickMethodChunk);
             }
             catch (Exception) { };
         }
 
         public void RegisterLua()
         {
-            lua.RegisterFunction("LoadBitmap", this, typeof(LuaApi).GetMethod("LoadBitmap"));
-            lua.RegisterFunction("DisplayBitmap", this, typeof(LuaApi).GetMethod("DisplayBitmap"));
-            lua.RegisterFunction("Sleep", this, typeof(LuaApi).GetMethod("Sleep"));
-            lua.RegisterFunction("RequestClickEvent", this, typeof(LuaApi).GetMethod("RequestClickEvent"));
-            lua.RegisterFunction("CreateDraft", this, typeof(LuaApi).GetMethod("CreateDraft"));
-            lua.RegisterFunction("CopyBitmapToDraft", this, typeof(LuaApi).GetMethod("CopyBitmapToDraft"));
-            lua.RegisterFunction("DrawDraft", this, typeof(LuaApi).GetMethod("DrawDraft"));
-            lua.RegisterFunction("MoveWindow", this, typeof(LuaApi).GetMethod("MoveWindow"));
-            lua.RegisterFunction("SetFlag", this, typeof(LuaApi).GetMethod("SetFlag"));
+            env.LoadBitmap = new Func<string, bool, int>(LoadBitmap);
+            env.DisplayBitmap = new Func<int, bool>(DisplayBitmap);
+            env.Sleep = new Action<int>(Sleep);
+            env.RequestClickEvent = new Action<string>(RequestClickEvent);
+            env.CreateDraft = new Action<int, int>(CreateDraft);
+            env.CopyBitmapToDraft = new Func<int, int, int, bool>(CopyBitmapToDraft);
+            env.DrawDraft = new Action(DrawDraft);
+            env.MoveWindow = new Action<int, int>(MoveWindow);
+            env.SetFlag = new Action<string, bool>(SetFlag);
         }
 
-        public LuaApi(ArkDesktopLuaModule master, Lua lua)
+        public LuaApi(ArkDesktopLuaModule master, Lua lua, dynamic env)
         {
             this.master = master ?? throw new ArgumentNullException(nameof(master));
-            this.lua = lua ?? throw new ArgumentNullException(nameof(lua));
+            this.lua = lua;
+            this.env = env ?? throw new ArgumentNullException(nameof(env));
             RegisterLua();
         }
     }

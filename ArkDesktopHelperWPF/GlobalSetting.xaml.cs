@@ -25,9 +25,11 @@ namespace ArkDesktopHelperWPF
     {
         private readonly MainWindow.RequestConfigList requestConfigList;
         private readonly ConfigManager manager;
+        private bool userClick = true;
 
         public GlobalSetting(MainWindow.RequestConfigList requestConfigList, ArkDesktop.CoreKit.ConfigManager manager)
         {
+            userClick = false;
             InitializeComponent();
             this.requestConfigList = requestConfigList;
             this.manager = manager;
@@ -49,10 +51,15 @@ namespace ArkDesktopHelperWPF
                         }
                         catch (Exception) { }
             }
+            var key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", false);
+            AutoRunCheckbox.IsChecked = (key.GetValue("ArkDesktop") as string) == GetType().Assembly.Location + " -autorun";
+            AutoUpdateCheckBox.IsChecked = File.Exists("AutoUpdate.flag");
+            userClick = true;
         }
 
         private void AutoRunCheckbox_Checked(object sender, RoutedEventArgs e)
         {
+            if (userClick == false) return;
             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
             if (AutoRunCheckbox.IsChecked == true)
             {
@@ -63,7 +70,7 @@ namespace ArkDesktopHelperWPF
                     AutoRunCheckbox.IsChecked = false;
                     return;
                 }
-                using (FileStream fs = File.OpenWrite("AutoRun.txt"))
+                using (FileStream fs = File.Open("AutoRun.txt", FileMode.Create))
                 using (StreamWriter sw = new StreamWriter(fs))
                     foreach (var i in list)
                         sw.WriteLine(i.ConfigGuid);
@@ -74,7 +81,7 @@ namespace ArkDesktopHelperWPF
                 AutoRunListTextBox.Text = sb.ToString();
                 key.SetValue("ArkDesktop", GetType().Assembly.Location + " -autorun");
             }
-            else key.DeleteValue("ArkDesktopHelper", false);
+            else key.DeleteValue("ArkDesktop", false);
         }
 
         private void AutoUpdateCheckBox_Checked(object sender, RoutedEventArgs e)
