@@ -1,3 +1,11 @@
+!!!如果你是Win7系统且不能打开软件多半去下载
+https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net48-web-installer
+即可
+
+主程序的名字是ArkDesktopHelperWPF
+如果你看到有一个没有后缀的ArkDesktopHelperWPF那么就说明你没有开显示后缀名,那么那个就是软件
+如果你没看到一个没有后缀的ArkDesktopHelperWPF那么就说明你开启了显示后缀名,那么软件就是ArkDesktopHelperWPF.exe
+
 1. 删除配置删除configs/下的文件夹即可
 2. 给配置改名直接修改文件夹名称即可
 3. 不能直接复制文件夹!!!复制了文件夹以后要重新生成一个GUID,然后写给config.xml,详见视频
