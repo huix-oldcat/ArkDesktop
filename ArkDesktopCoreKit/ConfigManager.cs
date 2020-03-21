@@ -79,6 +79,13 @@ namespace ArkDesktop.CoreKit
             return true;
         }
 
+        public string GetResourcesRealPath(string path)
+        {
+            if (path.StartsWith("/") || path.StartsWith("\\")) path = path.Substring(1);
+            string realPath = Path.Combine(rootPath, "resources", path);
+            return realPath;
+        }
+
         public Stream OpenRead(string filename, bool packagedFirst = false)
         {
             if (filename.StartsWith("/") || filename.StartsWith("\\"))
