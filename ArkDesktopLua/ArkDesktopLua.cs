@@ -66,6 +66,7 @@ namespace ArkDesktopLua
                     "API_DrawDraft",
                     "API_MoveWindow(Alpha)",
                     "API_SetFlag",
+                    "API_PlaySound",
                     "FLAG_autoClearBackground",
                     "FLAG_reverse",
                     "FLAG_strictMode"

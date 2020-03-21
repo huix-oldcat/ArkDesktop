@@ -8,6 +8,7 @@ using System.IO;
 using Neo.IronLua;
 using System.Reflection;
 using System.Threading;
+using System.Media;
 
 namespace ArkDesktopLua
 {
@@ -24,6 +25,7 @@ namespace ArkDesktopLua
         public bool strictMode = false;
         public int reversePos = 0;
         public LuaChunk clickMethodChunk;
+        public SoundPlayer player;
 
         public int LoadBitmap(string relativePath, bool necessary = true)
         {
@@ -132,6 +134,20 @@ namespace ArkDesktopLua
             }
         }
 
+        // add playing sound function
+        public void PlaySound(string relativePath)
+        {
+            string realPath = master.resourceManager.GetResRealPath(relativePath);
+            if (File.Exists(realPath))
+            {
+                player = new SoundPlayer(realPath);
+                player.Play();
+            }
+            else throw new ArgumentException($"{nameof(relativePath)}: doesn't exist.");
+
+
+        }
+
         public void OnClick()
         {
             if (clickMethodChunk == null) return;
@@ -153,6 +169,7 @@ namespace ArkDesktopLua
             env.DrawDraft = new Action(DrawDraft);
             env.MoveWindow = new Action<int, int>(MoveWindow);
             env.SetFlag = new Action<string, bool>(SetFlag);
+            env.PlaySound = new Action<string>(PlaySound);
         }
 
         public LuaApi(ArkDesktopLuaModule master, Lua lua, dynamic env)
