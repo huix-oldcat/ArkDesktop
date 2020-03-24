@@ -26,7 +26,7 @@ namespace ArkDesktopLua
 
         public string Description => "ArkDesktop提供的Lua能力实现";
 
-        public int Version => 2;
+        public int Version => 3;
 
         public bool CheckFeature(string featureName) => featureList.Contains(featureName);
 
