@@ -96,7 +96,7 @@ namespace ArkDesktopHelperWPF
         {
             Task.Factory.StartNew(() =>
             {
-                (var a, var b) = ArkDesktop.CoreKit.UpdateChecker.GetUpdateInfo();
+                (var a, var b) = ArkDesktop.CoreKit.UpdateChecker.GetUpdateInfo(manager.Modules, App.version);
                 Dispatcher.Invoke(() =>
                 {
                     if (a == "Latest") UpdateTextBlock.Text = "已经是最新版本了哦QwQ";

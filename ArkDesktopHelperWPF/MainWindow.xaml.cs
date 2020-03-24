@@ -82,7 +82,7 @@ namespace ArkDesktopHelperWPF
                     MainSnackbar.MessageQueue.Enqueue("正在检查更新...");
                     Task.Factory.StartNew(() =>
                     {
-                        (string a, _) = UpdateChecker.GetUpdateInfo();
+                        (string a, _) = UpdateChecker.GetUpdateInfo(manager.Modules, App.version);
                         if (a != "" && a != "Latest")
                         {
                             Dispatcher.Invoke(() => MainSnackbar.MessageQueue.Enqueue("发现新版本!请前往全局设置下载"));
@@ -99,7 +99,7 @@ namespace ArkDesktopHelperWPF
             {
                 Task<string> task = autoUpdate ? new Task<string>(() =>
                        {
-                           (string a, _) = UpdateChecker.GetUpdateInfo();
+                           (string a, _) = UpdateChecker.GetUpdateInfo(manager.Modules, App.version);
                            return a;
                        }) : null;
                 StartMultiConfig(validStartupConfig, false, task);

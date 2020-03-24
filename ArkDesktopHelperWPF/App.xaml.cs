@@ -13,5 +13,6 @@ namespace ArkDesktopHelperWPF
     /// </summary>
     public partial class App : Application
     {
+        public const int version = 2;
     }
 }
