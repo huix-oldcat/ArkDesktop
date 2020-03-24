@@ -112,6 +112,10 @@ namespace ArkDesktopLua
                 manager.window.Click += (sender, e) => api.OnClick();
                 var luaThread = new Thread(new ThreadStart(() =>
                 {
+                    string GenerateExceptionString(Exception e) => $"发生了异常:{e.Message}\n{e.StackTrace}\n" +
+                    "请加QQ群(在软件主界面右边菜单的'关于'页)反馈这个bug给我们(软件开发者/包制作者)\n" +
+                    "是否重试(按'否'退出软件)";
+
                     if (launchType == LaunchType.Positive)
                     {
                         while (true)
@@ -125,7 +129,11 @@ namespace ArkDesktopLua
                             }
                             catch (Exception e)
                             {
-                                MessageBox.Show("发生异常:" + e.Message + "\n" + e.StackTrace);
+                                if (MessageBox.Show(GenerateExceptionString(e), "QAQ", MessageBoxButtons.YesNo) == DialogResult.No)
+                                {
+                                    needDispose.Set();
+                                    return;
+                                }
                             }
                     }
                     else
@@ -163,7 +171,11 @@ namespace ArkDesktopLua
                             }
                             catch (Exception e)
                             {
-                                MessageBox.Show("发生异常:" + e.Message + "\n" + e.StackTrace);
+                                if (MessageBox.Show(GenerateExceptionString(e), "QAQ", MessageBoxButtons.YesNo) == DialogResult.No)
+                                {
+                                    needDispose.Set();
+                                    return;
+                                }
                             }
                         }
                     }
@@ -191,56 +203,4 @@ namespace ArkDesktopLua
             disposed.WaitOne();
         }
     }
-    //public class ArkDesktopLua : IArkDesktopV2
-    //{
-    //    public string Name => "ArkDesktop.Lua";
-    //    public string Description => "An offical plugin that provides the ability to run lua script.";
-    //    public int Version => 1;
-
-    //    public void MainThread(object coreInst)
-    //    {
-    //        //core = (Core)coreInst;
-
-    //        //window = core.RequestPlugin("ArkDesktop.LayeredWindow").CreateInstance("ArkDesktop.LayeredWindow") as LayeredWindow;
-    //        //manager = core.RequestPlugin("ArkDesktop.LayeredWindowManager").CreateInstance("ArkDesktop.LayeredWindowManager") as LayeredWindowManager;
-    //        //manager.window = window;
-    //        //manager.config = core.config;
-    //        //manager.HelpPositionChange();
-    //        //manager.helpZoomChange = true;
-    //        //core.AddControl("渲染窗口", manager);
-
-    //        //if (EnsureConfigCorrect() == false)
-    //        //{
-    //        //    return;
-    //        //}
-
-    //        //Lua lua = new Lua();
-    //        //LuaApi api = new LuaApi(this, lua);
-    //        //window.Click += (sender, e) => api.OnClick();
-
-    //        //while (true)
-    //        //{
-    //        //    if (launchType == LaunchType.Positive)
-    //        //    {
-    //        //        try
-    //        //        {
-    //        //            lua.DoString(config.Element(ns + "LuaScript").Value);
-    //        //        }
-    //        //        catch (Exception e)
-    //        //        {
-    //        //            MessageBox.Show("发生异常:" + e.Message + "\n" + e.StackTrace);
-    //        //        }
-    //        //    }
-    //        //    if (isDisposed)
-    //        //    {
-    //        //        break;
-    //        //    }
-    //        //}
-    //    }
-    //    public void RequestDispose()
-    //    {
-    //        isDisposed = true;
-    //        window.Dispose();
-    //    }
-    //}
 }
