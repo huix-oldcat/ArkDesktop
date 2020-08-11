@@ -10,13 +10,13 @@
     <Grid>
         <Border BorderThickness="1" BorderBrush="Gray" Background="White" CornerRadius="10,10,10,10">
             <Grid x:Name="root">
-                <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
+                <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked }">
                     <materialDesign:DrawerHost.LeftDrawerContent>
                         <DockPanel MinWidth="212">
                             <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" 
-                                    DockPanel.Dock="Top"
-                                    HorizontalAlignment="Right" Margin="16"
-                                    IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}" />
+                                        DockPanel.Dock="Top"
+                                        HorizontalAlignment="Right" Margin="16"
+                                        IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}" />
                             <ListBox x:Name="drawerItemsListBox" Margin="0 16 0 16" PreviewMouseLeftButtonUp="drawerItemsListBox_PreviewMouseLeftButtonUp" SelectedIndex="0">
                                 <ListBox.Resources>
                                     <Style TargetType="ScrollBar" BasedOn="{StaticResource MaterialDesignScrollBarMinimal}"/>
@@ -31,30 +31,30 @@
                     </materialDesign:DrawerHost.LeftDrawerContent>
                     <DockPanel>
                         <materialDesign:ColorZone
-  Mode="PrimaryMid"
-  Padding="16" MouseDown="ColorZone_MouseDown" materialDesign:ShadowAssist.ShadowDepth="Depth2" DockPanel.Dock="Top" CornerRadius="10,10,0,0">
+      Mode="PrimaryMid"
+      Padding="16" MouseDown="ColorZone_MouseDown" materialDesign:ShadowAssist.ShadowDepth="Depth2" DockPanel.Dock="Top" CornerRadius="10,10,0,0">
                             <DockPanel Margin="0">
                                 <Button
-                    x:Name="button_closeWindow"
-                    Style="{StaticResource MaterialDesignIconButton}"
-                    DockPanel.Dock="Right" Click="CloseWindowButton_Click" >
+                        x:Name="button_closeWindow"
+                        Style="{StaticResource MaterialDesignIconButton}"
+                        DockPanel.Dock="Right" Click="CloseWindowButton_Click" >
                                     <materialDesign:PackIcon Kind="WindowClose" Foreground="White" />
                                 </Button>
                                 <Button
-                    x:Name="button_minWindow"
-                    Style="{StaticResource MaterialDesignIconButton}"
-                    DockPanel.Dock="Right" Click="MinWindowButton_Click" >
+                        x:Name="button_minWindow"
+                        Style="{StaticResource MaterialDesignIconButton}"
+                        DockPanel.Dock="Right" Click="MinWindowButton_Click" >
                                     <materialDesign:PackIcon Kind="WindowMinimize" Foreground="White" />
                                 </Button>
                                 <StackPanel
-      Orientation="Horizontal"
-      materialDesign:RippleAssist.IsCentered="True">
+          Orientation="Horizontal"
+          materialDesign:RippleAssist.IsCentered="True">
                                     <ToggleButton x:Name="MenuToggleButton"
-        Style="{DynamicResource MaterialDesignHamburgerToggleButton}" />
+            Style="{DynamicResource MaterialDesignHamburgerToggleButton}" />
                                     <TextBlock
-      VerticalAlignment="Center"
-      Margin="16 0 0 0" FontSize="18" FontFamily="Consolas">
-    ArkDesktop
+          VerticalAlignment="Center"
+          Margin="16 0 0 0" FontSize="18" FontFamily="Consolas">
+        ArkDesktop
                                     </TextBlock>
                                 </StackPanel>
                             </DockPanel>
