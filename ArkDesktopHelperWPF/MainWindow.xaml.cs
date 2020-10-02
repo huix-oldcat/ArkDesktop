@@ -59,7 +59,10 @@ namespace ArkDesktopHelperWPF
                         break;
                     }
                 }
+                //?
+                sr.Close();
             }
+
             return validStartupConfig.Any();
         }
 

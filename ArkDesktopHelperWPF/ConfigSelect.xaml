@@ -7,6 +7,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="941.837">
+    <materialDesign:DialogHost Identifier="RootDialog">
     <Grid>
         <ScrollViewer x:Name="scr" Margin="0" Height="470" Width="938.25" HorizontalScrollBarVisibility="Hidden">
             <WrapPanel x:Name="configList" Margin="0" Width="{Binding ElementName=scr, Path=Width, Mode=OneWay}">
@@ -31,4 +32,5 @@
             </StackPanel>
         </materialDesign:PopupBox>
     </Grid>
+    </materialDesign:DialogHost>
 </UserControl>

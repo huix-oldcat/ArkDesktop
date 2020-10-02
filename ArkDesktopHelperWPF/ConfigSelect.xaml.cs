@@ -1,18 +1,10 @@
 ﻿using ArkDesktop.CoreKit;
+using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ArkDesktopHelperWPF
 {
@@ -33,7 +25,24 @@ namespace ArkDesktopHelperWPF
             this.requestBrocast = requestBrocast;
             LoadConfigs();
         }
-
+        //MaterialDesign形式的 messagebox
+        public async void MsgBox(String msg,object sender, RoutedEventArgs e)
+        {
+            Dialog dialog = new Dialog
+            {
+                Message = { Text = msg }
+            };
+            await DialogHost.Show(dialog, "RootDialog");
+        }
+        public async void MsgBox(String msg,String c, object sender, RoutedEventArgs e)
+        {
+            Dialog dialog = new Dialog
+            {
+                Message = { Text = msg }
+            };
+            dialog.settingConfigPath(c);
+            await DialogHost.Show(dialog, "RootDialog");
+        }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
@@ -46,11 +55,11 @@ namespace ArkDesktopHelperWPF
                     string path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Guid.NewGuid().ToString() + ".akdpkg");
                     requestBrocast("开始导出...");
                     var list = GetSelectedConfigs();
-                    Task.Factory.StartNew(() =>
+                    PackageManager.PackConfigs(list, path);
+                    App.Current.Dispatcher.Invoke((Action)(() =>
                     {
-                        PackageManager.PackConfigs(list, path);
-                        Dispatcher.Invoke(() => requestBrocast("已导出至" + path));
-                    });
+                        MsgBox("已导出至\n" + path + "\n是否使用文件管理器打开？", path, sender, e);
+                    }));
                     break;
 
             }
